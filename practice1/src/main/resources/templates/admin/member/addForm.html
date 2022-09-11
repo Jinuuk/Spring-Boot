@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원등록</title>
+  <style>
+    .errmsg {
+    font-size:0.8em;
+    font-weight:bold;
+    color:red;
+    }
+
+    ul {
+    margin:0;padding:0;
+    }
+    ul,li{
+    text-decoration:none;
+    }
+    .fieldError {
+    border:1px solid red;
+    color:red;
+    }
+
+    .fieldSuccess {
+    border:1px solid green;
+    color:green;
+    }
+  </style>
+</head>
+
+<body>
+ <h3 th:text="#{title.member.add}">회원등록</h3>
+ <hr>
+ <form id="frm" action="" method="post" th:object="${form}">
+   <div th:if="${#fields.hasGlobalErrors()}">
+     <p class="errmsg" th:each="err:${#fields.globalErrors()}" th:text="${err}"></p>
+   </div>
+   <div>
+     <label for="" th:text="#{label.member.email}">이메일</label>
+     <input type="text" name="email" th:field="*{email}" th:class="${#fields.hasErrors('email')}?fieldError:fieldSuccess">
+     <span class="errmsg"></span>
+     <ul th:if="${#fields.hasErrors('email')}" th:class="errmsg">
+       <li th:each="err: ${#fields.errors('email')}" th:text="|${errStat.count}.${err}|"/>
+     </ul>
+   </div>
+   <div>
+     <label for="" th:text="#{label.member.pw}">비밀번호</label>
+     <input type="text" name="pw" th:field="*{pw}">
+     <ul th:if="${#fields.hasErrors('pw')}" th:class="errmsg">
+       <li th:each="err: ${#fields.errors('pw')}" th:text="|${errStat.count}.${err}|"/>
+     </ul>
+   </div>
+   <div>
+     <label for="" th:text="#{label.member.nickname}">별칭</label>
+     <input type="text" name="nickname" th:field="*{nickname}">
+     <ul th:if="${#fields.hasErrors('nickname')}" th:class="errmsg">
+       <li th:each="err: ${#fields.errors('nickname')}" th:text="|${errStat.count}.${err}|"/>
+     </ul>
+   </div>
+   <div>
+     <button type="submit" th:text="#{btn.add}" id="addBtn">등록</button>
+     <button type="reset" th:text="#{btn.cancel}">취소</button>
+     <button type="button" th:text="#{btn.list}" th:onclick="|location.href='@{/admin/members/all}'|">목록</button>
+   </div>
+ </form>
+ <script>
+   //addBtn.addEventListener('click', evt=>{
+   // evt.preventDefault(); //디폴트 이벤트 (여기서는 submit) 중지
+   // if(email.value.trim().length == 0) {
+   //   email.nextElementSibling.textContent = '이메일 입력은 필수입니다.';
+   //   email.focus();
+   //   return;
+   // }
+   // frm.submit(); //요청 메시지 생성
+   //});
+ </script>
+
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$Title$</title>
+</head>
+
+<body>
+    <form id="addForm" method="post" action="">
+        <div><input type="text" name="op1" id="op1" th:value="${op1}">+<input type="text" name="op2" id="op2" th:value="${op2}">=<span id="result" th:text="${result}"></span></div>
+        <div><input type="submit" value="계산하기" id="calBtn"></input>
+            <input type="reset" value="다시계산하기" id="resetBtn"></div>
+    </form>
+    <script>
+        calBtn.addEventListener('click',e=>{
+            e.preventDefault();
+            const isInteger = Number.isInteger(parseInt(op1.value)) && Number.isInteger(parseInt(op2.value));
+            if(!isInteger) return;
+            addForm.submit();
+        });
+
+
+        resetBtn.addEventListener('click', e=> {
+            e.preventDefault(); //기본이벤트 막기
+
+            op1.value = '';
+            op2.value = '';
+            result.textContent = '';
+            op1.focus();
+        });
+
+    </script>
+</body>
+</html>

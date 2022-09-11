@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Title</title>
+</head>
+
+<body>
+  <div>
+    <label for="">지역명</label>
+    <input type="text" name="" id="cityNm">
+    <button id="btnPubData">가져오기</button>
+  </div>
+  <table>
+    <caption>
+      공공데이터 목록
+    </caption>
+    <thead>
+      <tr>
+        <th>가게명</th>
+        <th>위도</th>
+        <th>경도</th>
+      </tr>
+    </thead>
+    <tbody id="list"></tbody>
+  </table>
+
+  <script>
+
+
+    const getData_h = e => {
+
+    const cityNm = document.getElementById('cityNm').value;
+
+    console.log(cityNm);
+
+    const xhr = new XMLHttpRequest();
+    const method = 'GET';
+    const url = `http://localhost:9080/api/pub/json?cityNm=${cityNm}`;
+    xhr.open(method, url); //request 요청 초기화
+    xhr.send(null); //request 요청 전송
+
+    document.getElementById('list').textContent = '가져오기중...';
+
+    const async_h = (e) => {
+      console.log(xhr.readyState);
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        const status = xhr.status;
+        if (status === 0 || (status >= 200 && status < 400)) {
+          // 요청성공
+          console.log(xhr.responseText);
+          //json문자열=>js객체
+          jsObj = JSON.parse(xhr.responseText);
+          console.log(jsObj);
+          if (jsObj.header.resultCode == '00') {
+            const getListItem = (item) => {
+              return `<tr><td>${item.company}</td><td>${item.lat}</td><td>${item.lng}</td></tr>`;
+            };
+            const html = jsObj.body.data
+              .map((item) => getListItem(item))
+              .join('');
+            document.getElementById('list').innerHTML = html;
+          } else {
+            console.log('resultCode 00아님');
+          }
+        } else {
+          // 요청실패
+        }
+      }
+    };
+
+    xhr.addEventListener('readystatechange', async_h);
+  }
+
+    document.getElementById('btnPubData')
+            .addEventListener('click',getData_h);
+  </script>
+</body>
+
+</html>

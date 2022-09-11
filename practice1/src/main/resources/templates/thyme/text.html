@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Title</title>
+</head>
+
+<body>
+  <h3>text/utext</h3>
+  <p th:text="${hello}">반갑습니다</p> <!--escape처리-->
+  <p th:utext="${uhello}">반갑습니다</p> <!--unescape처리-->
+  <p>[[${hello}]]</p> <!--escape처리-->
+  <p>[(${hello})]</p> <!--unescape처리-->
+
+  <p th:text="2>3"></p>
+  <p th:text="2<3"></p>
+  <p th:text="2==3"></p>
+  <p th:text="1+2+3+4"></p>
+  <p th:text="2>3 ? '2가 크다' : '3이 크다'"></p>
+  <p th:text="2<3 ? '3이 크다'"></p>
+
+  <div th:with = "name1='홍길동', name2=null, num1=10, num2=20">
+    <p th:text="${name1} ?: '홍길순'"></p>
+    <p th:text="${name2} ?: '홍길순'"></p>
+    <p th:text="${num1} > ${num2} ? '크다' : _"></p>
+  </div>
+
+  <div>
+    <hr>
+    <p><span>이름 : </span><span th:text="${p1.name}"></span></p>
+    <p><span>나이 : </span><span th:text="${p1.age}"></span></p>
+    <hr>
+    <p><span>이름 : </span><span th:text="${p1['name']}"></span></p>
+    <p><span>나이 : </span><span th:text="${p1['age']}"></span></p>
+    <hr>
+    <p><span>이름 : </span><span th:text="${p1.getName()}"></span></p>
+    <p><span>나이 : </span><span th:text="${p1.getAge()}"></span></p>
+    <hr>
+  </div>
+
+  <h3>personList</h3>
+  <div>
+    <th:block th:each="person : ${personList}">
+      <p><span>이름 : </span><span th:text="${person.name}"></span></p>
+      <p><span>나이 : </span><span th:text="${person.age}"></span></p>
+      <hr>
+    </th:block>
+  </div>
+
+  <h3>personMap</h3>
+  <div>
+    <th:block th:each="person : ${personMap}">
+      <p><span>이름 : </span><span th:text="${person.value.name}"></span></p>
+      <p><span>나이 : </span><span th:text="${person.value.age}"></span></p>
+      <hr>
+      <p><span>이름 : </span><span th:text="${person.value['name']}"></span></p>
+      <p><span>나이 : </span><span th:text="${person.value['age']}"></span></p>
+      <hr>
+      <p><span>이름 : </span><span th:text="${person.value.getName()}"></span></p>
+      <p><span>나이 : </span><span th:text="${person.value.getAge()}"></span></p>
+      <hr>
+    </th:block>
+  </div>
+
+  <h3>personSet</h3>
+  <div>
+    <th:block th:each="person : ${personSet}">
+      <p><span>이름 : </span><span th:text="${person.name}"></span></p>
+      <p><span>나이 : </span><span th:text="${person.age}"></span></p>
+      <hr>
+    </th:block>
+  </div>
+
+  <h3>조건문 : 나이 50이상 출력</h3>
+  <div th:each = "person:${personList}">
+    <th:block th:if="${person.age} ge 60"> <!-- if, uless-->
+      <p><span>이름 : </span><span th:text="${person.name}"></span></p>
+      <p><span>나이 : </span><span th:text="${person.age}"></span></p>
+      <hr>
+    </th:block>
+  </div>
+  <hr>
+  <h3>스위치문</h3>
+  <div th:each = "person:${personList}">
+    <th:block th:switch="${person.age}">
+      <span th:case="40">40입니다.</span>
+<!--      <span th:case="50">50입니다.</span>-->
+<!--      <span th:case="*">40, 50이 아닙니다.</span>-->
+    </th:block>
+  </div>
+
+
+
+
+</body>
+</html>

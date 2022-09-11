@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Title</title>
+  <style>
+    table {
+      border-collapse:collapse;
+      width:400px;
+    }
+
+    table, td, th {
+      border:1px solid;
+      text-align : center;
+    }
+
+    table .c1{width:20%}
+    table .c2{width:20%}
+
+    table caption {
+      margin:10px 0;
+      letter-spacing:0.5em;
+      text-decoration:underline:
+    }
+
+    .even {
+      background-color: yellow;
+    }
+  </style>
+</head>
+
+<body>
+<!-- 1.table 태그를 이용해서 personList 표시하기 -->
+<!-- 2.순번을 표시하고 짝수행은 노란색으로 표시  -->
+<!-- 3.나이합 구하기 -->
+  <table>
+    <caption>
+      <h3>회원목록</h3>
+    </caption>
+    <colgroup>
+      <col class="c1">
+      <col class="c2">
+      <col class="c3">
+    </colgroup>
+    <thead>
+      <tr>
+        <th>번호</th>
+        <th>이름</th>
+        <th>나이</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="person,personStat : ${personList}" th:class="${personStat.even}? 'even'">
+        <td th:text="${personStat.count}"></td>
+        <td th:text="${person.name}"></td>
+        <td th:text="${person.age}"></td>
+      </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+      <td>합계</td>
+      <td colspan="2" th:text="${#aggregates.sum(personList.![age])}"></td>
+    </tr>
+    </tfoot>
+  </table>
+
+
+</body>
+</html>

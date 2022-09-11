@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>상품상세</title>
+</head>
+
+<body>
+  <div class="product-wrap">
+    <h3>상품상세</h3>
+    <form method="post" action="" > <!-- action값이 없으면 현재 URL -->
+      <div>
+        <div><label for="">상품아이디</label><input type="text" readonly name="pid" th:value="${itemForm.productId}"></div>
+        <div><label for="">상품명</label><input type="text" readonly name="pname" th:value="${itemForm.pname}"></div>
+        <div><label for="">수량</label><input type="text" readonly name="quantity" th:value="${itemForm.quantity}"></div>
+        <div><label for="">가격</label><input type="text" readonly name="price" th:value="${itemForm.price}"></div>
+        <div>
+          <button id="editBtn" type="button">수정</button>
+          <button id="delBtn" type="button">삭제</button>
+          <button id="listBtn" type="button">목록</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <script>
+
+    (()=>{ //IIFE : 즉시실행함수 <-- 여기서는 변수 스코프를 제한하기 위해 사용
+      const pid = document.querySelector('input[name=pid]').value;
+
+      //수정
+      editBtn.addEventListener('click', e => {
+       const url= `/products/${pid}/edit`;
+       location.href = url;
+      });
+
+      //삭제
+      delBtn.addEventListener('click', e => {
+       if(!confirm('삭제하시겠습니까?')) return;
+        const url = `/products/${pid}/del`;
+        location.href = url;
+      });
+
+      //목록
+      listBtn.addEventListener('click', e => {
+        location.href = '/products';
+      });
+    })();
+  </script>
+</body>
+</html>

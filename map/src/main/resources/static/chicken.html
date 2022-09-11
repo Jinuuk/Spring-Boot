@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script
+      type="text/javascript"
+      src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=5a75hq28lu&submodules=geocoder"
+    ></script>
+    <script
+      type="text/javascript"
+      src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9784bb7f20a5a5dc06087dc1cb7d88f5&libraries=services,clusterer,drawing"
+    ></script>
+    <style>
+      #map {
+        width: 100vw;
+        height: 100vh;
+      }
+      .my-location {
+        width: 22px;
+        height: 22px;
+        background-color: rgba(0, 255, 0, 0.3);
+        border-radius: 50%;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        animation: impact 1s infinite;
+      }
+
+      @keyframes impact {
+        0% {
+          box-shadow: 0 0 0 0 rgba(0, 235, 0, 0.4);
+        }
+        80% {
+          box-shadow: 0 0 0 10px rgba(0, 235, 50, 0.1);
+        }
+        100% {
+          box-shadow: 0 0 0 10px rgba(0, 235, 50, 0.1);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <div class="my-location"></div>
+    <script>
+      const g_keyword = '치킨'; //검색어
+      const g_radius = 5000; //검색반경
+
+      //1)내위치정보 받아오기
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          createMap(position);
+        },
+        (err) => {
+          console.log(err.code, err.message);
+        }
+      );
+
+      //2)지도 생성
+      function createMap(position) {
+        console.log(position.coords.latitude, position.coords.longitude);
+        const [lat, lng] = [
+          position.coords.latitude,
+          position.coords.longitude,
+        ];
+        const whereAmI = new naver.maps.LatLng(lat, lng);
+        const mapOptions = {
+          center: whereAmI,
+          zoom: 13,
+        };
+        const $map = document.getElementById('map');
+        map = new naver.maps.Map($map, mapOptions);
+
+        //내위치표시
+        new naver.maps.Marker({
+          map: map,
+          position: whereAmI,
+          icon: {
+            content: `<div class='my-location'></div>`,
+          },
+        });
+        findChickenShop(map, position);
+      }
+      //3)내위치에서 반경 5km내 치킨집 검색
+      function findChickenShop(map, position) {
+        const [lat, lng] = [
+          position.coords.latitude,
+          position.coords.longitude,
+        ];
+        const ps = new kakao.maps.services.Places();
+        const searchOptions = {
+          location: new kakao.maps.LatLng(lat, lng),
+          radius: g_radius, //검색반경
+        };
+        ps.keywordSearch(g_keyword, placesSearch_c, searchOptions);
+
+        //4)검색결과 마커 표시하기
+        function placesSearch_c(result, status, pagination) {
+          let markers = [];
+          const infowindow = new naver.maps.InfoWindow({ zIndex: 1 });
+
+          switch (status) {
+            case kakao.maps.services.Status.OK:
+              const bounds = new naver.maps.LatLngBounds();
+              //마커생성
+              markers = result.map((ele) => {
+                const position = new naver.maps.LatLng(ele.y, ele.x);
+                bounds.extend(position);
+                return new naver.maps.Marker({
+                  map: map,
+                  position: position,
+                });
+              });
+
+              //마커에 클릭이벤트 등록
+              markers.forEach((ele, idx) => {
+                naver.maps.Event.addListener(ele, 'click', () => {
+                  infowindow.setContent(
+                    `${result[idx].place_name}, ${result[idx].phone}`
+                  );
+                  infowindow.open(map, ele);
+                });
+              });
+
+              // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
+              map.panToBounds(bounds);
+
+              break;
+            case kakao.maps.services.Status.ZERO_RESULT:
+              alert('검색결과 없음');
+              break;
+            case kakao.maps.services.Status.ERROR:
+              break;
+              alert('서버 응답 오류');
+          }
+        }
+      }
+    </script>
+  </body>
+</html>

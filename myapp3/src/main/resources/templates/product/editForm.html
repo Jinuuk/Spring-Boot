@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>상품수정</title>
+</head>
+
+<body>
+  <div class="product-wrap">
+    <h3>상품수정</h3>
+    <form method="post" action="" > <!-- action값이 없으면 현재 URL -->
+      <div>
+        <div><label for="">상품아이디</label><input type="text" readonly name="productId" th:value="${editForm.productId}"></div>
+        <div><label for="">상품명</label><input type="text" name="pname" th:value="${editForm.pname}"></div>
+        <div><label for="">수량</label><input type="text" name="quantity" th:value="${editForm.quantity}"></div>
+        <div><label for="">가격</label><input type="text" name="price" th:value="${editForm.price}"></div>
+        <div>
+          <button id="cancelBtn" type="button">취소</button>
+          <button id="editBtn">저장</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <script>
+    //취소 버튼 클릭 시 상세화면으로 이동
+    cancelBtn.addEventListener('click', e => {
+      const productId = document.querySelector('input[name=productId]').value;
+      const url = `/products/${productId}`;
+      location.href = url;
+    });
+
+
+  </script>
+</body>
+</html>
