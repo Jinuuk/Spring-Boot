@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=	9784bb7f20a5a5dc06087dc1cb7d88f5"></script>
+  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9784bb7f20a5a5dc06087dc1cb7d88f5&libraries=services,clusterer,drawing"></script>
+  <link rel="stylesheet" href="../common/common.css">
+  <link rel="stylesheet" href="../css/map.css">
+  <title>내 주변 GREAT</title>
+</head>
+<body>
+  <div class="wrapper">
+    <header class="header container">
+      <nav class="top-menu content">
+        <a href="" class="top-menu__join">회원가입</a>
+        <a href="" class="top-menu__login">로그인</a>
+        <a href="" class="top-menu__cs">고객센터</a>
+      </nav>
+      <div class="logo content"><a href="">GR<span>EAT</span></a></div>
+      <nav class="bottom-menu content">
+        <div class="category">
+          <ul>
+            <li class="food-category">업종별 카테고리
+              <ul>
+                <li><a href="">한식</a></li>
+                <li><a href="">중식</a></li>
+                <li><a href="">일식</a></li>
+                <li><a href="">양식</a></li>
+                <li><a href="">아시안식</a></li>
+                <li><a href="">분식</a></li>
+                <li><a href="">도시락</a></li>
+                <li><a href="">카페/디저트</a></li>
+              </ul>
+            </li>
+            <li class="region-category">지역별 카테고리
+              <ul>
+                <li><a href="">서울</a></li>
+                <li><a href="">인천</a></li>
+                <li><a href="">대전</a></li>
+                <li><a href="">광주</a></li>
+                <li><a href="">대구</a></li>
+                <li><a href="">울산</a></li>
+                <li><a href="">부산</a></li>
+                <li><a href="">제주</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <div class="search">
+          <input type="text" class="search__search-box" placeholder="  검색어를 입력하세요.">
+          <a href="" class="search__search-icon"><i class="fa-solid fa-magnifying-glass"></i></a>
+        </div>
+      </nav>
+    </header>
+    <main class="main container">
+      <div class="map__box content">
+        <div class="map__title width--900px">
+          <h2><i class="bar"></i>내 주변 GREAT</h2>
+        </div>
+        <div id="map"></div>
+      </div>
+    </main>
+    <footer class="footer container">
+      <p class="content"></p>
+    </footer>
+  </div>
+  <script>
+    //지도 생성
+    var container = document.getElementById('map');
+    var options = {
+      center:new kakao.maps.LatLng(33.450701, 126.570667),
+      lever:4,
+    };
+    var map = new kakao.maps.Map(container, options);
+
+    //geolocatioin으로 내 위치 찾기
+    if(navigator.geolocation) {
+      console.log("geolocation 성공");
+      navigator.geolocation.getCurrentPosition(function(position) {
+        
+        var lat = position.coords.latitude;
+        var lon = position.coords.longitude;
+
+        var locPostion = new kakao.maps.LatLng(lat,lon);
+        var message = '<div style ="padding:5px;">현재 내 위치</div>';
+
+        displayMarker(locPostion,message);
+        
+      });
+    } else {
+      console.log("geolocation 실패");
+      var locPosition = new kakao.maps.LatLng(33.450701, 126.570667);
+      var message = 'geolocation을 사용할 수 없습니다.';
+      
+      
+      displayMarker(locPostion,message);
+    }
+
+  //지도에 마커와 인포 윈도우를 표시하는 함수
+  function displayMarker(locPosition,message) {
+    console.log("displayMarker 함수 실행");
+    var marker = new kakao.maps.Marker({
+      map:map,
+      position:locPosition
+    });
+
+    var iwContent = message;
+    var iwRemoveable = true;
+
+    var infowindow = new kakao.maps.InfoWindow({
+      content:iwContent,
+      removable:iwRemoveable
+    });
+
+
+
+    infowindow.open(map,marker);
+
+    map.setCenter(locPosition);
+  }
+  </script>
+</body>
+</html>
