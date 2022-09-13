@@ -35,8 +35,6 @@
     </tr>
     </thead>
     <tbody>
-
-
         <!--/*<tr th:each="rec :${list}" th:onclick="|location.href = '@{/admin/members/{id}(id=${rec.memberId})}'|">
           <td>[[${recStat.count}]]</td>
           <td><a th:href="@{|/admin/member/${rec.memberId}|}">[[${rec.memberId}]]</a></td>
@@ -49,16 +47,15 @@
           <td>[[${#temporals.format(rec.udate, 'yy-MM-dd HH:mm')}]]</td>
         </tr>*/-->
 
-
-
-
     <tr th:each="rec :${list}"  th:data-member-id="${rec.memberId}">
       <td>[[${recStat.count}]]</td>
       <!--        <td><a th:href="@{|/admin/members/${rec.memberId}|}">[[${rec.memberId}]]</a></td>-->
       <td><!--a th:href="@{/admin/members/{id}(id=${rec.memberId})}"-->[[${rec.memberId}]]<!--/a--></td>
       <td>[[${rec.email}]]</td>
-      <td>[[${#temporals.format(rec.cdate,'yy-MM-dd HH:mm')}]]</td>
-      <td>[[${#temporals.format(rec.udate,'yy-MM-dd HH:mm')}]]</td>
+<!--      <td>[[${#temporals.format(rec.cdate,'yy-MM-dd HH:mm')}]]</td>-->
+<!--      <td>[[${#temporals.format(rec.udate,'yy-MM-dd HH:mm')}]]</td>-->
+      <td>[[${{rec.cdate}}]]</td>
+      <td>[[${{rec.udate}}]]</td>
     </tr>
 
 

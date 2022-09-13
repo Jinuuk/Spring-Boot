@@ -7,6 +7,7 @@ import com.kh.myapp3.web.admin.form.member.EditForm;
 import com.kh.myapp3.web.admin.form.member.MemberForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -36,7 +38,7 @@ public class AdminMemberController {
   public String add(@Valid @ModelAttribute("form") AddForm addForm,
                     BindingResult bindingResult,
                     RedirectAttributes redirectAttributes) { //리다이렉트할 때 정보를 유지하기위해 사용 (굳이 왜?)
-
+    //model.addAttribute("addForm", addForm); -> model.addAttribute("form", addForm);
     log.info("addForm={}", addForm);
 
     //검증
@@ -70,14 +72,16 @@ public class AdminMemberController {
   public String findById(@PathVariable("id") Long id, Model model){
 
     Member foundMember = adminMemberSVC.findById(id);
-
     MemberForm memberForm = new MemberForm();
-    memberForm.setMemberId(foundMember.getMemberId());
-    memberForm.setEmail(foundMember.getEmail());
-    memberForm.setPw(foundMember.getPw());
-    memberForm.setNickname(foundMember.getNickname());
-    memberForm.setCdate(foundMember.getCdate());
-    memberForm.setUdate(foundMember.getUdate());
+
+    BeanUtils.copyProperties(foundMember,memberForm);
+
+//    memberForm.setMemberId(foundMember.getMemberId());
+//    memberForm.setEmail(foundMember.getEmail());
+//    memberForm.setPw(foundMember.getPw());
+//    memberForm.setNickname(foundMember.getNickname());
+//    memberForm.setCdate(foundMember.getCdate());
+//    memberForm.setUdate(foundMember.getUdate());
 
     model.addAttribute("form",memberForm);
 
@@ -138,9 +142,23 @@ public class AdminMemberController {
   @GetMapping("/all")
   public String all(Model model) {
 
-    List<Member> list = adminMemberSVC.all();
-    model.addAttribute("list",list);
+    List<Member> members = adminMemberSVC.all();
+    List<MemberForm> list = new ArrayList<>();
+    //case1) 향상된 for문
+//    for (Member member : members) {
+//      MemberForm memberForm = new MemberForm();
+//      BeanUtils.copyProperties(member, memberForm);
+//      list.add(memberForm);
+//    }
 
+    //case2) 고차함수 적용 => 람다 표현식
+    members.stream().forEach(member->{
+      MemberForm memberForm = new MemberForm();
+      BeanUtils.copyProperties(member, memberForm);
+      list.add(memberForm);
+    });
+
+    model.addAttribute("list",list);
     return "admin/member/all";
   }
 }
