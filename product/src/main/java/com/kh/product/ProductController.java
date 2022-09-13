@@ -35,7 +35,8 @@ public class ProductController {
 
   //등록처리
   @PostMapping("/add")
-  public String add(@Valid @ModelAttribute AddForm addForm, RedirectAttributes redirectAttributes, BindingResult bindingResult) {
+  public String add(@Valid @ModelAttribute AddForm addForm, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+
 
     if(bindingResult.hasErrors()){
       return "addForm";
@@ -43,6 +44,10 @@ public class ProductController {
 
     Product product = new Product();
     BeanUtils.copyProperties(addForm, product);
+    if((product.getPrice()*product.getCount()) >= 10000000) {
+      bindingResult.reject("totalErr","총액은 1000만원을 초과할 수 없습니다.");
+      return "addForm";
+    }
     Product savedProduct = productSVC.save(product);
     Long pid = savedProduct.getPid();
     redirectAttributes.addAttribute("pid",pid);
@@ -78,11 +83,19 @@ public class ProductController {
 
   //수정처리
   @PostMapping("/{pid}/edit")
-  public String update(@PathVariable("pid") Long pid, @Valid @ModelAttribute EditForm editForm, RedirectAttributes redirectAttributes) {
+  public String update(@PathVariable("pid") Long pid, @Valid @ModelAttribute EditForm editForm,BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+
+    if(bindingResult.hasErrors()){
+      return "editForm"; //상품 수정화면
+    }
 
     Product product = new Product();
     product.setPid(pid);
     BeanUtils.copyProperties(editForm,product);
+    if(product.getPrice()*product.getCount() >= 10000000) {
+      bindingResult.reject("totalErr","총액은 1000만원을 초과할 수 없습니다.");
+      return "editForm";
+    }
     productSVC.update(pid, product);
     redirectAttributes.addAttribute("pid",pid);
 

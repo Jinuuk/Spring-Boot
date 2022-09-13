@@ -39,9 +39,8 @@
     const $tbody = document.querySelector("table tbody");
     $tbody.addEventListener('click',e=>{
       if(e.target.tagName == 'TD'){
-        const pid = e.target.parentElement.dataset.pid;
-        console.log(pid);
-        //location.href =  `/products/${pid}`;
+        const pid = e.target.parentElement.dataset.productId;
+        location.href =  `/products/${pid}`;
       }
     });
 

@@ -39,6 +39,9 @@
           <li th:each="err : ${#fields.errors('price')}" th:text="${err}" />
         </ul>
       </div>
+      <div th:if="${#fields.hasGlobalErrors()}">
+        <p class="errmsg" th:each="err:${#fields.globalErrors()}" th:text="${err}"></p>
+      </div>
       <div><button type="submit">상품등록</button></div>
     </div>
   </form>
