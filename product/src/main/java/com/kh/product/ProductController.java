@@ -39,13 +39,14 @@ public class ProductController {
 
 
     if(bindingResult.hasErrors()){
+      log.info("{}",bindingResult);
       return "addForm";
     }
-
     Product product = new Product();
     BeanUtils.copyProperties(addForm, product);
-    if((product.getPrice()*product.getCount()) >= 10000000) {
-      bindingResult.reject("totalErr","총액은 1000만원을 초과할 수 없습니다.");
+    Integer total = 10000000; //총액 한계
+    if(product.getPrice()*product.getCount() >= total) {
+      bindingResult.reject("totalErr","총액은 "+total/10000+"만원을 초과할 수 없습니다.");
       return "addForm";
     }
     Product savedProduct = productSVC.save(product);
@@ -88,13 +89,13 @@ public class ProductController {
     if(bindingResult.hasErrors()){
       return "editForm"; //상품 수정화면
     }
-
     Product product = new Product();
     product.setPid(pid);
     BeanUtils.copyProperties(editForm,product);
-    if(product.getPrice()*product.getCount() >= 10000000) {
-      bindingResult.reject("totalErr","총액은 1000만원을 초과할 수 없습니다.");
-      return "editForm";
+    Integer total = 10000000; //총액 한계
+    if(product.getPrice()*product.getCount() >= total) {
+      bindingResult.reject("totalErr","총액은 "+total/10000+"만원을 초과할 수 없습니다.");
+      return "addForm";
     }
     productSVC.update(pid, product);
     redirectAttributes.addAttribute("pid",pid);

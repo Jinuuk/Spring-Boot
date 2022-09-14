@@ -26,7 +26,12 @@
   <h3>상품등록</h3>
   <form method="post" action="" th:object="${addForm}">
     <div>
-      <div><label for="">상품명</label><input type="text" name="pname" th:field="*{pname}"></div>
+      <div>
+        <label for="">상품명</label><input type="text" name="pname" th:field="*{pname}">
+        <ul th:if="${#fields.hasErrors('pname')}" th:class="errmsg">
+          <li th:each="err : ${#fields.errors('pname')}" th:text="${err}" />
+        </ul>
+      </div>
       <div>
         <label for="">수량</label><input type="text" name="count" th:field="*{count}">
         <ul th:if="${#fields.hasErrors('count')}" th:class="errmsg">
@@ -42,8 +47,14 @@
       <div th:if="${#fields.hasGlobalErrors()}">
         <p class="errmsg" th:each="err:${#fields.globalErrors()}" th:text="${err}"></p>
       </div>
-      <div><button type="submit">상품등록</button></div>
+        <button type="submit">상품등록</button>
+        <button type="button" id="cancelBtn">취소</button>
     </div>
   </form>
 </body>
+  <script>
+      cancelBtn.addEventListener('click',e=>{
+        location.href = `/products`;
+      });
+  </script>
 </html>

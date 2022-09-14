@@ -1,13 +1,22 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Title</title>
+  <title>초기페이지</title>
+  <style>
+    * {outline:1px solid red}
+  </style>
 </head>
 
 <body>
-<p>hello world!</p>
+  <div th:insert="~{layout/common_ui::header1}">header</div>
+  <div th:insert="~{layout/common_ui::header2('매개값1','매개값2')}">header</div>
+  <div th:insert="~{layout/common_ui::header3(~{this::title})}">
+    <title>타이틀</title>
+  </div>
+  <div>body</div>
+  <div th:replace="~{layout/common_ui::footer1}">footer</div>
 </body>
 </html>

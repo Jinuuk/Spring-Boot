@@ -27,7 +27,12 @@
 <form method="post" action="" th:object="${editForm}" >
   <div>
     <div><label for="">아이디</label><input type="text" name="pid" readonly th:field="*{pid}"></div>
-    <div><label for="">상품명</label><input type="text" th:field="*{pname}"></div>
+    <div>
+      <label for="">상품명</label><input type="text" th:field="*{pname}">
+      <ul th:if="${#fields.hasErrors('pname')}" th:class="errmsg">
+        <li th:each="err : ${#fields.errors('pname')}" th:text="${err}" />
+      </ul>
+    </div>
     <div>
       <label for="">수량</label><input type="text" th:field="*{count}">
       <ul th:if="${#fields.hasErrors('count')}" th:class="errmsg">
