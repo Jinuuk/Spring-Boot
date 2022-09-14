@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Title</title>
+</head>
+
+<body>
+  <div th:fragment="header1">
+    <p>header1 조각</p>
+  </div>
+  <div th:fragment="header2(p1,p2)">
+    <p th:text="${p1}">header2 조각-1</p>
+    <p th:text="${p2}">header2 조각-2</p>
+  </div>
+  <div th:fragment="header3(subject)">
+    <title th:replace="${subject}">제목</title>
+    <p>header1조각</p>
+  </div>
+  <div th:fragment="footer1">
+    <p>footer1 조각</p>
+  </div>
+  <div th:fragment="footer2">
+    <p>footer2 조각</p>
+  </div>
+
+</body>
+</html>

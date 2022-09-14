@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko"
+      th:replace="~{layout/base::layout (
+      ~{::title},
+      ~{::div#container},
+      ~{::link},
+      ~{::script},
+<!--/*      ~{::style},*/-->
+      ~{},
+<!--/*      ~{layout/common_ui::footer2}*/-->
+      _
+      )}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원 목록</title>
+  <!--  page css-->
+  <link rel="stylesheet" href="">
+  <link rel="stylesheet" href="">
+  <style>
+    table {
+      border:1px solid;
+      border-collapse:collapse;
+    }
+    td, th {
+      border:1px solid;
+      padding:5px;
+    }
+  </style>
+  <!--  page js-->
+  <script></script>
+  <script></script>
+</head>
+
+<body>
+<div id="container">
+  <h3>회원목록</h3>
+  <hr>
+  <table>
+    <colgroup>
+      <col><col><col><col><col>
+    </colgroup>
+    <thead>
+    <tr>
+      <th>순번</th>
+      <th>아이디</th>
+      <th>이메일</th>
+      <th>가입일</th>
+      <th>수정일</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="rec :${list}"  th:data-member-id="${rec.memberId}">
+      <td>[[${recStat.count}]]</td>
+      <!--        <td><a th:href="@{|/admin/members/${rec.memberId}|}">[[${rec.memberId}]]</a></td>-->
+      <td><!--a th:href="@{/admin/members/{id}(id=${rec.memberId})}"-->[[${rec.memberId}]]<!--/a--></td>
+      <td>[[${rec.email}]]</td>
+      <!--      <td>[[${#temporals.format(rec.cdate,'yy-MM-dd HH:mm')}]]</td>-->
+      <!--      <td>[[${#temporals.format(rec.udate,'yy-MM-dd HH:mm')}]]</td>-->
+      <td>[[${{rec.cdate}}]]</td>
+      <td>[[${{rec.udate}}]]</td>
+    </tr>
+    </tbody>
+  </table>
+  <div><button type="button" id="addBtn">등록</button></div>
+</div>
+  <script>
+      //등록
+      addBtn.addEventListener('click',e=>{
+        console.log('등록');
+        location.href = `/admin/members/add`;
+      });
+
+      //행클릭시 상세조회
+      const $tbody = document.querySelector("table tbody");
+      $tbody.addEventListener('click',e=>{
+        if(e.target.tagName == 'TD'){
+          const memberId = e.target.parentElement.dataset.memberId;
+          location.href =  `/admin/members/${memberId}`;
+        }
+      });
+    </script>
+</body>
+</html>
