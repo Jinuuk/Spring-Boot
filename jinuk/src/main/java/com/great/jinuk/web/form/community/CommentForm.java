@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class CommentAddForm {
+public class CommentForm {
   private Long comment_num;             //  comment_num          number(6),   댓글 번호
   private Long article_num;             //  article_num          number(6),   게시글 번호
   private String mem_num;               //  mem_number           number(6),   회원 번호

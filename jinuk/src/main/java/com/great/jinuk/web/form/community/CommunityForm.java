@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class ArticleAddForm {
+public class CommunityForm {
   private Long article_num;             //  article_num           number(6),    게시글 번호
   private String mem_number;            //  mem_number            number(6),    회원 번호
   private String article_category;      //  article_category      varchar2(6),  게시글 종류
