@@ -9,12 +9,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -32,11 +32,7 @@ public class ApiProductControllerV3 {
     //검증
     if (bindingResult.hasErrors()) {
       log.info("bindingResult={}",bindingResult);
-      List<ObjectError> allErrors = bindingResult.getAllErrors();
-      allErrors.stream().map(error->{
-        Arrays.stream(error.getArguments()).
-      });
-      return ApiResponse.createApiRestMsg("99", "실패", allErrors);
+      return ApiResponse.createApiRestMsg("99", "실패", getErrMsg(bindingResult));
     }
 
     //AddReq => Product 변환
@@ -48,6 +44,17 @@ public class ApiProductControllerV3 {
 
     //응답 메시지
     return ApiResponse.createApiRestMsg("00", "성공", bindingResult);
+  }
+
+  //검증 오류 메시지
+  private Map<String, String> getErrMsg(BindingResult bindingResult) {
+    Map<String, String> errmsg = new HashMap<>();
+
+    bindingResult.getAllErrors().stream().forEach(objectError -> {
+      errmsg.put(objectError.getCodes()[0], objectError.getDefaultMessage());
+    });
+
+    return errmsg;
   }
 
   //조회 get
