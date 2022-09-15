@@ -8,17 +8,18 @@ import com.kh.demo.web.api.product.EditReq;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-@Controller
+//@Controller
+//@ResponseBody
+//@RestController //@Controller+@ResponseBody
 @RequiredArgsConstructor
 @RequestMapping("/api")
-public class ApiProductController {
+public class ApiProductControllerV1 {
 
   private final ProductSVC productSVC;
 
@@ -76,7 +77,7 @@ public class ApiProductController {
 //  }
 
   //등록 post
-  @ResponseBody
+//  @ResponseBody
   @PostMapping(value = "/products")
   public ApiResponse<Long> add(@RequestBody AddReq addReq){
     log.info("reqMsg : {}",addReq);
@@ -98,7 +99,7 @@ public class ApiProductController {
 
 
   //조회 get
-  @ResponseBody
+//  @ResponseBody
   @GetMapping("/products/{id}")
   public ApiResponse<Product> findById(@PathVariable("id") Long id){
 
@@ -119,7 +120,7 @@ public class ApiProductController {
   }
 
   //수정 patch
-  @ResponseBody
+//  @ResponseBody
   @PatchMapping("/products/{id}")
   public ApiResponse<Product> edit(@PathVariable("id") Long id, @RequestBody EditReq editReq){
 
@@ -147,7 +148,7 @@ public class ApiProductController {
   }
 
   //삭제 delete
-  @ResponseBody
+//  @ResponseBody
   @DeleteMapping("/products/{id}")
   public ApiResponse<Product> del(@PathVariable("id") Long id) {
 
@@ -171,7 +172,7 @@ public class ApiProductController {
   }
 
   //목록 get
-  @ResponseBody
+//  @ResponseBody
   @GetMapping("/products")
   public ApiResponse<List<Product>> findAll(){
 
