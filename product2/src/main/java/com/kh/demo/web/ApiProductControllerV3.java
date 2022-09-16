@@ -35,6 +35,20 @@ public class ApiProductControllerV3 {
       return ApiResponse.createApiRestMsg("99", "실패", getErrMsg(bindingResult));
     }
 
+    //비즈니스 규칙
+    //필드 검증
+    if (addReq.getQuantity() > 100) {
+      bindingResult.rejectValue("quantity", null, "상품 수량은 100개를 초과할 수 없습니다.");
+    }
+    //오브젝트 검증
+    if (addReq.getQuantity()* addReq.getPrice() > 10_000_000) {
+      bindingResult.reject(null, "총액은 1000만원을 초과할 수 없습니다.");
+    }
+    if (bindingResult.hasErrors()) {
+      log.info("bindingResult={}",bindingResult);
+      return ApiResponse.createApiRestMsg("99", "실패", getErrMsg(bindingResult));
+    }
+
     //AddReq => Product 변환
     Product product = new Product();
     BeanUtils.copyProperties(addReq, product);
@@ -43,7 +57,7 @@ public class ApiProductControllerV3 {
     Long id = productSVC.save(product);
 
     //응답 메시지
-    return ApiResponse.createApiRestMsg("00", "성공", bindingResult);
+    return ApiResponse.createApiRestMsg("00", "성공", id);
   }
 
   //검증 오류 메시지
@@ -76,9 +90,31 @@ public class ApiProductControllerV3 {
 
   //수정 patch
   @PatchMapping("/products/{id}")
-  public ApiResponse<Product> edit(@PathVariable("id") Long id, @RequestBody EditReq editReq){
+  public ApiResponse<Object> edit(
+      @PathVariable("id") Long id,
+      @Valid @RequestBody EditReq editReq
+      , BindingResult bindingResult){
 
     //검증
+    if (bindingResult.hasErrors()) {
+      log.info("bindingResult={}",bindingResult);
+      return ApiResponse.createApiRestMsg("99", "실패", getErrMsg(bindingResult));
+    }
+
+    //비즈니스 규칙
+    //필드 검증
+    if (editReq.getQuantity() > 100) {
+      bindingResult.rejectValue("quantity", null, "상품 수량은 100개를 초과할 수 없습니다.");
+    }
+    //오브젝트 검증
+    if (editReq.getQuantity()* editReq.getPrice() > 10_000_000) {
+      bindingResult.reject(null, "총액은 1000만원을 초과할 수 없습니다.");
+    }
+    if (bindingResult.hasErrors()) {
+      log.info("bindingResult={}",bindingResult);
+      return ApiResponse.createApiRestMsg("99", "실패", getErrMsg(bindingResult));
+    }
+
     Optional<Product> foundProduct = productSVC.findByProductId(id);
     if (foundProduct.isEmpty()) {
       return ApiResponse.createApiRestMsg("01", "수정할 상품이 없습니다.",null);
