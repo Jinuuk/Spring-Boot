@@ -29,6 +29,7 @@ public class ApiProductControllerV3 {
   @PostMapping(value = "/products")
   public ApiResponse<Object> add(@Valid @RequestBody AddReq addReq, BindingResult bindingResult) {
     log.info("reqMsg : {}", addReq);
+
     //검증
     if (bindingResult.hasErrors()) {
       log.info("bindingResult={}",bindingResult);

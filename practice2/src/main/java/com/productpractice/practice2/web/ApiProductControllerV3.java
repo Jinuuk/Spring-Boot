@@ -8,33 +8,69 @@ import com.productpractice.practice2.web.api.product.EditReq;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
 
-//@RestController
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
-public class ApiProductControllerV2 {
+public class ApiProductControllerV3 {
 
   private final ProductSVC productSVC;
 
   //등록
   @PostMapping("/products")
-  public ApiResponse<Long> add(@RequestBody AddReq addReq) {
+  public ApiResponse<Object> add(@Valid @RequestBody AddReq addReq, BindingResult bindingResult) {
+    log.info("reqMsg : {}", addReq);
+
+    //검증
+    if (bindingResult.hasErrors()) {
+      log.info("bindingResult={}", bindingResult);
+      return ApiResponse.createApiRestMsg("99", "실패", getErrMsg(bindingResult));
+    }
+
+    //비즈니스 규칙
+    //필드 검증
+    if (addReq.getQuantity() > 100) {
+      bindingResult.rejectValue("quantity", null, "상품 수량은 100개를 초과할 수 없습니다.");
+    }
+    //오브젝트 검증
+    if (addReq.getQuantity() * addReq.getPrice() > 10_000_000) {
+      bindingResult.reject(null, "총액은 1000만원을 초과할 수 없습니다.");
+    }
+    if (bindingResult.hasErrors()) {
+      log.info("bindingResult={}", bindingResult);
+      return ApiResponse.createApiRestMsg("99", "실패", getErrMsg(bindingResult));
+    }
 
     //AddReq to Product 변환
     Product product = new Product();
-    BeanUtils.copyProperties(addReq,product);
+    BeanUtils.copyProperties(addReq, product);
 
     //상품등록
     Long id = productSVC.save(product);
 
     //응답 메시지
-    return ApiResponse.createApiRestMsg("00","성공",id);
+    return ApiResponse.createApiRestMsg("00", "성공", id);
+  }
+
+  //검증 오류 메시지
+  private Map<String, String> getErrMsg(BindingResult bindingResult) {
+    Map<String, String> errmsg = new HashMap<>();
+
+    bindingResult.getAllErrors().stream().forEach(objectError ->{
+      errmsg.put(objectError.getCodes()[0], objectError.getDefaultMessage());
+    });
+
+    return errmsg;
   }
 
   //조회
@@ -56,9 +92,30 @@ public class ApiProductControllerV2 {
 
   //수정
   @PatchMapping("/products/{id}")
-  public ApiResponse<Product> edit(@PathVariable("id") Long id, @RequestBody EditReq editReq) {
+  public ApiResponse<Object> edit(@PathVariable("id") Long id,
+                                  @Valid @RequestBody EditReq editReq,
+                                  BindingResult bindingResult) {
 
     //검증
+    if (bindingResult.hasErrors()) {
+      log.info("bindingResult={}", bindingResult);
+      return ApiResponse.createApiRestMsg("99", "실패", getErrMsg(bindingResult));
+    }
+
+    //비즈니스 규칙
+    //필드 검증
+    if (editReq.getQuantity() > 100) {
+      bindingResult.rejectValue("quantity", null, "상품 수량은 100개를 초과할 수 없습니다.");
+    }
+    //오브젝트 검증
+    if (editReq.getQuantity() * editReq.getPrice() > 10_000_000) {
+      bindingResult.reject(null, "총액은 1000만원을 초과할 수 없습니다.");
+    }
+    if (bindingResult.hasErrors()) {
+      log.info("bindingResult={}", bindingResult);
+      return ApiResponse.createApiRestMsg("99", "실패", getErrMsg(bindingResult));
+    }
+
     Optional<Product> foundProduct = productSVC.findByProductId(id);
     ApiResponse<Product> response = null;
     if (foundProduct.isEmpty()) {
@@ -73,9 +130,7 @@ public class ApiProductControllerV2 {
     productSVC.update(id, product);
 
     //응답 메시지
-    return response = ApiResponse.createApiRestMsg("00", "성공", productSVC.findByProductId(id).get());
-
-
+    return ApiResponse.createApiRestMsg("00", "성공", productSVC.findByProductId(id).get());
   }
 
   //삭제
