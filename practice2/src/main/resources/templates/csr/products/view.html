@@ -56,6 +56,8 @@
     </div>
     <div>
       <button type="button" id="addBtn">등록</button>
+      <button type="button" id="updateBtn">수정</button>
+      <button type="button" id="deleteBtn">삭제</button>
     </div>
   </form>
 
@@ -105,10 +107,10 @@
       const product = getInputData();
       //3)상품 등록 처리하기
       add(product);
+      //5)양식 클리어
+      clearForm();
       //4)목록 가져오기
       findAll();
-      //양식 클리어
-      clearForm();
     });
 
     //조회 클릭 시
@@ -119,6 +121,25 @@
 
     //목록 클릭 시
     listBtn.addEventListener('click', e=>{
+      findAll();
+    });
+
+    //수정 클릭 시
+    updateBtn.addEventListener('click',e=>{
+      const id = form.productId.value;
+      const product = getInputData();
+      update(id,product);
+
+      clearForm();
+      findAll();
+    });
+
+    //삭제 클릭시
+    deleteBtn.addEventListener('click', e=>{
+      const id = form.productId.value;
+      deleteById(id);
+
+      clearForm();
       findAll();
     });
 
@@ -181,6 +202,8 @@
       }).then(res=>res.json())
          .then(data=>console.log(data))
          .catch(err=>console.log(err));
+
+         findAll();
     }
 
     //삭제 함수
@@ -194,6 +217,8 @@
       }).then(res=>res.json())
          .then(data=>console.log(data))
          .catch(err=>console.log(err));
+
+         findAll();
     }
 
     //목록 함수
@@ -315,6 +340,7 @@
 
     //필드 클리어 함수
     function clearForm(){
+      productId.value='';
       pname.value = '';
       quantity.value = '';
       price.value = '';
