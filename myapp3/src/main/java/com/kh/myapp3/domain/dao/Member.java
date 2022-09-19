@@ -1,4 +1,4 @@
-package com.kh.myapp3.domain;
+package com.kh.myapp3.domain.dao;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/community")
 @RequiredArgsConstructor
-public class CommunityController {
+public class ArticleController {
 
   @GetMapping
   public String communityMain(){ //자유게시판 메인 화면

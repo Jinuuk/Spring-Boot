@@ -1,7 +1,7 @@
 package com.kh.myapp3.domain.admin;
 
 
-import com.kh.myapp3.domain.Member;
+import com.kh.myapp3.domain.dao.Member;
 
 import java.util.List;
 

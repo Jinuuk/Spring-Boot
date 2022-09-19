@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class CommunityDAOImpl {
+public class ArticleDAOImpl {
 }

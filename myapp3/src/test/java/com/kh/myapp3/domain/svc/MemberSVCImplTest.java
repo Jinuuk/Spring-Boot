@@ -1,6 +1,6 @@
 package com.kh.myapp3.domain.svc;
 
-import com.kh.myapp3.domain.Member;
+import com.kh.myapp3.domain.dao.Member;
 import com.kh.myapp3.domain.admin.AdminMemberSVC;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
