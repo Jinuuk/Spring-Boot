@@ -1,12 +1,13 @@
 package com.productpractice.practice1.domain.dao;
 
-import com.productpractice.practice1.domain.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 @Slf4j
 @Repository
@@ -107,4 +108,30 @@ public class MemberDAOImpl implements MemberDAO {
     return result;
   }
 
+  /**
+   * 로그인
+   *
+   * @param email 이메일
+   * @param pw    비밀번호
+   * @return 회원
+   */
+  @Override
+  public Optional<Member> login(String email, String pw) {
+    StringBuffer sql = new StringBuffer();
+    sql.append("select * ");
+    sql.append(" from member ");
+    sql.append(" where email = ? ");
+    sql.append(" and pw = ? ");
+
+    try {
+      Member member = jt.queryForObject(
+                      sql.toString(),
+                      new BeanPropertyRowMapper<>(Member.class),
+                      email, pw
+      );
+      return Optional.of(member);
+    } catch (DataAccessException e) {
+      return Optional.empty();
+    }
+  }
 }

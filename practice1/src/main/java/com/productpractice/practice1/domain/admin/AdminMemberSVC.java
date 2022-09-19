@@ -1,6 +1,6 @@
 package com.productpractice.practice1.domain.admin;
 
-import com.productpractice.practice1.domain.Member;
+import com.productpractice.practice1.domain.dao.Member;
 
 import java.util.List;
 

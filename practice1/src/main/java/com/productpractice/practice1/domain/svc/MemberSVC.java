@@ -1,6 +1,8 @@
 package com.productpractice.practice1.domain.svc;
 
-import com.productpractice.practice1.domain.Member;
+import com.productpractice.practice1.domain.dao.Member;
+
+import java.util.Optional;
 
 public interface MemberSVC {
 
@@ -32,5 +34,13 @@ public interface MemberSVC {
    * @param memberId 회원 아이디
    */
   int del(Long memberId, String pw);
+
+  /**
+   * 로그인
+   * @param email 이메일
+   * @param pw 비밀번호
+   * @return 회원
+   */
+  Optional<Member> login(String email, String pw);
 
 }

@@ -102,7 +102,6 @@
       READ:Symbol('read')          //조회
     });
 
-
     //전역변수
     const form = {
       productId : document.getElementById('productId'),
@@ -112,7 +111,7 @@
       mode : null
     }
 
-    //등록상태
+    //등록 상태
     changeMode(MODE.ADD);
 
     //전체목록 가져오기
@@ -177,7 +176,7 @@
       }
         return;
       }else{
-        productIdErr.textContent = ''
+        productIdErr.textContent = '';
         productIdErr.classList.remove('fieldError');
       }
       const id = form.productId.value; //상품 아이디
@@ -221,8 +220,6 @@
         findAll();
         })
         .catch(err=>console.log(err));
-
-        findAll();
     }
     //add(product);
 

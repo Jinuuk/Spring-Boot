@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko"
+      th:fragment="layout (title, content, css, js, style, footer)"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:replace="${title}">Layout Title</title>
+  <!--  공통 css-->
+  <link rel="stylesheet" href="">
+  <link rel="stylesheet" href="">
+  <!--  공통 js-->
+  <script></script>
+  <script></script>
+  <!--  page css-->
+  <th:block th:replace="${css}"></th:block>
+  <th:block th:replace="${style}"></th:block>
+  <!--  page js-->
+  <th:block th:replace="${js}"></th:block>
+</head>
+
+<body>
+<h1>Layout H1</h1>
+<div th:replace="${content}">
+  <p>Layout content</p>
+</div>
+<footer th:replace="${footer}">
+  common footer
+</footer>
+</body>
+</html>

@@ -24,6 +24,10 @@
       font-weight: bold;
       font-size:1.2em;
     }
+
+    .none {
+      display:none;
+    }
   </style>
 </head>
 
@@ -37,7 +41,6 @@
       <label for="productId">상품 아이디</label>
       <input type="text" id="productId" size="10">
       <button type="button" id="findBtn">조회</button>
-      <button type="button" id="deleteBtn">삭제</button>
       <span class="fieldError" id="productIdErr"></span>
     </div>
     <div>
@@ -55,9 +58,15 @@
       <input type="text" id="price">
       <span class="fieldError" id="priceErr"></span>
     </div>
-    <div>
+<!--    등록상태-->
+    <div class="btngrp add">
       <button type="button" id="addBtn">등록</button>
-      <button type="button" id="updateBtn">수정</button>
+    </div>
+<!--    조회상태-->
+    <div class="btngrp read">
+      <button type="button" id="toAddBtn">신규</button>
+      <button type="button" id="modifyBtn">수정</button>
+      <button type="button" id="delBtn">삭제</button>
     </div>
   </form>
 
@@ -78,16 +87,45 @@
   </div>
   
   <script>
+    //불변객체 : 프로퍼티값 수정 불가
+    const MODE = Object.freeze({
+      ADD:Symbol('add'),  //등록
+      READ:Symbol('read') //조회
+    });
+
     //전역변수
     const form = {
       productId : document.getElementById('productId'),
       pname : document.getElementById('pname'),
       quantity : document.getElementById('quantity'),
       price : document.getElementById('price'),
+      mode : null
     }
+
+    //등록 상태
+    changeMode(MODE.ADD);
 
     //전체 목록 가져오기
     findAll();
+
+    //화면 MODE 변경
+    function changeMode(mode){
+      //현재 mode와 비교시 동일하면 수행안함
+      if(form.mode == mode) return;
+      form.mode = mode;
+
+      switch(form.mode){
+        case MODE.ADD :  //등록
+          //버튼
+          document.querySelector('.btngrp.add').style.display='block';
+          document.querySelector('.btngrp.read').style.display='none';
+          break;
+        case MODE.READ : //조회
+          document.querySelector('.btngrp.add').style.display='none';
+          document.querySelector('.btngrp.read').style.display='block';
+          break;
+      }
+    }
 
     //입력 데이터 가져오기
     function getInputData(){
@@ -107,16 +145,39 @@
       const product = getInputData();
       //3)상품 등록 처리하기
       add(product);
-      //5)양식 클리어
+      //4)양식 클리어
       clearForm();
-      //4)목록 가져오기
-      findAll();
+    });
+
+    //삭제 클릭시
+    delBtn.addEventListener('click', e=>{
+      if(!confirm('삭제하시겠습니까?')) return;
+      const id = form.productId.value;
+      deleteById(id);
+      clearForm();
     });
 
     //조회 클릭 시
     findBtn.addEventListener('click', e=>{
+      if(!productId.value.trim()){
+        productIdErr.textContent='상품 아이디를 입력하세요.';
+        if(!productIdErr.classList.contains('fieldError')){
+        }
+        return;
+      }else{
+        productIdErr.textContent='';
+        productIdErr.classList.remove('fieldError');
+      }
       const id = productId.value //상품 아이디
       findById(id);
+    });
+
+    //수정 클릭 시
+    modifyBtn.addEventListener('click',e=>{
+      //1)유효성 체크
+      validChk();
+      //2)수정처리
+      update(form.productId.value,getInputData());
     });
 
     //목록 클릭 시
@@ -124,25 +185,11 @@
       findAll();
     });
 
-    //수정 클릭 시
-    updateBtn.addEventListener('click',e=>{
-      const id = form.productId.value;
-      const product = getInputData();
-      update(id,product);
-
+    //신규 클릭 시
+    toAddBtn.addEventListener('click',e=>{
+      changeMode(MODE.ADD);
       clearForm();
-      findAll();
     });
-
-    //삭제 클릭시
-    deleteBtn.addEventListener('click', e=>{
-      const id = form.productId.value;
-      deleteById(id);
-
-      clearForm();
-      findAll();
-    });
-
 
     //등록 함수
     function add(product){
@@ -155,10 +202,11 @@
         },
         body:JSON.stringify(product)
       }).then(res=>res.json())
-         .then(data=>console.log(data))
-         .catch(err=>console.log(err));
-
+         .then(data=>{
+         console.log(data)
          findAll();
+         })
+         .catch(err=>console.log(err));
     }
 
     //조회 함수
@@ -176,6 +224,8 @@
             //조회 결과 양식에 반영
             fillForm(res.data);
             productIdErr.textContent='';
+            //조회 상태
+            changeMode(MODE.READ);
           }else{
             const errMsg = `${res.header.rtcd}-${res.header.rtmsg}`;
             productIdErr.context = res.header.rtmsg;
@@ -200,10 +250,11 @@
         },
         body:JSON.stringify(product)
       }).then(res=>res.json())
-         .then(data=>console.log(data))
-         .catch(err=>console.log(err));
-
+         .then(data=>{
+         console.log(data)
          findAll();
+         })
+         .catch(err=>console.log(err));
     }
 
     //삭제 함수
@@ -215,10 +266,11 @@
           'Accept' : 'application/json'
         }
       }).then(res=>res.json())
-         .then(data=>console.log(data))
-         .catch(err=>console.log(err));
-
+         .then(data=>{
+         console.log(data)
          findAll();
+         })
+         .catch(err=>console.log(err));
     }
 
     //목록 함수
@@ -236,9 +288,9 @@
             const result = 
             res.data.map(product=>{
               return `<div>${product.productId}</div>
-                          <div>${product.pname}</div>
-                          <div>${product.quantity}</div>
-                          <div>${product.price}</div>`;
+                      <div><a href="#" onclick='findById(${product.productId})'>${product.pname}</a></div>
+                      <div>${product.quantity}</div>
+                      <div>${product.price}</div>`;
             });
             console.log(result.join(' '));
             document.querySelector('#productList .wrap .body').innerHTML = result.join(' ');
@@ -340,10 +392,10 @@
 
     //필드 클리어 함수
     function clearForm(){
-      productId.value='';
-      pname.value = '';
-      quantity.value = '';
-      price.value = '';
+      form.productId.value='';
+      form.pname.value = '';
+      form.quantity.value = '';
+      form.price.value = '';
     }
 
     //양식 값 채우기 (조회)

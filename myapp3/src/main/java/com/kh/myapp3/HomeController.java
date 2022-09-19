@@ -69,6 +69,7 @@ public class HomeController {
 
     return "afterLogin";
   }
+
   //로그아웃
   @GetMapping("/logout")
   public String logout(HttpServletRequest request) {

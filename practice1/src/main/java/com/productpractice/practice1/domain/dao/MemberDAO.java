@@ -1,6 +1,6 @@
 package com.productpractice.practice1.domain.dao;
 
-import com.productpractice.practice1.domain.Member;
+import java.util.Optional;
 
 public interface MemberDAO {
 
@@ -40,4 +40,12 @@ public interface MemberDAO {
    * @return 회원 아이디
    */
   Long generateMemberId();
+
+  /**
+   * 로그인
+   * @param email 이메일
+   * @param pw 비밀번호
+   * @return 회원
+   */
+  Optional<Member> login(String email, String pw);
 }

@@ -1,6 +1,6 @@
 package com.productpractice.practice1.web;
 
-import com.productpractice.practice1.domain.Member;
+import com.productpractice.practice1.domain.dao.Member;
 import com.productpractice.practice1.domain.svc.MemberSVC;
 import com.productpractice.practice1.web.form.member.AddForm;
 import com.productpractice.practice1.web.form.member.EditForm;

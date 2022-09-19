@@ -1,4 +1,4 @@
-package com.productpractice.practice1.domain;
+package com.productpractice.practice1.domain.dao;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
