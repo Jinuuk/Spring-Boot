@@ -38,33 +38,6 @@ public class ProductController {
   }
 
   //등록
-  @PostMapping("/add")
-  public String saveV2(@Valid @ModelAttribute("form") SaveForm saveForm,
-                     BindingResult bindingResult,
-                     RedirectAttributes redirectAttributes) throws IOException {
-
-    log.info("saveForm={}", saveForm);
-    if (!saveForm.getFile().isEmpty()) {
-      log.info("첨부파일이름={}", saveForm.getFile().getOriginalFilename());
-      log.info("파일크기={}", saveForm.getFile().getSize());
-      log.info("파일유형={}", saveForm.getFile().getContentType());
-      String originalFilename = saveForm.getFile().getOriginalFilename();
-      saveForm.getFile().transferTo(new File("d:/tmp/"+originalFilename));
-    }
-
-    if (!saveForm.getFiles().isEmpty()) {
-      List<MultipartFile> files = saveForm.getFiles();
-      files.stream().forEach(file->{
-        log.info("첨부파일이름={}", file.getOriginalFilename());
-        log.info("파일크기={}", file.getSize());
-        log.info("파일유형={}", file.getContentType());
-      });
-    }
-
-    return "redirect:/products/{id}/detail";
-  }
-
-  //등록
   //@PostMapping("/add")
   public String save(@Valid @ModelAttribute("form") SaveForm saveForm,
                      BindingResult bindingResult,
@@ -99,6 +72,35 @@ public class ProductController {
     redirectAttributes.addAttribute("id", productId);
     return "redirect:/products/{id}/detail";
   }
+
+  //등록
+  @PostMapping("/add")
+  public String saveV2(@Valid @ModelAttribute("form") SaveForm saveForm,
+                     BindingResult bindingResult,
+                     RedirectAttributes redirectAttributes) throws IOException {
+
+    log.info("saveForm={}", saveForm);
+    if (!saveForm.getFile().isEmpty()) {
+      log.info("첨부파일이름={}", saveForm.getFile().getOriginalFilename());
+      log.info("파일크기={}", saveForm.getFile().getSize());
+      log.info("파일유형={}", saveForm.getFile().getContentType());
+      String originalFilename = saveForm.getFile().getOriginalFilename();
+      saveForm.getFile().transferTo(new File("d:/tmp/"+originalFilename));
+    }
+
+    if (!saveForm.getFiles().isEmpty()) {
+      List<MultipartFile> files = saveForm.getFiles();
+      files.stream().forEach(file->{
+        log.info("첨부파일이름={}", file.getOriginalFilename());
+        log.info("파일크기={}", file.getSize());
+        log.info("파일유형={}", file.getContentType());
+      });
+    }
+
+    return "redirect:/products/{id}/detail";
+  }
+
+
 
   //조회
   @GetMapping("/{id}/detail")

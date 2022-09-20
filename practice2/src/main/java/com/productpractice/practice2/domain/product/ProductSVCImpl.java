@@ -1,7 +1,5 @@
-package com.productpractice.practice2.svc;
+package com.productpractice.practice2.domain.product;
 
-import com.productpractice.practice2.dao.Product;
-import com.productpractice.practice2.dao.ProductDAO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

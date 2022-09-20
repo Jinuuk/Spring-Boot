@@ -6,7 +6,6 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-
 public class UploadFile {
   private Long uploadFileId;         //  uploadfile_id   number(10),                     --파일아이디
   private String code;               //  code            varchar2(11),                   --분류코드

@@ -21,12 +21,20 @@
 </head>
 
 <body>
-<h1>Layout H1</h1>
-<div th:replace="${content}">
-  <p>Layout content</p>
-</div>
-<footer th:replace="${footer}">
-  common footer
-</footer>
+  <h1>
+    Layout H1
+  </h1>
+  <div>
+    <span th:if="${!session.isEmpty()}" th:text="${session.LoginMember.email}"></span>
+    <span th:if="${!session.isEmpty()}" th:text="${session.LoginMember.nickname}"></span>
+    <span th:if="${!session.isEmpty()}"><a href="" th:href="@{/logout}">로그아웃</a></span>
+  </div>
+
+  <div th:replace="${content}">
+    <p>Layout content</p>
+  </div>
+  <footer th:replace="${footer}">
+    common footer
+  </footer>
 </body>
 </html>

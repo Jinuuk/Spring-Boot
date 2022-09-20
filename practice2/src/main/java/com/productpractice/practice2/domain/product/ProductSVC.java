@@ -1,6 +1,6 @@
-package com.productpractice.practice2.svc;
+package com.productpractice.practice2.domain.product;
 
-import com.productpractice.practice2.dao.Product;
+import com.productpractice.practice2.domain.product.Product;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,7 +1,7 @@
 package com.productpractice.practice2.web;
 
-import com.productpractice.practice2.dao.Product;
-import com.productpractice.practice2.svc.ProductSVC;
+import com.productpractice.practice2.domain.product.Product;
+import com.productpractice.practice2.domain.product.ProductSVC;
 import com.productpractice.practice2.web.api.ApiResponse;
 import com.productpractice.practice2.web.api.product.AddReq;
 import com.productpractice.practice2.web.api.product.EditReq;

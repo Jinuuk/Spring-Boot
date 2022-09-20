@@ -1,4 +1,4 @@
-package com.productpractice.practice2.dao;
+package com.productpractice.practice2.domain.product;
 
 import lombok.Data;
 

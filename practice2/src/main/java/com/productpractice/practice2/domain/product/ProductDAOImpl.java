@@ -1,4 +1,4 @@
-package com.productpractice.practice2.dao;
+package com.productpractice.practice2.domain.product;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.kh.demo.domain.common.file;
+package com.productpractice.practice2.domain.common.file;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,10 +20,16 @@ import java.util.Optional;
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class UploadFileDAOImpl implements UploadFileDAO {
+public class UploadFileDAOImpl implements UploadFileDAO{
+
   private final JdbcTemplate jdbcTemplate;
 
-  //업로드파일 등록-단건
+  /**
+   * 업로드 파일 등록 : 단건
+   *
+   * @param uploadFile
+   * @return
+   */
   @Override
   public Long addFile(UploadFile uploadFile) {
 
@@ -47,6 +53,7 @@ public class UploadFileDAOImpl implements UploadFileDAO {
     sql.append(") ");
 
     KeyHolder keyHolder = new GeneratedKeyHolder();
+
     jdbcTemplate.update(new PreparedStatementCreator() {
       @Override
       public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
@@ -64,7 +71,11 @@ public class UploadFileDAOImpl implements UploadFileDAO {
     return Long.valueOf(keyHolder.getKeys().get("uploadfile_id").toString());
   }
 
-  //업로드파일 등록-여러건
+  /**
+   * 업로드 파일 등록 : 여러건
+   *
+   * @param uploadFile
+   */
   @Override
   public void addFile(List<UploadFile> uploadFile) {
 
@@ -87,12 +98,12 @@ public class UploadFileDAOImpl implements UploadFileDAO {
     sql.append("  ? ");
     sql.append(") ");
 
-    //배치 처리 : 여러건의 갱신작업을 한꺼번에 처리하므로 단건처리할때보다 성능이 좋다.
+    //배치 처리 : 여러건의 갱신 작업을 한꺼번에 처리하므로 단건 처리할 때보다 성능이 좋다.
     jdbcTemplate.batchUpdate(sql.toString(), new BatchPreparedStatementSetter() {
       @Override
       public void setValues(PreparedStatement ps, int i) throws SQLException {
         ps.setString(1, uploadFile.get(i).getCode());
-        ps.setLong(2,uploadFile.get(i).getRid());
+        ps.setLong(2,  uploadFile.get(i).getRid());
         ps.setString(3, uploadFile.get(i).getStoreFileName());
         ps.setString(4, uploadFile.get(i).getUploadFileName());
         ps.setString(5, uploadFile.get(i).getFsize());
@@ -108,7 +119,39 @@ public class UploadFileDAOImpl implements UploadFileDAO {
 
   }
 
-  //첨부파일 조회 - 여러건
+  /**
+   * 업로드 파일 조회 : 단건
+   *
+   * @param uploadFileId
+   * @return
+   */
+  @Override
+  public Optional<UploadFile> findFileByUploadFileId(Long uploadFileId) {
+    StringBuffer sql = new StringBuffer();
+    sql.append(" select * ");
+    sql.append("  from uploadfile ");
+    sql.append(" where uploadfile_id = ? ");
+
+    UploadFile uploadFile = null;
+    try {
+      uploadFile = jdbcTemplate.queryForObject(
+          sql.toString(),
+          new BeanPropertyRowMapper<>(UploadFile.class),
+          uploadFileId);
+      return Optional.of(uploadFile);
+    } catch (EmptyResultDataAccessException e) {
+      e.printStackTrace();
+      return Optional.empty();
+    }
+  }
+
+  /**
+   * 업로드 파일 조회 : 여러건
+   *
+   * @param code
+   * @param rid
+   * @return
+   */
   @Override
   public List<UploadFile> getFilesByCodeWithRid(String code, Long rid) {
     StringBuffer sql = new StringBuffer();
@@ -128,34 +171,18 @@ public class UploadFileDAOImpl implements UploadFileDAO {
     sql.append("   AND RID = ?  ");
 
     List<UploadFile> list = jdbcTemplate.query(sql.toString(),
-        //db table의 칼럼명(snake case) => 별칭 줄 필요 없이 java 객체(camel case)로 자동으로 변환
+        //DB 테이블의 칼럼명(스네이크 케이스) => java 객체(케멀 케이스)로 자동 변환
         new BeanPropertyRowMapper<>(UploadFile.class), code, rid);
     log.info("list={}",list);
     return list;
   }
 
-  //첨부파일 조회 - 단건
-  @Override
-  public Optional<UploadFile> findFileByUploadFileId(Long uploadFileId) {
-    StringBuffer sql = new StringBuffer();
-    sql.append(" select * ");
-    sql.append("  from uploadfile ");
-    sql.append(" where uploadfile_id = ? ");
-
-    UploadFile uploadFile = null;
-    try {
-      uploadFile = jdbcTemplate.queryForObject(
-          sql.toString(),
-          new BeanPropertyRowMapper<>(UploadFile.class),
-          uploadFileId);
-      return Optional.of(uploadFile);
-    }catch (EmptyResultDataAccessException e){
-      e.printStackTrace();
-      return Optional.empty();
-    }
-  }
-
-  // 첨부파일 삭제 by uplaodfileId
+  /**
+   * 업로드 파일 삭제 by uploadFileId
+   *
+   * @param uploadFileId
+   * @return
+   */
   @Override
   public int deleteFileByUploadFileId(Long uploadFileId) {
     StringBuffer sql = new StringBuffer();
@@ -165,7 +192,13 @@ public class UploadFileDAOImpl implements UploadFileDAO {
     return jdbcTemplate.update(sql.toString(), uploadFileId);
   }
 
-  // 첨부파일 삭제 by uplaodfileId
+  /**
+   * 업로드 파익 삭제 by code, rid
+   *
+   * @param code
+   * @param rid
+   * @return
+   */
   @Override
   public int deleteFileByCodeWithRid(String code, Long rid) {
     StringBuffer sql = new StringBuffer();

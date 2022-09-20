@@ -1,4 +1,4 @@
-package com.kh.myapp3.web.interceptor;
+package com.productpractice.practice1.web.interceptor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -19,10 +19,10 @@ public class LogInterceptor implements HandlerInterceptor {
     log.info("preHandle called!");
     String requestURI = request.getRequestURI(); //클라이언트의 요청 url
 
-    String uuid = UUID.randomUUID().toString(); //요청 추적 번호
-    request.setAttribute(TRANSACTION_ID,uuid); //컨트롤+알트+C : 상수화, 컨트롤+알트+M : 메소드화
+    String uuid = UUID.randomUUID().toString();
+    request.setAttribute(TRANSACTION_ID,uuid);
 
-    log.info("REQUEST [{}][{}][{}]",uuid,requestURI,handler);
+    log.info("REQUEST [{}][{}][{}]", uuid, requestURI,handler);
     return true;
   }
 
@@ -33,7 +33,7 @@ public class LogInterceptor implements HandlerInterceptor {
     log.info("postHandle called!");
     String requestURI = request.getRequestURI(); //클라이언트의 요청 url
     String uuid = (String)request.getAttribute(TRANSACTION_ID);
-    log.info("REQUEST [{}][{}][{}]",uuid,requestURI,handler);
+    log.info("REQUEST [{}][{}][{}]", uuid, requestURI,handler);
   }
 
   //view가 렌더링되고 응답 메시지가 클라이언트에 전송된 후
@@ -43,10 +43,10 @@ public class LogInterceptor implements HandlerInterceptor {
     log.info("afterCompletion called!");
     String requestURI = request.getRequestURI(); //클라이언트의 요청 url
     String uuid = (String)request.getAttribute(TRANSACTION_ID);
-    log.info("REQUEST [{}][{}][{}]",uuid,requestURI,handler);
+    log.info("REQUEST [{}][{}][{}]", uuid, requestURI,handler);
 
     if (ex != null) {
-      log.error("afterCompletion error!!", ex);
+      log.error("afterCompletion error!",ex);
     }
   }
 }
