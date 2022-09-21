@@ -11,28 +11,28 @@ public interface ArticleDAO {
    * 게시글 목록 조회1 : 전체
    * @return 게시글 리스트
    */
-  Optional<List<Article>> findAll();
+  List<Article> findAll();
 
   /**
    * 게시글 목록 조회2 : 카테고리별 분류
    * @param article_category 게시글 카테고리
    * @return 게시글 리스트
    */
-  Optional<List<Article>> findByCategory(String article_category);
+  List<Article> findByCategory(String article_category);
 
   /**
    * 게시글 목록 조회3 : 검색(제목)
    * @param article_title 게시글 제목
    * @return 게시글 리스트
    */
-  Optional<List<Article>> findByTitle(String article_title);
+  List<Article> findByTitle(String article_title);
 
   /**
    * 게시글 목록 조회4 : 검색(내용)
    * @param article_contents 게시글 내용
    * @return 게시글 리스트
    */
-  Optional<List<Article>> findByContents(String article_contents);
+  List<Article> findByContents(String article_contents);
 
   //게시글 목록 조회5 : 검색(제목+내용) -> SVC
 
@@ -41,7 +41,7 @@ public interface ArticleDAO {
    * @param mem_nickname 회원 닉네임
    * @return 게시글 리스트
    */
-  Optional<List<Article>> findByNickname(String mem_nickname);
+  List<Article> findByNickname(String mem_nickname);
 
   /**
    * 게시글 조회
@@ -56,14 +56,14 @@ public interface ArticleDAO {
    * @param article 게시글 작성 내용
    * @return 게시글
    */
-  Article save(Article article);
+  int save(Article article);
 
   /**
    * 게시글 수정
    * @param article_num 게시글 번호
    * @param article 게시글 수정 내용
    */
-  Article update(Long article_num, Article article);
+  int update(Long article_num, Article article);
 
   /**
    * 게시글 삭제

@@ -16,18 +16,14 @@ public class ArticleDAOImpl implements ArticleDAO {
 
   private final JdbcTemplate jt;
 
-
   /**
    * 게시글 목록 조회1 : 전체
    *
    * @return 게시글 리스트
    */
   @Override
-  public Optional<List<Article>> findAll() {
-    StringBuffer sql = new StringBuffer();
-
-
-    return Optional.empty();
+  public List<Article> findAll() {
+    return null;
   }
 
   /**
@@ -37,8 +33,8 @@ public class ArticleDAOImpl implements ArticleDAO {
    * @return 게시글 리스트
    */
   @Override
-  public Optional<List<Article>> findByCategory(String article_category) {
-    return Optional.empty();
+  public List<Article> findByCategory(String article_category) {
+    return null;
   }
 
   /**
@@ -48,8 +44,8 @@ public class ArticleDAOImpl implements ArticleDAO {
    * @return 게시글 리스트
    */
   @Override
-  public Optional<List<Article>> findByTitle(String article_title) {
-    return Optional.empty();
+  public List<Article> findByTitle(String article_title) {
+    return null;
   }
 
   /**
@@ -59,8 +55,8 @@ public class ArticleDAOImpl implements ArticleDAO {
    * @return 게시글 리스트
    */
   @Override
-  public Optional<List<Article>> findByContents(String article_contents) {
-    return Optional.empty();
+  public List<Article> findByContents(String article_contents) {
+    return null;
   }
 
   /**
@@ -70,8 +66,8 @@ public class ArticleDAOImpl implements ArticleDAO {
    * @return 게시글 리스트
    */
   @Override
-  public Optional<List<Article>> findByNickname(String mem_nickname) {
-    return Optional.empty();
+  public List<Article> findByNickname(String mem_nickname) {
+    return null;
   }
 
   /**
@@ -92,8 +88,8 @@ public class ArticleDAOImpl implements ArticleDAO {
    * @return 게시글
    */
   @Override
-  public Article save(Article article) {
-    return null;
+  public int save(Article article) {
+    return 0;
   }
 
   /**
@@ -103,8 +99,8 @@ public class ArticleDAOImpl implements ArticleDAO {
    * @param article     게시글 수정 내용
    */
   @Override
-  public Article update(Long article_num, Article article) {
-    return null;
+  public int update(Long article_num, Article article) {
+    return 0;
   }
 
   /**

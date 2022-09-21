@@ -1,7 +1,6 @@
 package com.kh.demo.domain.product;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 public class Product {
