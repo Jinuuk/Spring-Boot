@@ -13,12 +13,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -39,7 +36,7 @@ public class ProductController {
   }
 
   //등록
-  //@PostMapping("/add")
+  @PostMapping("/add")
   public String save(@Valid @ModelAttribute("form") SaveForm saveForm,
                      BindingResult bindingResult,
                      RedirectAttributes redirectAttributes) {
@@ -68,37 +65,27 @@ public class ProductController {
 
     Product product = new Product();
     BeanUtils.copyProperties(saveForm, product);
-    Long productId = productSVC.save(product);
+
+    Long productId = 0L;
+
+    //상품
+    if (saveForm.getFile().isEmpty() && saveForm.getFiles().get(0).isEmpty()) {
+      productId = productSVC.save(product);
+    //상품, 설명 첨부
+    } else if (!saveForm.getFile().isEmpty() && saveForm.getFiles().get(0).isEmpty()) {
+      productId = productSVC.save(product,saveForm.getFile());
+    //상품, 이미지 첨부
+    } else if (saveForm.getFile().isEmpty() && !saveForm.getFiles().get(0).isEmpty()) {
+      productId = productSVC.save(product,saveForm.getFiles());
+    //상품, 설명 첨부, 이미지 첨부
+    } else if (!saveForm.getFile().isEmpty() && !saveForm.getFiles().get(0).isEmpty()) {
+      productId = productSVC.save(product,saveForm.getFile(),saveForm.getFiles());
+    }
 
     redirectAttributes.addAttribute("id", productId);
     return "redirect:/products/{id}/detail";
   }
 
-  //등록
-  @PostMapping("/add")
-  public String saveV2(@Valid @ModelAttribute("form") SaveForm saveForm,
-                     BindingResult bindingResult,
-                     RedirectAttributes redirectAttributes) throws IOException {
-
-    log.info("saveForm={}", saveForm);
-    if (!saveForm.getFile().isEmpty()) {
-      log.info("첨부파일이름={}", saveForm.getFile().getOriginalFilename());
-      log.info("파일크기={}", saveForm.getFile().getSize());
-      log.info("파일유형={}", saveForm.getFile().getContentType());
-      String originalFilename = saveForm.getFile().getOriginalFilename();
-      saveForm.getFile().transferTo(new File("c:/tmp/"+originalFilename));
-    }
-
-    if (!saveForm.getFiles().isEmpty()) {
-      List<MultipartFile> files = saveForm.getFiles();
-      files.stream().forEach(file->{
-        log.info("첨부파일이름={}", file.getOriginalFilename());
-        log.info("파일크기={}", file.getSize());
-        log.info("파일유형={}", file.getContentType());
-      });
-    }
-    return "redirect:/products/{id}/detail";
-  }
 
   //조회
   @GetMapping("/{id}/detail")

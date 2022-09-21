@@ -68,7 +68,7 @@ public interface ArticleDAO {
   /**
    * 게시글 삭제
    */
-  int delete();
+  int delete(Long article_num);
 
   //조회수 상승 -> 나중에
 }

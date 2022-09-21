@@ -107,9 +107,9 @@ public class ProductController {
     BeanUtils.copyProperties(saveForm, product);
 
     Long productId = 0L;
-    log.info("{}",saveForm.getFiles().size());
+
     //상품
-    //주의 : view에서 multiple인 경우 파일 첨부가 없더라도 빈문자열("")이 반환되어 
+    //주의 : view에서 multiple인 경우 파일 첨부가 없더라도 빈문자열("")이 반환되어
     // List<MultipartFile>에 빈 객체 1개가 포함됨
     if (saveForm.getFile().isEmpty() && saveForm.getFiles().get(0).isEmpty()) {
       productId = productSVC.save(product);

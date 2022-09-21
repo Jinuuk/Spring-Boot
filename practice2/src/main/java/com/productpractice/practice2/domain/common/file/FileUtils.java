@@ -1,5 +1,4 @@
-package com.kh.demo.domain.common.file;
-
+package com.productpractice.practice2.domain.common.file;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -14,43 +13,44 @@ import java.util.UUID;
 @Component
 public class FileUtils {
 
-  @Value("${attach.root_dir}") //application.properties 파일의 키 값을 읽어옴
+  @Value("${attach.root_dir}") //application.properties 파일의 키 값을 읽어온다
   private String attachRoot; //첨부파일 루트
 
   //MultipartFile -> UploadFile
   public UploadFile multipartFileToUploadFile(MultipartFile file, AttachCode code, Long rid) {
     UploadFile uploadFile = new UploadFile();
-    
-    uploadFile.setCode(code.name()); //상품관리
+
+    uploadFile.setCode(code.name());
     uploadFile.setRid(rid);
     uploadFile.setUploadFileName(file.getOriginalFilename());
-    
+
     String storeFileName = storeFileName(file.getOriginalFilename());
     uploadFile.setStoreFileName(storeFileName);
     uploadFile.setFsize(String.valueOf(file.getSize()));
     uploadFile.setFtype(file.getContentType());
-    
+
     //스토리지에 파일 저장
     storageFile(file,code,storeFileName);
 
     return uploadFile;
   }
-  
+
   //List<MultipartFile> -> List<UploadFile>
   public List<UploadFile> multipartFilesToUploadFiles(List<MultipartFile> files, AttachCode code, Long rid) {
     List<UploadFile> uploadFiles = new ArrayList<>();
+
     for (MultipartFile file : files) {
       UploadFile uploadFile = multipartFileToUploadFile(file, code, rid);
       uploadFiles.add(uploadFile);
     }
     return uploadFiles;
   }
-  
-  //랜덤 파일명 생성
+
+  //랜덤 파일명 생성 메소드
   private String storeFileName(String originalFileName) {
     //확장자 추출
     int dotPosition = originalFileName.indexOf(".");
-    String ext = originalFileName.substring(dotPosition+1);
+    String ext = originalFileName.substring(dotPosition + 1);
 
     //랜덤 파일명
     String storeFileName = UUID.randomUUID().toString();
@@ -62,7 +62,12 @@ public class FileUtils {
     return storeFileName;
   }
 
-  //스토리지에 파일 저장 메소드
+  //첨부파일 경로 만드는 메소드
+  private String getPath(AttachCode code, String storeFileName) {
+    return this.attachRoot + code.name() + "/" + storeFileName;
+  }
+
+  //스토리지에 파일 저장하는 메소드
   private void storageFile(MultipartFile file, AttachCode code, String storeFileName) {
     try {
       File f = new File(getPath(code, storeFileName));
@@ -71,10 +76,7 @@ public class FileUtils {
     } catch (IOException e) {
       throw new RuntimeException("첨부파일 스토리지 저장시 오류 발생!");
     }
+
   }
 
-  //첨부파일 경로
-  private String getPath(AttachCode code, String storeFileName) {
-    return this.attachRoot + code.name() + "/" + storeFileName;
-  }
 }

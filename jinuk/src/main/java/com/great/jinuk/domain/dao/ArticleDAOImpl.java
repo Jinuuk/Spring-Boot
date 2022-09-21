@@ -3,6 +3,8 @@ package com.great.jinuk.domain.dao;
 import com.great.jinuk.domain.Article;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -23,7 +25,14 @@ public class ArticleDAOImpl implements ArticleDAO {
    */
   @Override
   public List<Article> findAll() {
-    return null;
+    StringBuffer sql = new StringBuffer();
+    sql.append("select article_num, article_category, article_title, attachment, mem_nickname, create_date, views ");
+    sql.append("from article a, member m ");
+    sql.append("where a.mem_number = m.mem_number ");
+
+    List<Article> articles = jt.query(sql.toString(), new BeanPropertyRowMapper<>(Article.class));
+
+    return articles;
   }
 
   /**
@@ -34,7 +43,14 @@ public class ArticleDAOImpl implements ArticleDAO {
    */
   @Override
   public List<Article> findByCategory(String article_category) {
-    return null;
+    StringBuffer sql = new StringBuffer();
+    sql.append("select article_num, article_category, article_title, attachment, mem_nickname, create_date, views ");
+    sql.append("from article a, member m ");
+    sql.append("where a.mem_number = m.mem_number and a.article_category = ? ");
+
+    List<Article> articles = jt.query(sql.toString(), new BeanPropertyRowMapper<>(Article.class),article_category);
+
+    return articles;
   }
 
   /**
@@ -45,7 +61,14 @@ public class ArticleDAOImpl implements ArticleDAO {
    */
   @Override
   public List<Article> findByTitle(String article_title) {
-    return null;
+    StringBuffer sql = new StringBuffer();
+    sql.append("select article_num, article_category, article_title, attachment, mem_nickname, create_date, views ");
+    sql.append("from article a, member m ");
+    sql.append("where a.mem_number = m.mem_number and a.article_title like ? ");
+
+    List<Article> articles = jt.query(sql.toString(), new BeanPropertyRowMapper<>(Article.class),article_title);
+
+    return articles;
   }
 
   /**
@@ -56,7 +79,14 @@ public class ArticleDAOImpl implements ArticleDAO {
    */
   @Override
   public List<Article> findByContents(String article_contents) {
-    return null;
+    StringBuffer sql = new StringBuffer();
+    sql.append("select article_num, article_category, article_title, attachment, mem_nickname, create_date, views ");
+    sql.append("from article a, member m ");
+    sql.append("where a.mem_number = m.mem_number and a.article_contents like ? ");
+
+    List<Article> articles = jt.query(sql.toString(), new BeanPropertyRowMapper<>(Article.class),article_contents);
+
+    return articles;
   }
 
   /**
@@ -67,7 +97,14 @@ public class ArticleDAOImpl implements ArticleDAO {
    */
   @Override
   public List<Article> findByNickname(String mem_nickname) {
-    return null;
+    StringBuffer sql = new StringBuffer();
+    sql.append("select article_num, article_category, article_title, attachment, mem_nickname, create_date, views ");
+    sql.append("from article a, member m ");
+    sql.append("where a.mem_number = m.mem_number and m.mem_nickname = ? ");
+
+    List<Article> articles = jt.query(sql.toString(), new BeanPropertyRowMapper<>(Article.class),mem_nickname);
+
+    return articles;
   }
 
   /**
@@ -78,7 +115,18 @@ public class ArticleDAOImpl implements ArticleDAO {
    */
   @Override
   public Optional<Article> read(Long article_num) {
-    return Optional.empty();
+    StringBuffer sql = new StringBuffer();
+    sql.append("select article_num, article_category, article_title, article_contents, attachment, mem_nickname, create_date, views ");
+    sql.append("from article a, member m ");
+    sql.append("where a.mem_number = m.mem_number and a.article_num = ? ");
+
+    try {
+      Article article = jt.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(Article.class), article_num);
+      return Optional.of(article);
+    } catch (EmptyResultDataAccessException e) {
+      e.printStackTrace();
+      return Optional.empty();
+    }
   }
 
   /**
@@ -100,14 +148,22 @@ public class ArticleDAOImpl implements ArticleDAO {
    */
   @Override
   public int update(Long article_num, Article article) {
-    return 0;
+    StringBuffer sql = new StringBuffer();
+    sql.append("update article ");
+    sql.append("set article_title = ?, article_contents = ?, create_date = ? ");
+    sql.append("where article_num = ? ");
+
+    int affectedRow = jt.update(sql.toString(), article.getArticle_title(), article.getArticle_contents(), article.getCreate_date(), article_num);
+    return affectedRow;
   }
 
   /**
    * 게시글 삭제
    */
   @Override
-  public int delete() {
-    return 0;
+  public int delete(Long article_num) {
+    String sql = "delete from article where article_num = ? ";
+    int affectedRow = jt.update(sql, article_num);
+    return affectedRow;
   }
 }
