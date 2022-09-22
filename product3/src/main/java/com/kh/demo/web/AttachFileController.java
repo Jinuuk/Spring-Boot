@@ -38,7 +38,7 @@ public class AttachFileController {
       @PathVariable String storeFileName) throws MalformedURLException {
     // http://서버:포트/경로...
     // file:///d:/tmp/P0101/xxx-xxx-xxx-xxx.png
-    Resource resource = new UrlResource("file:///" + attachRoot + "/" + attachCode + "/" + storeFileName);
+    Resource resource = new UrlResource("file:///" + attachRoot+attachCode + "/" + storeFileName);
     return resource;
   }
 
@@ -66,7 +66,7 @@ public class AttachFileController {
     String encode = UriUtils.encode(uploadFileName, StandardCharsets.UTF_8);
 
     //클라이언트가 파일을 다운로드 해주기위해 응답 메시지 헤더에 포함
-    String contentDisposition = "attachmemt; filename=\"" + encode + "\"";
+    String contentDisposition = "attachment; filename=\"" + encode + "\"";
 
     res = ResponseEntity.ok()
         .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)

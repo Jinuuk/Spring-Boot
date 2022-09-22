@@ -35,6 +35,20 @@
     <button type="button" id="deleteBtn">삭제</button>
     <button type="button" id="listBtn">목록</button>
   </div>
+  <div th:if="${form.attachFile}">
+    <a href=""
+    th:href="@{/attach/file/{attachCode}/{fid}(attachCode=${form.attachFile.code},fid=${form.attachFile.uploadfileId})}"
+    th:text="${form.attachFile.uploadFilename}">상품설명</a>
+  </div>
+  <div th:if="${form.imageFiles}">
+    <div th:each="imageFile:${form.imageFiles}">
+      <img width="500px"
+           src=""
+           th:src="@{/attach/img/{attachCode}/{storeFilename}(attachCode=${imageFile.code},storeFilename=${imageFile.storeFilename})}"
+           alt="이미지를 불러올 수 없습니다.">
+    </div>
+
+  </div>
 </div>
 <script>
     //수정

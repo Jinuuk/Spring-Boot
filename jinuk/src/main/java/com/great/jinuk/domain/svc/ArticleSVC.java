@@ -33,7 +33,12 @@ public interface ArticleSVC {
    */
   List<Article> findByContents(String articleContents);
 
-  //게시글 목록 조회5 : 검색(제목+내용) -> SVC
+  /**
+   * 게시글 목록 조회5 : 검색(제목+내용)
+   * @param keyword
+   * @return
+   */
+  List<Article> findByTitleOrContents(String keyword);
 
   /**
    * 게시글 목록 조회6 : 검색(닉네임)
@@ -55,25 +60,19 @@ public interface ArticleSVC {
    * @param article 게시글 작성 내용
    * @return 게시글
    */
-  int save(Article article);
+  Article save(Article article);
 
   /**
    * 게시글 수정
    * @param articleNum 게시글 번호
    * @param article 게시글 수정 내용
    */
-  int update(Long articleNum, Article article);
+  void update(Long articleNum, Article article);
 
   /**
    * 게시글 삭제
    */
-  int delete(Long articleNum);
+  void delete(Long articleNum);
 
   //조회수 상승 -> 나중에
-
-  /**
-   * 신규 게시물 번호 생성
-   * @return
-   */
-  Long generatedArticleNum();
 }
