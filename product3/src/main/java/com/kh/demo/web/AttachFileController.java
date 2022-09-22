@@ -2,18 +2,17 @@ package com.kh.demo.web;
 
 import com.kh.demo.domain.common.file.UploadFile;
 import com.kh.demo.domain.common.file.UploadFileDAO;
+import com.kh.demo.web.api.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriUtils;
 
 import java.net.MalformedURLException;
@@ -26,12 +25,12 @@ import java.util.Optional;
 @RequestMapping("/attach")
 public class AttachFileController {
 
-  @Value("${attach.roo_dir}")
-  private String attachRoot; //첨부파일 루트 경로
+  @Value("${attach.root_dir}")
+  private String attachRoot; //첨부파일 루트경로
   private final UploadFileDAO uploadFileDAO;
 
   //이미지
-  //@ResponseStatus(HttpStatus.OK)
+  @ResponseStatus(HttpStatus.OK)
   @ResponseBody
   @GetMapping("/img/{attachCode}/{storeFileName}")
   public Resource img(
@@ -39,12 +38,13 @@ public class AttachFileController {
       @PathVariable String storeFileName) throws MalformedURLException {
     // http://서버:포트/경로...
     // file:///d:/tmp/P0101/xxx-xxx-xxx-xxx.png
-    Resource resource = new UrlResource("file:///"+attachRoot+"/"+attachCode+"/"+storeFileName);
+    Resource resource = new UrlResource("file:///" + attachRoot + "/" + attachCode + "/" + storeFileName);
     return resource;
   }
 
   //다운로드
   @GetMapping("/file/{attachCode}/{fid}")
+  //반환 타입이 ResponseEntity<>인 경우 응답 메시지 바디에 직접 쓰기 작업 시도 함 (@ResponseBody 불필요)
   public ResponseEntity<Resource> file(
       @PathVariable String attachCode,
       @PathVariable Long fid) throws MalformedURLException {
@@ -55,16 +55,44 @@ public class AttachFileController {
     if (uploadFile.isEmpty()) return res;
 
     UploadFile attachFile = uploadFile.get();
-    String storeFileName = attachFile.getStoreFileName();
-    Resource resource = new UrlResource("file:///"+attachRoot+"/"+attachCode+"/"+storeFileName);
-    String encode = UriUtils.encode(storeFileName, StandardCharsets.UTF_8);
+    log.info("attachFile={}", attachFile);
+    String storeFileName = attachFile.getStoreFilename();
+    String uploadFileName = attachFile.getUploadFilename();
 
-    String contentDisposition = "attachment; filename=\""+encode+"\"";
+    Resource resource = new UrlResource("file:" + attachRoot + attachCode + "/" + storeFileName);
+//    Resource resource = new UrlResource("file:///"+attachRoot+"/"+attachCode+"/"+storeFileName);
+
+    //첨부 파일명의 한글 깨짐 방지
+    String encode = UriUtils.encode(uploadFileName, StandardCharsets.UTF_8);
+
+    //클라이언트가 파일을 다운로드 해주기위해 응답 메시지 헤더에 포함
+    String contentDisposition = "attachmemt; filename=\"" + encode + "\"";
 
     res = ResponseEntity.ok()
-                        .header(HttpHeaders.CONTENT_DISPOSITION,contentDisposition)
-                        .body(resource);
-
+        .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
+        .body(resource);
     return res;
+  }
+
+  //첨부파일 삭제
+  @ResponseBody
+  @DeleteMapping("/{fid}")
+  public ApiResponse<Object> deleteAttachFile(@PathVariable Long fid) {
+    //1)스토리지 파일을 삭제하기위해 첨부분류코드(code)와 저장파일명(storeFilename)을 가져온다.
+    Optional<UploadFile> optional = uploadFileDAO.findFileByUploadFileId(fid);
+    if (optional.isEmpty()) {
+      ApiResponse.createApiResMsg("01", "찾고자하는 파일이 없습니다.", null);
+    }
+    UploadFile uploadFile = optional.get();
+    //2)스토리지 파일을 삭제한다.
+
+
+    //3) 첨부파일의 메타정보를 삭제한다.
+    int affectedRow = uploadFileDAO.deleteFileByUploadFileId(fid);
+
+    if (affectedRow == 1) {
+      return ApiResponse.createApiResMsg("00", "성공", null);
+    }
+    return ApiResponse.createApiResMsg("99", "실패", null);
   }
 }

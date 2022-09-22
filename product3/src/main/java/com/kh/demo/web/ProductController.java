@@ -1,5 +1,8 @@
 package com.kh.demo.web;
 
+import com.kh.demo.domain.common.file.AttachCode;
+import com.kh.demo.domain.common.file.UploadFile;
+import com.kh.demo.domain.common.file.UploadFileDAO;
 import com.kh.demo.domain.product.Product;
 import com.kh.demo.domain.product.ProductSVC;
 import com.kh.demo.web.form.DetailForm;
@@ -26,6 +29,7 @@ import java.util.Optional;
 public class ProductController {
 
   private final ProductSVC productSVC;
+  private final UploadFileDAO uploadFileDAO;
 
   //등록양식
   @GetMapping("/add")
@@ -133,10 +137,28 @@ public class ProductController {
   public String findByProductId(@PathVariable("id") Long productId,
                                 Model model) {
 
+    //1)상품조회
     Optional<Product> findedProduct = productSVC.findByProductId(productId);
     DetailForm detailForm = new DetailForm();
     if(!findedProduct.isEmpty()) {
       BeanUtils.copyProperties(findedProduct.get(), detailForm);
+    }
+
+    //2)첨부파일 조회
+    //2-1)상품설명파일 조회
+    List<UploadFile> uploadFile = uploadFileDAO.getFilesByCodeWithRid(AttachCode.P0101.name(), productId);
+    if (uploadFile.size()>0) {
+      UploadFile attachFile = uploadFile.get(0);
+      detailForm.setAttachFile(attachFile);
+    }
+    //2-2)상품이미지 조회
+    List<UploadFile> uploadFiles = uploadFileDAO.getFilesByCodeWithRid(AttachCode.P0102.name(), productId);
+    if (uploadFiles.size()>0) {
+      List<UploadFile> imageFiles = new ArrayList<>();
+      for (UploadFile file:uploadFiles) {
+        imageFiles.add(file);
+      }
+      detailForm.setImageFiles(imageFiles);
     }
 
     model.addAttribute("form", detailForm);
@@ -147,12 +169,30 @@ public class ProductController {
   @GetMapping("/{id}/edit")
   public String updateForm(@PathVariable("id") Long productId,
                            Model model) {
-
+    //1)상품조회
     Optional<Product> findedProduct = productSVC.findByProductId(productId);
     UpdateForm updateForm = new UpdateForm();
     if(!findedProduct.isEmpty()) {
       BeanUtils.copyProperties(findedProduct.get(), updateForm);
     }
+
+    //2)첨부파일 조회
+    //2-1)상품설명파일 조회
+    List<UploadFile> uploadFile = uploadFileDAO.getFilesByCodeWithRid(AttachCode.P0101.name(), productId);
+    if (uploadFile.size()>0) {
+      UploadFile attachFile = uploadFile.get(0);
+      updateForm.setAttachFile(attachFile);
+    }
+    //2-2)상품이미지 조회
+    List<UploadFile> uploadFiles = uploadFileDAO.getFilesByCodeWithRid(AttachCode.P0102.name(), productId);
+    if (uploadFiles.size()>0) {
+      List<UploadFile> imageFiles = new ArrayList<>();
+      for (UploadFile file:uploadFiles) {
+        imageFiles.add(file);
+      }
+      updateForm.setImageFiles(imageFiles);
+    }
+
     model.addAttribute("form", updateForm);
 
     return "product/updateForm";

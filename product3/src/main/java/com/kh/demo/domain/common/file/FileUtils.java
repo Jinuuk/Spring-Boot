@@ -23,10 +23,10 @@ public class FileUtils {
     
     uploadFile.setCode(code.name()); //상품관리
     uploadFile.setRid(rid);
-    uploadFile.setUploadFileName(file.getOriginalFilename());
+    uploadFile.setUploadFilename(file.getOriginalFilename());
     
     String storeFileName = storeFileName(file.getOriginalFilename());
-    uploadFile.setStoreFileName(storeFileName);
+    uploadFile.setStoreFilename(storeFileName);
     uploadFile.setFsize(String.valueOf(file.getSize()));
     uploadFile.setFtype(file.getContentType());
     
