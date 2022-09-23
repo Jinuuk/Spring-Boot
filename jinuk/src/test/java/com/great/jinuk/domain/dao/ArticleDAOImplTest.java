@@ -2,6 +2,7 @@ package com.great.jinuk.domain.dao;
 
 import com.great.jinuk.domain.Article;
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ class ArticleDAOImplTest {
     for (Article article : list) {
       log.info("게시글 : {}",article);
     }
+
+    Assertions.assertThat(list.size()).isEqualTo(4);
   }
 
   @Test
@@ -35,6 +38,8 @@ class ArticleDAOImplTest {
     for (Article article : list) {
       log.info("게시글 : {}",article);
     }
+
+    Assertions.assertThat(list.size()).isEqualTo(4);
   }
 
   @Test
@@ -45,6 +50,8 @@ class ArticleDAOImplTest {
     for (Article article : list) {
       log.info("게시글 : {}",article);
     }
+
+    Assertions.assertThat(list.size()).isEqualTo(4);
   }
 
   @Test
@@ -55,6 +62,8 @@ class ArticleDAOImplTest {
     for (Article article : list) {
       log.info("게시글 : {}",article);
     }
+
+    Assertions.assertThat(list.size()).isEqualTo(4);
   }
 
   @Test
@@ -65,6 +74,8 @@ class ArticleDAOImplTest {
     for (Article article : list) {
       log.info("게시글 : {}",article);
     }
+
+    Assertions.assertThat(list.size()).isEqualTo(4);
   }
 
   @Test
@@ -73,12 +84,29 @@ class ArticleDAOImplTest {
     Optional<Article> article = articleDAO.read(3L);
     Article foundArticle = article.get();
     log.info("게시글 정보 : {}",foundArticle);
+
+    Assertions.assertThat(foundArticle.getArticleNum()).isEqualTo(3);
+    Assertions.assertThat(foundArticle.getArticleCategory()).isEqualTo("부산");
+    Assertions.assertThat(foundArticle.getArticleTitle()).isEqualTo("글제목3");
+    Assertions.assertThat(foundArticle.getArticleContents()).isEqualTo("글내용3");
+    Assertions.assertThat(foundArticle.getAttachment()).isEqualTo("Y");
+    Assertions.assertThat(foundArticle.getMember().getMemNickname()).isEqualTo("닉네임2");
+    //Assertions.assertThat(foundArticle.getCreateDate())
+    Assertions.assertThat(foundArticle.getViews()).isEqualTo(0L);
   }
-//
+
 //  @Test
+//  @DisplayName("게시글 등록")
 //  void save() {
+//    Article article = new Article();
+//    article.setMemNumber(1L);
+//    article.setArticleCategory("문의");
+//    article.setArticleTitle("글제목5");
+//    article.setArticleContents("글내용5");
+//    article.setAttachment("N");
+//    article.setCreateDate();
 //  }
-//
+
 //  @Test
 //  void update() {
 //  }
