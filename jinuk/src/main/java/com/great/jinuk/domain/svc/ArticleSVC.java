@@ -67,7 +67,7 @@ public interface ArticleSVC {
    * @param articleNum 게시글 번호
    * @param article 게시글 수정 내용
    */
-  void update(Long articleNum, Article article);
+  Article update(Long articleNum, Article article);
 
   /**
    * 게시글 삭제

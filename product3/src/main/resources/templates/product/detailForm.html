@@ -37,7 +37,7 @@
   </div>
   <div th:if="${form.attachFile}">
     <a href="http://localhost:9080/attach/file/P0101/29"
-       th:href="@{/attach/file/{attachCode}/{fid}(attachCode=${form.attachFile.code},fid=${form.attachFile.uploadfileId})}"
+       th:href="@{/api/attach/file/{attachCode}/{fid}(attachCode=${form.attachFile.code},fid=${form.attachFile.uploadfileId})}"
        th:text="${form.attachFile.uploadFilename}">상품설명</a>
 <!--    th:text="|${form.attachFile.uploadFilename}(${form.attachFile.fsize})(${form.attachFile.ftype})|">상품설명</a>-->
   </div>
@@ -45,7 +45,7 @@
     <div th:each="imageFile:${form.imageFiles}">
       <img width="500px"
            src="http://localhost:9080/attach/img/P0102/0b80f1aa-ec3d-4ec4-ad5d-fa77f51ac03e.png"
-           th:src="@{/attach/img/{attachCode}/{storeFilename}(attachCode=${imageFile.code},storeFilename=${imageFile.storeFilename})}"
+           th:src="@{/api/attach/img/{attachCode}/{storeFilename}(attachCode=${imageFile.code},storeFilename=${imageFile.storeFilename})}"
            alt="이미지를 불러올 수 없습니다.">
     </div>
   </div>

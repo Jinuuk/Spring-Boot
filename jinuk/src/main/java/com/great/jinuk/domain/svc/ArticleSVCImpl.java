@@ -100,7 +100,8 @@ public class ArticleSVCImpl implements ArticleSVC {
    */
   @Override
   public Optional<Article> read(Long articleNum) {
-    return Optional.empty();
+
+    return articleDAO.read(articleNum);
   }
 
   /**
@@ -125,8 +126,9 @@ public class ArticleSVCImpl implements ArticleSVC {
    * @param article    게시글 수정 내용
    */
   @Override
-  public void update(Long articleNum, Article article) {
-    articleDAO.update(articleNum,article);
+  public Article update(Long articleNum, Article article) {
+    articleDAO.update(articleNum, article);
+    return articleDAO.read(articleNum).get();
   }
 
   /**
@@ -136,6 +138,6 @@ public class ArticleSVCImpl implements ArticleSVC {
    */
   @Override
   public void delete(Long articleNum) {
-    articleDAO.delete(articleNum)
+    articleDAO.delete(articleNum);
   }
 }

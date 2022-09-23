@@ -1,13 +1,17 @@
 package com.great.jinuk.domain.dao;
 
 import com.great.jinuk.domain.Article;
+import com.great.jinuk.domain.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +34,16 @@ public class ArticleDAOImpl implements ArticleDAO {
     sql.append("from article a, member m ");
     sql.append("where a.mem_number = m.mem_number ");
 
-    List<Article> articles = jt.query(sql.toString(), new BeanPropertyRowMapper<>(Article.class));
+//    List<Article> articles = jt.query(sql.toString(), new BeanPropertyRowMapper<>(Article.class));
+        List<Article> articles = jt.query(sql.toString(), new RowMapper<Article>(){
+          @Override
+          public Article mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Member member = (new BeanPropertyRowMapper<>(Member.class)).mapRow(rs,rowNum);
+            Article article = (new BeanPropertyRowMapper<>(Article.class)).mapRow(rs,rowNum);
+            article.setMember(member);
+            return article;
+          }
+        });
 
     return articles;
   }
@@ -48,7 +61,16 @@ public class ArticleDAOImpl implements ArticleDAO {
     sql.append("from article a, member m ");
     sql.append("where a.mem_number = m.mem_number and a.article_category = ? ");
 
-    List<Article> articles = jt.query(sql.toString(), new BeanPropertyRowMapper<>(Article.class),articleCategory);
+//    List<Article> articles = jt.query(sql.toString(), new BeanPropertyRowMapper<>(Article.class),articleCategory);
+    List<Article> articles = jt.query(sql.toString(), new RowMapper<Article>(){
+      @Override
+      public Article mapRow(ResultSet rs, int rowNum) throws SQLException {
+        Member member = (new BeanPropertyRowMapper<>(Member.class)).mapRow(rs,rowNum);
+        Article article = (new BeanPropertyRowMapper<>(Article.class)).mapRow(rs,rowNum);
+        article.setMember(member);
+        return article;
+      }
+    },articleCategory);
 
     return articles;
   }
@@ -66,7 +88,17 @@ public class ArticleDAOImpl implements ArticleDAO {
     sql.append("from article a, member m ");
     sql.append("where a.mem_number = m.mem_number and a.article_title like ? ");
 
-    List<Article> articles = jt.query(sql.toString(), new BeanPropertyRowMapper<>(Article.class),articleTitle);
+//    List<Article> articles = jt.query(sql.toString(), new BeanPropertyRowMapper<>(Article.class),articleTitle);
+    List<Article> articles = jt.query(sql.toString(), new RowMapper<Article>(){
+      @Override
+      public Article mapRow(ResultSet rs, int rowNum) throws SQLException {
+        Member member = (new BeanPropertyRowMapper<>(Member.class)).mapRow(rs,rowNum);
+        Article article = (new BeanPropertyRowMapper<>(Article.class)).mapRow(rs,rowNum);
+        article.setMember(member);
+        return article;
+      }
+    },articleTitle);
+
 
     return articles;
   }
@@ -84,7 +116,17 @@ public class ArticleDAOImpl implements ArticleDAO {
     sql.append("from article a, member m ");
     sql.append("where a.mem_number = m.mem_number and a.article_contents like ? ");
 
-    List<Article> articles = jt.query(sql.toString(), new BeanPropertyRowMapper<>(Article.class),articleContents);
+    //List<Article> articles = jt.query(sql.toString(), new BeanPropertyRowMapper<>(Article.class),articleContents);
+    List<Article> articles = jt.query(sql.toString(), new RowMapper<Article>(){
+      @Override
+      public Article mapRow(ResultSet rs, int rowNum) throws SQLException {
+        Member member = (new BeanPropertyRowMapper<>(Member.class)).mapRow(rs,rowNum);
+        Article article = (new BeanPropertyRowMapper<>(Article.class)).mapRow(rs,rowNum);
+        article.setMember(member);
+        return article;
+      }
+    },articleContents);
+
 
     return articles;
   }
@@ -102,7 +144,16 @@ public class ArticleDAOImpl implements ArticleDAO {
     sql.append("from article a, member m ");
     sql.append("where a.mem_number = m.mem_number and m.mem_nickname = ? ");
 
-    List<Article> articles = jt.query(sql.toString(), new BeanPropertyRowMapper<>(Article.class),memNickname);
+//    List<Article> articles = jt.query(sql.toString(), new BeanPropertyRowMapper<>(Article.class),memNickname);
+    List<Article> articles = jt.query(sql.toString(), new RowMapper<Article>(){
+      @Override
+      public Article mapRow(ResultSet rs, int rowNum) throws SQLException {
+        Member member = (new BeanPropertyRowMapper<>(Member.class)).mapRow(rs,rowNum);
+        Article article = (new BeanPropertyRowMapper<>(Article.class)).mapRow(rs,rowNum);
+        article.setMember(member);
+        return article;
+      }
+    },memNickname);
 
     return articles;
   }
@@ -121,7 +172,16 @@ public class ArticleDAOImpl implements ArticleDAO {
     sql.append("where a.mem_number = m.mem_number and a.article_num = ? ");
 
     try {
-      Article article = jt.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(Article.class), articleNum);
+//      Article article = jt.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(Article.class), articleNum);
+      Article article = jt.queryForObject(sql.toString(),new RowMapper<Article>(){
+        @Override
+        public Article mapRow(ResultSet rs, int rowNum) throws SQLException {
+          Member member = (new BeanPropertyRowMapper<>(Member.class)).mapRow(rs,rowNum);
+          Article article = (new BeanPropertyRowMapper<>(Article.class)).mapRow(rs,rowNum);
+          article.setMember(member);
+          return article;
+        }
+      },articleNum);
       return Optional.of(article);
     } catch (EmptyResultDataAccessException e) {
       e.printStackTrace();
