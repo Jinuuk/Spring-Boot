@@ -199,7 +199,7 @@ public class ArticleDAOImpl implements ArticleDAO {
   public int save(Article article) {
     StringBuffer sql = new StringBuffer();
     sql.append("insert into article (article_num, mem_number, article_category, article_title, article_contents, attachment, create_date,views) ");
-    sql.append("values (?,?,?,?,?,?,?,0) ");
+    sql.append("values (?,?,?,?,?,?,sysdate,0) ");
 
     int result = jt.update(sql.toString(),
                           article.getArticleNum(),
@@ -207,9 +207,7 @@ public class ArticleDAOImpl implements ArticleDAO {
                           article.getArticleCategory(),
                           article.getArticleTitle(),
                           article.getArticleContents(),
-                          article.getAttachment(),
-                          article.getCreateDate());
-
+                          article.getAttachment());
     return result;
   }
 
@@ -223,10 +221,11 @@ public class ArticleDAOImpl implements ArticleDAO {
   public int update(Long articleNum, Article article) {
     StringBuffer sql = new StringBuffer();
     sql.append("update article ");
-    sql.append("set article_title = ?, article_contents = ?, create_date = ? ");
+    sql.append("set article_category = ?, article_title = ?, ");
+    sql.append("article_contents = ?, attachment = ?, create_date = sysdate ");
     sql.append("where article_num = ? ");
 
-    int affectedRow = jt.update(sql.toString(), article.getArticleTitle(), article.getArticleContents(), article.getCreateDate(), articleNum);
+    int affectedRow = jt.update(sql.toString(), article.getArticleCategory() ,article.getArticleTitle(), article.getArticleContents(),article.getAttachment(), articleNum);
     return affectedRow;
   }
 

@@ -140,12 +140,12 @@ select:focus{
   font-weight: bold;
 }
 
-.board-write__cancel-btn{
+#cancelBtn {
   background-color: var(--mainBtn-color-gre);
 
 }
 
-.board-write__complete-btn{
+#addBtn {
   background-color: var(--main-color-yel);
 
 }

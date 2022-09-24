@@ -46,9 +46,9 @@ create table profile (
 create table article (
   article_num           number(6),
   mem_number            number(6),
-  article_category      varchar2(6),
+  article_category      varchar2(10),
   article_title         varchar2(90),
-  article_contents      clob,
+  article_contents      varchar2(1500),
   attachment            varchar2(1),
   create_date           date,
   views                 number(5)
@@ -65,6 +65,16 @@ alter table article modify article_category constraint article_article_category_
 alter table article modify article_title constraint article_article_title_nn not null;
 alter table article modify article_contents constraint article_article_contents_nn not null;
 alter table article modify attachment constraint article_attachment_nn not null;
+
+--게시글 번호 시퀀스 생성
+create sequence article_article_num_seq
+increment by 1
+start with 1
+minvalue 1
+maxvalue 999999
+nocycle
+nocache
+noorder;
 
 
 --댓글 테이블 생성

@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="../common/common.css">
-  <link rel="stylesheet" href="../css/articleWriter.css">
+  <link rel="stylesheet" href="/common/common.css">
+  <link rel="stylesheet" href="/css/articleWriter.css">
   <script src="https://kit.fontawesome.com/038578f405.js" crossorigin="anonymous"></script>
   <title>GREAT 게시글 - 작성자</title>
 </head>
@@ -56,27 +57,27 @@
       </nav>
     </header>
     <main class="main container">
-      <div class="article">
+      <div class="article" th:action th:object="${articleForm}">
 
         <div class="article__header width--900px">
-          <a href="" class="article__bullet"><i class="bar"></i><span>울산</span></a>
-          <h2 class="article__title">글 제목</h2>
+          <a href="" class="article__bullet"><i class="bar"></i><span th:text="*{articleCategory}">울산</span></a>
+          <h2 class="article__title" th:text="*{articleTitle}">글 제목</h2>
           <div class="article__information">
             <div class="article__profile">
               <a href=""><img
                   src="./img/profile.jpg"
                   alt=""></i></a>
-              <a href="">user</a>
+              <a href="" th:text="*{member.memNickname}">user</a>
             </div>
             <div class="article__write-information">
-              <span class="font-size--12px">조회 98</span>
-              <span class="font-size--12px">2022.08.01 13:48</span>
+              <span class="font-size--12px" th:text="*{views}">조회 98</span>
+              <span class="font-size--12px" th:text="*{{createDate}}">2022.08.01 13:48</span>
             </div>
           </div>
         </div>
 
         <div class="article__content width--900px">
-          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ab, aperiam. Voluptas eaque modi eius, commodi
+          <p th:utext="*{articleContents}">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ab, aperiam. Voluptas eaque modi eius, commodi
             culpa architecto! Tempore repellendus assumenda non numquam aliquid saepe, asperiores reprehenderit a
             sapiente consequuntur architecto.
             Iste veniam quod maiores voluptatem hic eos totam iure facere aut repellat aspernatur cupiditate alias
@@ -90,11 +91,13 @@
             Consequatur, debitis dignissimos? Vitae dicta magni suscipit possimus! Asperiores culpa expedita ratione sed
             numquam neque earum odit! Iste mollitia quod dolorem animi, corrupti omnis sint, optio ea asperiores magni
             voluptates. </p>
+          <form th:action="@{/community/edit/{id}(id=${articleForm.articleNum})}">
+            <div class="article__btn-box">
+              <button id="article__modify-btn">수정</button>
+              <button id="article__delete-btn" type="button">삭제</button>
+            </div>
+          </form>
 
-          <div class="article__btn-box">
-            <button class="article__modify-btn">수정</button>
-            <button class="article__delete-btn">삭제</button>
-          </div>
         </div>
 
         <div class="comment width--900px">
@@ -257,7 +260,7 @@
 
       </div>
       <div class="article__bottom">
-        <button class="prev-page-btn"><i class="fa-solid fa-angles-left"></i></button>
+        <button id="prev-page-btn"><i class="fa-solid fa-angles-left"></i></button>
       </div>
 
     </main>
@@ -265,6 +268,32 @@
       <p class="content"></p>
     </footer>
   </div>
+  <script>
+    //삭제 버튼 클릭
+    const $delBtn = document.getElementById('article__delete-btn');
+    $delBtn.addEventListener('click',e=>{
+      console.log("삭제 버튼 클릭");
+      const id = [[${articleForm.articleNum}]];
+      deleteById(id);
+    });
+
+    function deleteById(id){
+    console.log(id);
+      const url = `http://localhost:9080/community/article/${id}/del`;
+      fetch(url,{
+        method:'DELETE'
+      }).then(res=>{
+        location.href='/community';
+      }).catch(err=>console.log(err));
+    }
+
+    //이전 페이지 버튼 클릭
+    const $prevPageBtn = document.getElementById('prev-page-btn');
+    $prevPageBtn.addEventListener('click',e=>{
+    location.href='/community';
+  });
+
+  </script>
 </body>
 
 </html>

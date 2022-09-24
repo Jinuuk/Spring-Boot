@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
   <meta charset="UTF-8">
@@ -62,21 +63,17 @@
         </div>
         <div class="board-write__article-head width--900px">
           <div class="board-write__article-bullet">
-            <select name="" id="">
-              <option value="">말머리 선택</option>
-              <option value="">문의</option>
-              <option value="">서울</option>
-              <option value="">인천</option>
-              <option value="">대전</option>
-              <option value="">광주</option>
-              <option value="">대구</option>
-              <option value="">울산</option>
-              <option value="">부산</option>
-              <option value="">제주</option>
+            <select name="" id="articleCategory">
+              <option value="전체">전체</option>
+              <option value="문의">문의</option>
+              <option value="남구">남구</option>
+              <option value="동구">동구</option>
+              <option value="북구">북구</option>
+              <option value="울주군">울주군</option>
             </select>
           </div>
           <div class="board-write__article-title">
-            <input type="text" name="" id="" placeholder="제목을 입력하세요." autofocus>
+            <input type="text" name="" id="articleTitle" placeholder="제목을 입력하세요." autofocus>
           </div>
         </div>
         <div class="board-write__tool width--900px">
@@ -119,12 +116,12 @@
           </div>
         </div>
         <div class="board-write__article-main width--900px">
-          <textarea class="board-write__article-content" name="" id="" cols="30" rows="10" placeholder="내용을 작성하세요." autofocus></textarea>
+          <textarea class="board-write__article-content" name="" id="articleContents" cols="30" rows="10" placeholder="내용을 작성하세요." autofocus></textarea>
         </div>
-        <div class="board-write__complete width--900px">
-          <button class="board-write__cancel-btn">취소</button>
-          <button class="board-write__complete-btn">등록</button>
-        </div>
+        <form class="board-write__complete width--900px"  th:action="@{/community}">
+          <button id="cancelBtn">취소</button>
+          <button id="addBtn" type="button">등록</button>
+        </form>
       </div>
 
     </main>
@@ -132,6 +129,62 @@
       <p class="content"></p>
     </footer>
   </div>
+  <script>
+    //전역변수
+    const form = {
+      articleCategory : document.getElementById('articleCategory'),
+      articleTitle : document.getElementById('articleTitle'),
+      articleContents : document.getElementById('articleContents')
+      //attachment
+    }
+
+    const categoryValue = form.articleCategory.options[articleCategory.selectedIndex].value;
+
+    //입력 데이터 가져오는 함수
+    function getInputData(){
+      const memNumber = '1'; //나중에 변경 : 세션 완성 후
+      const articleCategory = categoryValue;
+      const articleTitle = form.articleTitle.value;
+      const articleContents = form.articleContents.value.replace(/(?:\r\n|\r|\n)/g, '<br>');
+      const attachment = 'Y'; // 나중에 변경 : 첨부파일이 있으면 Y, 없으면 N
+
+      return {memNumber,articleCategory,articleTitle,articleContents,attachment}
+    }
+
+    //등록 버튼 클릭
+    addBtn.addEventListener('click',e=>{
+      console.log("등록 버튼 클릭");
+      //1)유효성 체크
+      //2)입력 데이터 가져오기
+      const article = getInputData();
+      //3)게시글 등록 처리
+      add(article);
+    });
+
+    //게시글 등록 함수
+    function add(article){
+      console.log(article);
+      const url = `http://localhost:9080/community/write`;
+      fetch(url,{
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json',
+          'Accept' : 'application/json'
+        },
+        body:JSON.stringify(article)
+      }).then(res=>res.json())
+        .then(data=>{
+          //console.log(data);
+          //console.log(data.data.articleNum);
+          location.href=`/community/article/${data.data.articleNum}`;
+          })
+        .catch(err=> console.log(err));
+    }
+
+
+
+
+  </script>
 </body>
 
 </html>

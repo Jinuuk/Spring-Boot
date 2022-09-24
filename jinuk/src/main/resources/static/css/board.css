@@ -26,6 +26,10 @@ input:focus {
   margin-right: 10px;
 }
 
+td a {
+  text-align: center;
+}
+
 
 /* board */
 .board-main {
@@ -112,13 +116,13 @@ input:focus {
 }
 
 
-/* board__wirte */
-.board__wirte {
+/* board__write*/
+.board__write {
   display: flex;
   justify-content: flex-end;
 }
 
-.board__post-btn {
+#board__post-btn {
   background-color: var(--main-color-yel);
   /* margin:10px 0;
   border:none;

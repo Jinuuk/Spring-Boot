@@ -2,8 +2,9 @@ package com.great.jinuk.web.controller.community;
 
 import com.great.jinuk.domain.Article;
 import com.great.jinuk.domain.svc.ArticleSVC;
-import com.great.jinuk.web.form.community.ArticleAddForm;
-import com.great.jinuk.web.form.community.ArticleEditForm;
+import com.great.jinuk.web.api.ApiResponse;
+import com.great.jinuk.web.api.article.ArticleAddForm;
+import com.great.jinuk.web.api.article.ArticleEditForm;
 import com.great.jinuk.web.form.community.ArticleForm;
 import com.great.jinuk.web.form.community.BoardForm;
 import lombok.RequiredArgsConstructor;
@@ -13,12 +14,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Controller
@@ -60,25 +58,25 @@ public class ArticleController {
   }
 
   //글쓰기 처리
+  @ResponseBody
   @PostMapping("/write")
-  public String write(@Valid @ModelAttribute ArticleAddForm articleAddForm,
-                      BindingResult bindingResult,
-                      RedirectAttributes redirectAttributes) {
+  public ApiResponse<Object> write(@Valid @RequestBody ArticleAddForm articleAddForm,
+                           BindingResult bindingResult) {
+
+    log.info("articleAddForm : {}",articleAddForm);
 
     //검증 : 제목, 내용 글자수 제한
     if (bindingResult.hasErrors()) {
-      log.info("bindingResult : ",bindingResult);
-      return "/community/writeForm";
+      log.info("bindingResult : {}",bindingResult);
+      return ApiResponse.createApiRestMsg("99", "실패", getErrMsg(bindingResult));
     }
 
     Article article = new Article();
     BeanUtils.copyProperties(articleAddForm,article);
-
+    log.info("article : {}",article);
     Article savedArticle = articleSVC.save(article);
-    Long articleNum = savedArticle.getArticleNum();
 
-    redirectAttributes.addAttribute("id",articleNum);
-    return "redirect:/community/article/{id}";
+    return ApiResponse.createApiRestMsg("00", "성공", savedArticle);
   }
 
   //글수정 화면
@@ -97,25 +95,27 @@ public class ArticleController {
   }
 
   //글수정 처리
+  @ResponseBody
   @PatchMapping("edit/{id}")
-  public String edit(@PathVariable("id") Long articleNum,
-                     @Valid @ModelAttribute("articleEditForm") ArticleEditForm articleEditForm,
-                     BindingResult bindingResult,
-                     RedirectAttributes redirectAttributes) {
+  public ApiResponse<Object> edit(@PathVariable("id") Long articleNum,
+                     @Valid @RequestBody ArticleEditForm articleEditForm,
+                     BindingResult bindingResult) {
 
+    log.info("articleEditForm : {}",articleEditForm);
     //검증 : 제목, 내용 글자수 제한
     if (bindingResult.hasErrors()) {
       log.info("bindingResult : ",bindingResult);
-      return "/community/editForm";
+      return ApiResponse.createApiRestMsg("99", "실패", getErrMsg(bindingResult));
     }
 
     Article article = new Article();
     BeanUtils.copyProperties(articleEditForm,article);
+    log.info("article : {}",article);
 
     articleSVC.update(articleNum,article);
 
-    redirectAttributes.addAttribute("id",articleNum);
-    return "redirect:/community/article/{id}";
+
+    return ApiResponse.createApiRestMsg("00", "성공", null);
   }
 
   //게시글 조회
@@ -134,16 +134,28 @@ public class ArticleController {
     //articleForm.getMemNumber()이 세션에 저장된 회원 번호와 일치하다면 return "/community/articleWriter"
     //아니면  return "/community/articleViewer"
 
-    return "/community/articleViewer";
+    return "/community/articleWriter";
   }
 
   //게시글 삭제
+  @ResponseBody
   @DeleteMapping("/article/{id}/del")
-  public String delete(@PathVariable("id") Long articleNum) {
-
+  public ApiResponse<Article> delete(@PathVariable("id") Long articleNum) {
+    log.info("게시글 번호 : {}", articleNum);
     articleSVC.delete(articleNum);
 
-    return "redirect:/community";
+    return ApiResponse.createApiRestMsg("00", "성공", null);
+  }
+
+  //검증 오류 메시지
+  private Map<String, String> getErrMsg(BindingResult bindingResult) {
+    Map<String, String> errmsg = new HashMap<>();
+
+    bindingResult.getAllErrors().stream().forEach(objectError ->{
+      errmsg.put(objectError.getCodes()[0], objectError.getDefaultMessage());
+    });
+
+    return errmsg;
   }
 
 }

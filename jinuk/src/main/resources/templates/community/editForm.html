@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="../common/common.css">
-  <link rel="stylesheet" href="../css/editForm.css">
+  <link rel="stylesheet" href="/common/common.css">
+  <link rel="stylesheet" href="/css/editForm.css">
   <script src="https://kit.fontawesome.com/038578f405.js" crossorigin="anonymous"></script>
   <title>GREAT 게시글 수정</title>
 </head>
@@ -62,21 +63,17 @@
         </div>
         <div class="board-write__article-head width--900px">
           <div class="board-write__article-bullet">
-            <select name="" id="">
-              <option value="">말머리 선택</option>
-              <option value="">문의</option>
-              <option value="">서울</option>
-              <option value="">인천</option>
-              <option value="">대전</option>
-              <option value="">광주</option>
-              <option value="">대구</option>
-              <option value="">울산</option>
-              <option value="">부산</option>
-              <option value="">제주</option>
+            <select name="" id="articleCategory">
+              <option value="전체">전체</option>
+              <option value="문의">문의</option>
+              <option value="남구">남구</option>
+              <option value="동구">동구</option>
+              <option value="북구">북구</option>
+              <option value="울주군">울주군</option>
             </select>
           </div>
           <div class="board-write__article-title">
-            <input type="text" name="" id="" placeholder="제목을 입력하세요." autofocus>
+            <input type="text" id="articleTitle" placeholder="제목을 입력하세요." autofocus>
           </div>
         </div>
         <div class="board-write__tool width--900px">
@@ -119,12 +116,12 @@
           </div>
         </div>
         <div class="board-write__article-main width--900px">
-          <textarea class="board-write__article-content" name="" id="" cols="30" rows="10" placeholder="내용을 작성하세요." autofocus></textarea>
+          <textarea class="board-write__article-content" id="articleContents" cols="30" rows="10" placeholder="내용을 작성하세요." autofocus></textarea>
         </div>
-        <div class="board-write__modify width--900px">
-          <button class="board-write__cancel-btn">취소</button>
-          <button class="board-write__modify-btn">수정</button>
-        </div>
+        <form class="board-write__modify width--900px" th:action="@{/community/article/{id}(id=${articleEditForm.articleNum})}">
+          <button id="cancelBtn">취소</button>
+          <button id="modifyBtn" type="button">수정</button>
+        </form>
       </div>
 
     </main>
@@ -132,6 +129,73 @@
       <p class="content"></p>
     </footer>
   </div>
+  <script th:inline="javascript">
+    //articleEditForm에서 제목, 내용 추출
+   
+    const titleValue = [[${articleEditForm.articleTitle}]];
+    const contentsValue = [[${articleEditForm.articleContents}]]; //.replaceAll("<br>", "\r\n");
+
+    //추출한 제목, 내용을 다시 삽입
+    const $title = document.getElementById('articleTitle');
+    const $contents = document.getElementById('articleContents');
+    $title.value = titleValue;
+    $contents.textContent = contentsValue.replaceAll("<br>", "\r\n");
+
+    //전역변수
+    const form = {
+      articleCategory : document.getElementById('articleCategory'),
+      articleTitle : document.getElementById('articleTitle'),
+      articleContents : document.getElementById('articleContents')
+      //attachment
+    }
+
+    const categoryValue = form.articleCategory.options[articleCategory.selectedIndex].value;
+
+    //입력 데이터 가져오는 함수
+    function getInputData(){
+      const articleCategory = categoryValue;
+      const articleTitle = form.articleTitle.value;
+      const articleContents = form.articleContents.value.replace(/(?:\r\n|\r|\n)/g, '<br>');
+      const attachment = 'Y'; // 나중에 변경 : 첨부파일이 있으면 Y, 없으면 N
+      const articleNum = [[${articleEditForm.articleNum}]]; 
+
+      return {articleCategory,articleTitle,articleContents,attachment,articleNum}
+    }    
+
+    //수정 버튼 클릭
+    modifyBtn.addEventListener('click',e=>{
+      console.log("수정 버튼 클릭");
+      //1)유효성 체크
+      //2)입력 데이터 가져오기
+      const article = getInputData();
+      //3)게시글 번호
+      const id = [[${articleEditForm.articleNum}]]; 
+      //4)게시글 수정 처리
+      modify(article, id);
+    });
+
+    //게시글 수정 함수
+    function modify(article, id){
+      console.log(article);
+      console.log(id);
+      const url = `http://localhost:9080/community/edit/${id}`;
+      fetch(url,{
+        method:'PATCH',
+        headers:{
+          'Content-Type':'application/json',
+          'Accept' : 'application/json'
+        },
+        body:JSON.stringify(article)
+      }).then(res=>res.json())
+        .then(data=>{
+          location.href=`/community/article/${id}`;
+          })
+        .catch(err=> console.log(err));
+    }   
+
+
+    
+  </script>
 </body>
 
 </html>

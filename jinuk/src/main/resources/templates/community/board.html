@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="ko">
-
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="../common/common.css">
-  <link rel="stylesheet" href="../css/community.css">
+  <link rel="stylesheet" href="/common/common.css">
+  <link rel="stylesheet" href="/css/board.css">
   <script src="https://kit.fontawesome.com/038578f405.js" crossorigin="anonymous"></script>
   <title>GREAT 커뮤니티</title>
 </head>
@@ -62,22 +62,26 @@
         </div>
         <div class="board__category width--900px">
           <div class="board__category-select">
-            <select name="" id="">
-              <option value="">전체</option>
-              <option value="">문의</option>
-              <option value="">서울</option>
-              <option value="">인천</option>
-              <option value="">대전</option>
-              <option value="">광주</option>
-              <option value="">대구</option>
-              <option value="">울산</option>
-              <option value="">부산</option>
-              <option value="">제주</option>
+            <select name="" id="category">
+              <option value="전체">전체</option>
+              <option value="문의">문의</option>
+              <option value="남구">남구</option>
+              <option value="동구">동구</option>
+              <option value="북구">북구</option>
+              <option value="울주군">울주군</option>
             </select>
           </div>
         </div>
         <div class="board__table width--900px">
           <table class="board__table-content width--900px">
+            <colgroup>
+              <col width="5%"/>
+              <col width="10%"/>
+              <col width="60%"/>
+              <col width="10%"/>
+              <col width="10%"/>
+              <col width="5%"/>
+            </colgroup>
             <thead>
               <tr>
                 <th></th>
@@ -89,92 +93,19 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>문의</td>
-                <td class ="left"><a href="">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, architecto!</a></td>
-                <td><a href="">Lorem.</a></td>
-                <td>2022.08.01</td>
-                <td>11</td>
+              <tr th:each="article:${list}">
+                <td th:text="${article.articleNum}">1</td>
+                <td th:text="${article.articleCategory}">문의</td>
+                <td class ="left"><a th:href="@{/community/article/{id}(id=${article.articleNum})}" th:text="${article.articleTitle}">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, architecto!</a></td>
+                <td><a href="" th:text="${article.member.memNickname}">Lorem.</a></td>
+                <td th:text="${{article.createDate}}">2022.08.01</td>
+                <td th:text="${article.views}">11</td>
               </tr>
-              <tr>
-                <td>2</td>
-                <td>문의</td>
-                <td class ="left"><a href="">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, architecto!</a></td>
-                <td><a href="">Lorem.</a></td>
-                <td>2022.08.01</td>
-                <td>11</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>문의</td>
-                <td class ="left"><a href="">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, architecto!</a></td>
-                <td><a href="">Lorem.</a></td>
-                <td>2022.08.01</td>
-                <td>11</td>
-              </tr>
-              <tr>
-                <td>4</td>
-                <td>문의</td>
-                <td class ="left"><a href="">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, architecto!</a></td>
-                <td><a href="">Lorem.</a></td>
-                <td>2022.08.01</td>
-                <td>11</td>
-              </tr>
-              <tr>
-                <td>5</td>
-                <td>문의</td>
-                <td class="left"><a href="">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, architecto!</a></td>
-                <td><a href="">Lorem.</a></td>
-                <td>2022.08.01</td>
-                <td>11</td>
-              </tr>
-              <tr>
-                <td>6</td>
-                <td>문의</td>
-                <td class="left"><a href="">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, architecto!</a></td>
-                <td><a href="">Lorem.</a></td>
-                <td>2022.08.01</td>
-                <td>11</td>
-              </tr>
-              <tr>
-                <td>7</td>
-                <td>문의</td>
-                <td class="left"><a href="">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, architecto!</a></td>
-                <td><a href="">Lorem.</a></td>
-                <td>2022.08.01</td>
-                <td>11</td>
-              </tr>
-              <tr>
-                <td>8</td>
-                <td>문의</td>
-                <td class="left"><a href="">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, architecto!</a></td>
-                <td><a href="">Lorem.</a></td>
-                <td>2022.08.01</td>
-                <td>11</td>
-              </tr>
-              <tr>
-                <td>9</td>
-                <td>문의</td>
-                <td class="left"><a href="">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, architecto!</a></td>
-                <td><a href="">Lorem.</a></td>
-                <td>2022.08.01</td>
-                <td>11</td>
-              </tr>
-              <tr>
-                <td>10</td>
-                <td>문의</td>
-                <td class="left"><a href="">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, architecto!</a></td>
-                <td><a href="">Lorem.</a></td>
-                <td>2022.08.01</td>
-                <td>11</td>
-              </tr>
-
             </tbody>
           </table>
         </div>
-        <div class="board__wirte width--900px">
-          <button class="board__post-btn">글쓰기</button>
+        <div class="board__write width--900px">
+          <button id="board__post-btn">글쓰기</button>
         </div>
         <div class="board__page width--900px">
           <div class="board__page--select">
@@ -189,16 +120,6 @@
         </div>
         <div class="board__search width--900px">
           <div class="board__search-box">
-            <div class="board__search-date">
-              <!-- <select name="" id="">
-                <option value="">전체기간</option>
-                <option value="">1일</option>
-                <option value="">1주</option>
-                <option value="">1개월</option>
-                <option value="">6개월</option>
-                <option value="">1년</option>
-              </select> -->
-            </div>
             <div class="board__search-setting">
               <select name="" id="search-category">
                 <option value="">제목+내용</option>
@@ -218,6 +139,12 @@
       <p class="content"></p>
     </footer>
   </div>
+  <script>
+  const $postBtn = document.getElementById('board__post-btn');
+  $postBtn.addEventListener('click',e=>{
+    location.href='/community/write';
+  });
+  </script>
 </body>
 
 </html>

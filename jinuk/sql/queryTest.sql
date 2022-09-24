@@ -39,7 +39,7 @@ insert into article values (5,3,'인천','글제목5','글내용5','Y',sysdate,0
 select * from article;
 
 --게시글 수정
-update article set article_title = '글제목5(수정)', article_contents = '글내용5(수정)', create_date = sysdate
+update article set article_category = '문의', article_title = '글제목5(수정)', article_contents = '글내용5(수정)', attachment = 'N', create_date = sysdate
 where article_num = 5;
 select * from article;
 
