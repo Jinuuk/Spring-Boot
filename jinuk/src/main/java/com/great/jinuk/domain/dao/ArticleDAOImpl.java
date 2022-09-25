@@ -33,6 +33,7 @@ public class ArticleDAOImpl implements ArticleDAO {
     sql.append("select article_num, article_category, article_title, attachment, mem_nickname, create_date, views ");
     sql.append("from article a, member m ");
     sql.append("where a.mem_number = m.mem_number ");
+    sql.append("order by a.article_num desc ");
 
 //    List<Article> articles = jt.query(sql.toString(), new BeanPropertyRowMapper<>(Article.class));
         List<Article> articles = jt.query(sql.toString(), new RowMapper<Article>(){
@@ -60,6 +61,7 @@ public class ArticleDAOImpl implements ArticleDAO {
     sql.append("select article_num, article_category, article_title, attachment, mem_nickname, create_date, views ");
     sql.append("from article a, member m ");
     sql.append("where a.mem_number = m.mem_number and a.article_category = ? ");
+    sql.append("order by a.article_num desc ");
 
 //    List<Article> articles = jt.query(sql.toString(), new BeanPropertyRowMapper<>(Article.class),articleCategory);
     List<Article> articles = jt.query(sql.toString(), new RowMapper<Article>(){
@@ -87,6 +89,7 @@ public class ArticleDAOImpl implements ArticleDAO {
     sql.append("select article_num, article_category, article_title, attachment, mem_nickname, create_date, views ");
     sql.append("from article a, member m ");
     sql.append("where a.mem_number = m.mem_number and a.article_title like ? ");
+    sql.append("order by a.article_num desc ");
 
 //    List<Article> articles = jt.query(sql.toString(), new BeanPropertyRowMapper<>(Article.class),articleTitle);
     List<Article> articles = jt.query(sql.toString(), new RowMapper<Article>(){
@@ -115,6 +118,7 @@ public class ArticleDAOImpl implements ArticleDAO {
     sql.append("select article_num, article_category, article_title, attachment, mem_nickname, create_date, views ");
     sql.append("from article a, member m ");
     sql.append("where a.mem_number = m.mem_number and a.article_contents like ? ");
+    sql.append("order by a.article_num desc ");
 
     //List<Article> articles = jt.query(sql.toString(), new BeanPropertyRowMapper<>(Article.class),articleContents);
     List<Article> articles = jt.query(sql.toString(), new RowMapper<Article>(){
@@ -143,6 +147,7 @@ public class ArticleDAOImpl implements ArticleDAO {
     sql.append("select article_num, article_category, article_title, attachment, mem_nickname, create_date, views ");
     sql.append("from article a, member m ");
     sql.append("where a.mem_number = m.mem_number and m.mem_nickname = ? ");
+    sql.append("order by a.article_num desc ");
 
 //    List<Article> articles = jt.query(sql.toString(), new BeanPropertyRowMapper<>(Article.class),memNickname);
     List<Article> articles = jt.query(sql.toString(), new RowMapper<Article>(){

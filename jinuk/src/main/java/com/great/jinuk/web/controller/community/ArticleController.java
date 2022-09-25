@@ -6,6 +6,7 @@ import com.great.jinuk.web.api.ApiResponse;
 import com.great.jinuk.web.api.article.ArticleAddForm;
 import com.great.jinuk.web.api.article.ArticleEditForm;
 import com.great.jinuk.web.form.community.ArticleForm;
+import com.great.jinuk.web.form.community.ArticleSearchForm;
 import com.great.jinuk.web.form.community.BoardForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +29,7 @@ public class ArticleController {
 
   //자유게시판 화면 : 전체
   @GetMapping
-  public String board(Model model){
+  public String board(ArticleSearchForm articleSearchForm, Model model){
     List<Article> articles = articleSVC.findAll();
     List<Article> list = new ArrayList<>();
 
@@ -43,7 +44,56 @@ public class ArticleController {
     return "/community/board";
   }
 
-  //자유게시판 화면 : 카테고리 분류, 검색
+  //자유게시판 화면 : 카테고리 분류
+  @GetMapping("/category")
+  public String boardCategory(){
+    return null;
+  }
+
+  //자유기시판 화면 : 검색(제목, 내용, 제목+내용, 닉네임)
+  @GetMapping("/search")
+  public String boardSearch(ArticleSearchForm articleSearchForm, Model model){
+    log.info("articleSearchForm : {}",articleSearchForm);
+
+    List<Article> list = new ArrayList<>();
+    List<Article> foundArticles = new ArrayList<>();
+    String searchCategory = articleSearchForm.getSearchCategory();
+    String searchKeyword = articleSearchForm.getSearchKeyword();
+
+
+    if (searchCategory.equals("title")) {
+      log.info("1");
+      foundArticles.addAll(articleSVC.findByTitle(searchKeyword));
+      for (Article article : foundArticles) {
+          list.add(article);
+          model.addAttribute("list",list);
+        }
+    } else if (searchCategory.equals("contents")) {
+      log.info("2");
+      foundArticles.addAll(articleSVC.findByContents(searchKeyword));
+      for (Article article : foundArticles) {
+        list.add(article);
+        model.addAttribute("list",list);
+      }
+    } else if (searchCategory.equals("titleOrContents")) {
+      log.info("3");
+      foundArticles.addAll(articleSVC.findByTitleOrContents(searchKeyword));
+      for (Article article : foundArticles) {
+        list.add(article);
+        model.addAttribute("list",list);
+      }
+    } else if (searchCategory.equals("nickname")) {
+      log.info("4");
+      foundArticles.addAll(articleSVC.findByNickname(searchKeyword));
+      for (Article article : foundArticles) {
+        list.add(article);
+        model.addAttribute("list",list);
+      }
+    }
+    log.info("5");
+    return "/community/board";
+  }
+
   @ResponseBody
   @PostMapping
   public String sortArticles() {

@@ -119,7 +119,7 @@
           <textarea class="board-write__article-content" id="articleContents" cols="30" rows="10" placeholder="내용을 작성하세요." autofocus></textarea>
         </div>
         <form class="board-write__modify width--900px" th:action="@{/community/article/{id}(id=${articleEditForm.articleNum})}">
-          <button id="cancelBtn">취소</button>
+          <button id="cancelBtn" type="button">취소</button>
           <button id="modifyBtn" type="button">수정</button>
         </form>
       </div>
@@ -191,7 +191,16 @@
           location.href=`/community/article/${id}`;
           })
         .catch(err=> console.log(err));
-    }   
+    }
+
+
+    //취소 버튼 클릭
+      cancelBtn.addEventListener('click',e=>{
+        if(!confirm('게시글 수정을 취소하시겠습니까?')) return;
+        location.href=[[@{/community/article/{id}(id=${articleEditForm.articleNum})}]];
+      });
+
+
 
 
     
