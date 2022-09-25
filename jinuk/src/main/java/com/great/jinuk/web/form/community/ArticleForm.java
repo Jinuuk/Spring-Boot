@@ -1,11 +1,13 @@
 package com.great.jinuk.web.form.community;
 
 import com.great.jinuk.domain.Member;
+import com.great.jinuk.domain.common.file.UploadFile;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class ArticleForm {
@@ -21,4 +23,7 @@ public class ArticleForm {
   private LocalDateTime createDate;      //  create_date           date,         작성일
   private Long views;                    //  views                 number(5)     조회수
   private Member member;
+
+  //private UploadFile attachFile;
+  private List<UploadFile> imageFiles;
 }

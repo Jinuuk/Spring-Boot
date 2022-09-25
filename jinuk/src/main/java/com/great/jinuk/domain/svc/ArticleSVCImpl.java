@@ -1,12 +1,18 @@
 package com.great.jinuk.domain.svc;
 
 import com.great.jinuk.domain.Article;
+import com.great.jinuk.domain.common.file.AttachCode;
+import com.great.jinuk.domain.common.file.FileUtils;
+import com.great.jinuk.domain.common.file.UploadFile;
+import com.great.jinuk.domain.common.file.UploadFileSVC;
 import com.great.jinuk.domain.dao.ArticleDAO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +22,8 @@ import java.util.Optional;
 public class ArticleSVCImpl implements ArticleSVC {
 
   private final ArticleDAO articleDAO;
+  private final UploadFileSVC uploadFileSVC;
+  private final FileUtils fileUtils;
 
   /**
    * 게시글 목록 조회1 : 전체
@@ -116,6 +124,20 @@ public class ArticleSVCImpl implements ArticleSVC {
     Long generatedArticleNum = articleDAO.generatedArticleNum();
     article.setArticleNum(generatedArticleNum);
     articleDAO.save(article);
+
+    return articleDAO.read(generatedArticleNum).get();
+  }
+
+
+  @Override
+  public Article save(Article article, List<MultipartFile> files) {
+    Long generatedArticleNum = articleDAO.generatedArticleNum();
+    article.setArticleNum(generatedArticleNum);
+    articleDAO.save(article);
+
+    //첨부파일-이미지
+    uploadFileSVC.addFile(files,AttachCode.P0102,generatedArticleNum);
+
     return articleDAO.read(generatedArticleNum).get();
   }
 
@@ -131,6 +153,16 @@ public class ArticleSVCImpl implements ArticleSVC {
     return articleDAO.read(articleNum).get();
   }
 
+  @Override
+  public Article update(Long articleNum, Article article, List<MultipartFile> files) {
+    articleDAO.update(articleNum, article);
+
+    //2)첨부파일-이미지
+    uploadFileSVC.addFile(files,AttachCode.P0102,articleNum);
+
+    return articleDAO.read(articleNum).get();
+  }
+
   /**
    * 게시글 삭제
    *
@@ -138,6 +170,23 @@ public class ArticleSVCImpl implements ArticleSVC {
    */
   @Override
   public void delete(Long articleNum) {
+    //1)첨부파일 메타정보 조회
+    List<UploadFile> attachFiles = uploadFileSVC.getFilesByCodeWithRid(AttachCode.P0101.name(), articleNum);
+    List<UploadFile> imageFiles = uploadFileSVC.getFilesByCodeWithRid(AttachCode.P0102.name(), articleNum);
+
+    //2)스토리지 파일 삭제
+    List<UploadFile> unionFiles = new LinkedList<>();
+    unionFiles.addAll(attachFiles);
+    unionFiles.addAll((imageFiles));
+    for (UploadFile file : unionFiles) {
+      fileUtils.deleteAttachFile(AttachCode.valueOf(file.getCode()), file.getStoreFilename());
+    }
+
+    //3)게시글 삭제
     articleDAO.delete(articleNum);
+
+    //메타정보 삭제
+    uploadFileSVC.deleteFileByCodeWithRid(AttachCode.P0101.name(),articleNum);
+    uploadFileSVC.deleteFileByCodeWithRid(AttachCode.P0102.name(),articleNum);
   }
 }

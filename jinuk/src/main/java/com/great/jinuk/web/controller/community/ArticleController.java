@@ -1,6 +1,9 @@
 package com.great.jinuk.web.controller.community;
 
 import com.great.jinuk.domain.Article;
+import com.great.jinuk.domain.common.file.AttachCode;
+import com.great.jinuk.domain.common.file.UploadFile;
+import com.great.jinuk.domain.common.file.UploadFileSVC;
 import com.great.jinuk.domain.svc.ArticleSVC;
 import com.great.jinuk.web.api.ApiResponse;
 import com.great.jinuk.web.api.article.ArticleAddForm;
@@ -26,6 +29,7 @@ import java.util.*;
 public class ArticleController {
 
   private final ArticleSVC articleSVC;
+  private final UploadFileSVC uploadFileSVC;
 
   //자유게시판 화면 : 전체
   @GetMapping
@@ -110,7 +114,7 @@ public class ArticleController {
   //글쓰기 처리
   @ResponseBody
   @PostMapping("/write")
-  public ApiResponse<Object> write(@Valid @RequestBody ArticleAddForm articleAddForm,
+  public ApiResponse<Object> write(@Valid ArticleAddForm articleAddForm,
                            BindingResult bindingResult) {
 
     log.info("articleAddForm : {}",articleAddForm);
@@ -118,15 +122,25 @@ public class ArticleController {
     //검증 : 제목, 내용 글자수 제한
     if (bindingResult.hasErrors()) {
       log.info("bindingResult : {}",bindingResult);
-      return ApiResponse.createApiRestMsg("99", "실패", getErrMsg(bindingResult));
+      return ApiResponse.createApiResMsg("99", "실패", getErrMsg(bindingResult));
     }
 
     Article article = new Article();
     BeanUtils.copyProperties(articleAddForm,article);
     log.info("article : {}",article);
-    Article savedArticle = articleSVC.save(article);
+    Article savedArticle = null;
 
-    return ApiResponse.createApiRestMsg("00", "성공", savedArticle);
+
+    //주의 : view에서 multiple인 경우 파일 첨부가 없더라도 빈문자열("")이 반환되어
+    // List<MultipartFile>에 빈 객체 1개가 포함됨
+    if (articleAddForm.getFiles().get(0).isEmpty()) {
+      savedArticle = articleSVC.save(article);
+      //이미지 첨부
+    } else if (!articleAddForm.getFiles().get(0).isEmpty()) {
+      savedArticle = articleSVC.save(article,articleAddForm.getFiles());
+    }
+
+    return ApiResponse.createApiResMsg("00", "성공", savedArticle);
   }
 
   //글수정 화면
@@ -139,6 +153,17 @@ public class ArticleController {
     if (!foundArticle.isEmpty()) {
       BeanUtils.copyProperties(foundArticle.get(),articleEditForm);
     }
+
+    //2)이미지 조회
+    List<UploadFile> uploadFiles = uploadFileSVC.getFilesByCodeWithRid(AttachCode.P0102.name(), articleNum);
+    if (uploadFiles.size()>0) {
+      List<UploadFile> imageFiles = new ArrayList<>();
+      for (UploadFile file:uploadFiles) {
+        imageFiles.add(file);
+      }
+      articleEditForm.setImageFiles(imageFiles);
+    }
+
     model.addAttribute("articleEditForm",articleEditForm);
 
     return "/community/editForm";
@@ -148,24 +173,30 @@ public class ArticleController {
   @ResponseBody
   @PatchMapping("edit/{id}")
   public ApiResponse<Object> edit(@PathVariable("id") Long articleNum,
-                     @Valid @RequestBody ArticleEditForm articleEditForm,
+                     @Valid ArticleEditForm articleEditForm,
                      BindingResult bindingResult) {
 
     log.info("articleEditForm : {}",articleEditForm);
     //검증 : 제목, 내용 글자수 제한
     if (bindingResult.hasErrors()) {
       log.info("bindingResult : ",bindingResult);
-      return ApiResponse.createApiRestMsg("99", "실패", getErrMsg(bindingResult));
+      return ApiResponse.createApiResMsg("99", "실패", getErrMsg(bindingResult));
     }
 
     Article article = new Article();
     BeanUtils.copyProperties(articleEditForm,article);
     log.info("article : {}",article);
+    Article updatedArticle = null;
 
-    articleSVC.update(articleNum,article);
+    //메타정보 수정
+    if (articleEditForm.getFiles().get(0).isEmpty()) {
+      updatedArticle = articleSVC.update(articleNum, article);
+    //사진 첨부
+    } else if (!articleEditForm.getFiles().get(0).isEmpty()) {
+      updatedArticle = articleSVC.update(articleNum, article,articleEditForm.getFiles());
+    }
 
-
-    return ApiResponse.createApiRestMsg("00", "성공", null);
+    return ApiResponse.createApiResMsg("00", "성공", updatedArticle);
   }
 
   //게시글 조회
@@ -178,6 +209,17 @@ public class ArticleController {
     if (!foundArticle.isEmpty()) {
       BeanUtils.copyProperties(foundArticle.get(),articleForm);
     }
+
+    //2)게시글 이미지 조회
+    List<UploadFile> uploadFiles = uploadFileSVC.getFilesByCodeWithRid(AttachCode.P0102.name(), articleNum);
+    if (uploadFiles.size()>0) {
+      List<UploadFile> imageFiles = new ArrayList<>();
+      for (UploadFile file:uploadFiles) {
+        imageFiles.add(file);
+      }
+      articleForm.setImageFiles(imageFiles);
+    }
+
     model.addAttribute("articleForm",articleForm);
 
     //세션 완성 후 조건문 추가
@@ -194,7 +236,7 @@ public class ArticleController {
     log.info("게시글 번호 : {}", articleNum);
     articleSVC.delete(articleNum);
 
-    return ApiResponse.createApiRestMsg("00", "성공", null);
+    return ApiResponse.createApiResMsg("00", "성공", null);
   }
 
   //검증 오류 메시지

@@ -1,6 +1,7 @@
 package com.great.jinuk.domain.svc;
 
 import com.great.jinuk.domain.Article;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -61,6 +62,7 @@ public interface ArticleSVC {
    * @return 게시글
    */
   Article save(Article article);
+  Article save(Article article, List<MultipartFile> files);
 
   /**
    * 게시글 수정
@@ -68,6 +70,7 @@ public interface ArticleSVC {
    * @param article 게시글 수정 내용
    */
   Article update(Long articleNum, Article article);
+  Article update(Long articleNum, Article article, List<MultipartFile> files);
 
   /**
    * 게시글 삭제

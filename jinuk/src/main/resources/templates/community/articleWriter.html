@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <head>
   <meta charset="UTF-8">
@@ -64,9 +63,7 @@
           <h2 class="article__title" th:text="*{articleTitle}">글 제목</h2>
           <div class="article__information">
             <div class="article__profile">
-              <a href=""><img
-                  src="./img/profile.jpg"
-                  alt=""></i></a>
+              <a href=""><img id="profileImage" src="./img/profile.jpg" alt=""></i></a>
               <a href="" th:text="*{member.memNickname}">user</a>
             </div>
             <div class="article__write-information">
@@ -77,7 +74,15 @@
         </div>
 
         <div class="article__content width--900px">
-          <p th:utext="*{articleContents}">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ab, aperiam. Voluptas eaque modi eius, commodi
+          <div th:if="*{imageFiles}">
+            <div th:each="imageFile:*{imageFiles}">
+              <img width="800px" src=""
+                th:src="@{/api/attach/img/{attachCode}/{storeFilename}(attachCode=${imageFile.code},storeFilename=${imageFile.storeFilename})}"
+                alt="이미지를 불러올 수 없습니다.">
+            </div>
+          </div>
+          <p th:utext="*{articleContents}">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ab, aperiam.
+            Voluptas eaque modi eius, commodi
             culpa architecto! Tempore repellendus assumenda non numquam aliquid saepe, asperiores reprehenderit a
             sapiente consequuntur architecto.
             Iste veniam quod maiores voluptatem hic eos totam iure facere aut repellat aspernatur cupiditate alias
@@ -119,12 +124,15 @@
                     <div class="comment-box__top">
                       <a href="" class="comment-box__nickname font-size--13px  ">닉네임</a>
                       <div class="comment-box__info">
-                        <a class="comment-box__modify font-size--12px" href=""><i class="fa-regular fa-pen-to-square"></i></a>
-                        <a class="comment-box__delete font-size--12px" href=""><i class="fa-regular fa-trash-can"></i></a>
+                        <a class="comment-box__modify font-size--12px" href=""><i
+                            class="fa-regular fa-pen-to-square"></i></a>
+                        <a class="comment-box__delete font-size--12px" href=""><i
+                            class="fa-regular fa-trash-can"></i></a>
                       </div>
                     </div>
                     <div class="comment-box__middle">
-                      <p class="comment-box__text font-size--13px ">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Maiores, excepturi!</p>
+                      <p class="comment-box__text font-size--13px ">Lorem ipsum dolor, sit amet consectetur adipisicing
+                        elit. Maiores, excepturi!</p>
                     </div>
                     <div class="comment-box__bottom">
                       <span class="comment-box__date font-size--12px">2022.08.02 14:25</span>
@@ -147,7 +155,8 @@
                       </div>
                     </div>
                     <div class="comment-box__middle">
-                      <p class="comment-box__text font-size--13px ">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Maiores, excepturi!</p>
+                      <p class="comment-box__text font-size--13px ">Lorem ipsum dolor, sit amet consectetur adipisicing
+                        elit. Maiores, excepturi!</p>
                     </div>
                     <div class="comment-box__bottom">
                       <span class="comment-box__date font-size--12px">2022.08.02 14:25</span>
@@ -163,7 +172,8 @@
                     <span class="reply-box__nickname font-size--13px">닉네임</span>
                   </div>
                   <div class="reply-box__middle">
-                    <textarea class="reply-box__text" name="" id="" cols="30" rows="10" placeholder="댓글을 입력하세요." autofocus></textarea>
+                    <textarea class="reply-box__text" name="" id="" cols="30" rows="10" placeholder="댓글을 입력하세요."
+                      autofocus></textarea>
                   </div>
                   <div class="reply-box__bottom">
                     <button class="reply-box__register-btn font-size--12px" href="">등록</button>
@@ -184,7 +194,8 @@
                       </div>
                     </div>
                     <div class="comment-box__middle">
-                      <p class="comment-box__text font-size--13px ">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Maiores, excepturi!</p>
+                      <p class="comment-box__text font-size--13px ">Lorem ipsum dolor, sit amet consectetur adipisicing
+                        elit. Maiores, excepturi!</p>
                     </div>
                     <div class="comment-box__bottom">
                       <span class="comment-box__date font-size--12px">2022.08.02 14:25</span>
@@ -207,7 +218,8 @@
                       </div>
                     </div>
                     <div class="comment-box__middle">
-                      <p class="comment-box__text font-size--13px ">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Maiores, excepturi!</p>
+                      <p class="comment-box__text font-size--13px ">Lorem ipsum dolor, sit amet consectetur adipisicing
+                        elit. Maiores, excepturi!</p>
                     </div>
                     <div class="comment-box__bottom">
                       <span class="comment-box__date font-size--12px">2022.08.02 14:25</span>
@@ -226,12 +238,15 @@
                     <div class="comment-box__top">
                       <a href="" class="comment-box__nickname font-size--13px  ">닉네임</a>
                       <div class="comment-box__info">
-                        <a class="comment-box__modify font-size--12px" href=""><i class="fa-regular fa-pen-to-square"></i></a>
-                        <a class="comment-box__delete font-size--12px" href=""><i class="fa-regular fa-trash-can"></i></a>
+                        <a class="comment-box__modify font-size--12px" href=""><i
+                            class="fa-regular fa-pen-to-square"></i></a>
+                        <a class="comment-box__delete font-size--12px" href=""><i
+                            class="fa-regular fa-trash-can"></i></a>
                       </div>
                     </div>
                     <div class="comment-box__middle">
-                      <p class="comment-box__text font-size--13px ">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Maiores, excepturi!</p>
+                      <p class="comment-box__text font-size--13px ">Lorem ipsum dolor, sit amet consectetur adipisicing
+                        elit. Maiores, excepturi!</p>
                     </div>
                     <div class="comment-box__bottom">
                       <span class="comment-box__date font-size--12px">2022.08.02 14:25</span>
@@ -240,7 +255,7 @@
                   </div>
                 </div>
               </li>
-              
+
             </ul>
           </div>
           <div class="comment__write">
@@ -249,7 +264,8 @@
                 <span class="reply-box__nickname font-size--13px">닉네임</span>
               </div>
               <div class="reply-box__middle">
-                <textarea class="reply-box__text" name="" id="" cols="30" rows="10" placeholder="댓글을 입력하세요." autofocus></textarea>
+                <textarea class="reply-box__text" name="" id="" cols="30" rows="10" placeholder="댓글을 입력하세요."
+                  autofocus></textarea>
               </div>
               <div class="reply-box__bottom">
                 <button class="reply-box__register-btn font-size--12px" href="">등록</button>
@@ -271,28 +287,28 @@
   <script>
     //삭제 버튼 클릭
     const $delBtn = document.getElementById('article__delete-btn');
-    $delBtn.addEventListener('click',e=>{
+    $delBtn.addEventListener('click', e => {
       console.log("삭제 버튼 클릭");
-      if(!confirm('게시글을 삭제하시겠습니까?')) return;
-      const id = [[${articleForm.articleNum}]];
+      if (!confirm('게시글을 삭제하시겠습니까?')) return;
+      const id = [[${ articleForm.articleNum }]];
       deleteById(id);
     });
 
-    function deleteById(id){
-    console.log(id);
+    function deleteById(id) {
+      console.log(id);
       const url = `http://localhost:9080/community/article/${id}/del`;
-      fetch(url,{
-        method:'DELETE'
-      }).then(res=>{
-        location.href='/community';
-      }).catch(err=>console.log(err));
+      fetch(url, {
+        method: 'DELETE'
+      }).then(res => {
+        location.href = '/community';
+      }).catch(err => console.log(err));
     }
 
     //이전 페이지 버튼 클릭
     const $prevPageBtn = document.getElementById('prev-page-btn');
-    $prevPageBtn.addEventListener('click',e=>{
-    location.href='/community';
-  });
+    $prevPageBtn.addEventListener('click', e => {
+      location.href = '/community';
+    });
 
   </script>
 </body>

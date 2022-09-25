@@ -24,7 +24,7 @@ public class ApiResponse<T>{
    * @return
    * @param <T> 데이터
    */
-  public static <T> ApiResponse<T> createApiRestMsg(String rtcd, String rtmsg, T data) { //제네릭 메소드
+  public static <T> ApiResponse<T> createApiResMsg(String rtcd, String rtmsg, T data) { //제네릭 메소드
 //    ApiResponse<T> response = null;
 //    Header header = new Header(rtcd, rtmsg);
 //    response = new ApiResponse<>(header,data);

@@ -2,6 +2,9 @@ package com.great.jinuk.web.api.article;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Data
 public class ArticleAddForm {
@@ -12,4 +15,7 @@ public class ArticleAddForm {
   @Length(min=1, max=500)
   private String articleContents;        //  article_contents      clob,         게시글 내용 string?
   private String attachment;             //  attachment            varchar2(1),  첨부파일 유무
+
+  //private MultipartFile file;        //상품 이미지 첨부 : 단건
+  private List<MultipartFile> files; //상품 이미지 첨부 : 여러건
 }

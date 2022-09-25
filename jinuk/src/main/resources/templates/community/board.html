@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -58,7 +58,9 @@
     <main class="main container">
       <div class="board-main content">
         <div class="board__title width--900px">
-          <a href="/community"><h2><i class="bar"></i>커뮤니티</h2></a>
+          <a href="/community">
+            <h2><i class="bar"></i>커뮤니티</h2>
+          </a>
         </div>
         <div class="board__category width--900px">
           <div class="board__category-select">
@@ -75,12 +77,12 @@
         <div class="board__table width--900px">
           <table class="board__table-content width--900px">
             <colgroup>
-              <col width="5%"/>
-              <col width="10%"/>
-              <col width="60%"/>
-              <col width="10%"/>
-              <col width="10%"/>
-              <col width="5%"/>
+              <col width="5%" />
+              <col width="10%" />
+              <col width="60%" />
+              <col width="10%" />
+              <col width="10%" />
+              <col width="5%" />
             </colgroup>
             <thead>
               <tr>
@@ -96,7 +98,9 @@
               <tr th:each="article:${list}">
                 <td th:text="${article.articleNum}">1</td>
                 <td th:text="${article.articleCategory}">문의</td>
-                <td class ="left"><a th:href="@{/community/article/{id}(id=${article.articleNum})}" th:text="${article.articleTitle}">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi, architecto!</a></td>
+                <td class="left"><a th:href="@{/community/article/{id}(id=${article.articleNum})}"
+                    th:text="${article.articleTitle}">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi,
+                    architecto!</a></td>
                 <td><a href="" th:text="${article.member.memNickname}">Lorem.</a></td>
                 <td th:text="${{article.createDate}}">2022.08.01</td>
                 <td th:text="${article.views}">11</td>
@@ -129,7 +133,8 @@
               </select>
             </div>
             <div class="board__search-keyword">
-              <input type="text" th:field="*{searchKeyword}"><button class="search__search-icon"><i class="fa-solid fa-magnifying-glass"></i></button>
+              <input type="text" th:field="*{searchKeyword}"><button class="search__search-icon"><i
+                  class="fa-solid fa-magnifying-glass"></i></button>
             </div>
           </form>
         </div>
@@ -142,8 +147,8 @@
   </div>
   <script>
     const $postBtn = document.getElementById('board__post-btn');
-    $postBtn.addEventListener('click',e=>{
-      location.href='/community/write';
+    $postBtn.addEventListener('click', e => {
+      location.href = '/community/write';
     });
   </script>
 </body>
