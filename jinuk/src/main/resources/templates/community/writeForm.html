@@ -129,6 +129,7 @@
       <p class="content"></p>
     </footer>
   </div>
+  
   <script>
     //전역변수
     const form = {
@@ -155,6 +156,7 @@
     addBtn.addEventListener('click',e=>{
       console.log("등록 버튼 클릭");
       //1)유효성 체크
+      if(!validChk()) return;
       //2)입력 데이터 가져오기
       const article = getInputData();
       //3)게시글 등록 처리
@@ -181,14 +183,34 @@
         .catch(err=> console.log(err));
     }
 
-  //취소 버튼 클릭
-    cancelBtn.addEventListener('click',e=>{
-      if(!confirm('게시글 작성을 취소하시겠습니까?')) return;
-      location.href=`/community`;
-    });
+    //취소 버튼 클릭
+      cancelBtn.addEventListener('click',e=>{
+        if(!confirm('게시글 작성을 취소하시겠습니까?')) return;
+        location.href=`/community`;
+      });
 
+    //유효성 체크 함수
+    function validChk(){
+      const regex = / /gi;
+      //제목 입력 필수
+      if(form.articleTitle.value.replace(regex, '').length == 0){
+        alert('제목을 입력해주세요.');
+        return;}
+      //제목 50자 이하
+      if(form.articleTitle.value.length > 50){
+        alert('제목은 50자 이내여야합니다.');
+        return;}
+      //내용 입력 필수
+      if(form.articleContents.value.replace(regex, '').length == 0){
+        alert('내용을 입력해주세요.');
+        return;}
+      //내용 500자 이하
+      if(form.articleContents.value.length > 500){
+        alert('내용은 500자 이내여야합니다.');
+        return;}
 
-
+        return true;
+      }
 
 
   </script>

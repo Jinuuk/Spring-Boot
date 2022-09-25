@@ -146,7 +146,7 @@ public class ArticleDAOImpl implements ArticleDAO {
     StringBuffer sql = new StringBuffer();
     sql.append("select article_num, article_category, article_title, attachment, mem_nickname, create_date, views ");
     sql.append("from article a, member m ");
-    sql.append("where a.mem_number = m.mem_number and m.mem_nickname = ? ");
+    sql.append("where a.mem_number = m.mem_number and m.mem_nickname like ? ");
     sql.append("order by a.article_num desc ");
 
 //    List<Article> articles = jt.query(sql.toString(), new BeanPropertyRowMapper<>(Article.class),memNickname);

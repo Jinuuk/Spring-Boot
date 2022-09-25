@@ -183,6 +183,11 @@ td a {
   border: none;
 }
 
+.board__search-box .board__search-keyword .search__search-icon{
+  border:none;
+  background-color: transparent;
+}
+
 .board__search .board__search-box .board__search-keyword i {
   color: gray;
 }

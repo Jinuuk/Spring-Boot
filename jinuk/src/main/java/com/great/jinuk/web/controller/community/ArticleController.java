@@ -63,28 +63,28 @@ public class ArticleController {
 
     if (searchCategory.equals("title")) {
       log.info("1");
-      foundArticles.addAll(articleSVC.findByTitle(searchKeyword));
+      foundArticles.addAll(articleSVC.findByTitle("%"+searchKeyword+"%"));
       for (Article article : foundArticles) {
           list.add(article);
           model.addAttribute("list",list);
         }
     } else if (searchCategory.equals("contents")) {
       log.info("2");
-      foundArticles.addAll(articleSVC.findByContents(searchKeyword));
+      foundArticles.addAll(articleSVC.findByContents("%"+searchKeyword+"%"));
       for (Article article : foundArticles) {
         list.add(article);
         model.addAttribute("list",list);
       }
     } else if (searchCategory.equals("titleOrContents")) {
       log.info("3");
-      foundArticles.addAll(articleSVC.findByTitleOrContents(searchKeyword));
+      foundArticles.addAll(articleSVC.findByTitleOrContents("%"+searchKeyword+"%"));
       for (Article article : foundArticles) {
         list.add(article);
         model.addAttribute("list",list);
       }
     } else if (searchCategory.equals("nickname")) {
       log.info("4");
-      foundArticles.addAll(articleSVC.findByNickname(searchKeyword));
+      foundArticles.addAll(articleSVC.findByNickname("%"+searchKeyword+"%"));
       for (Article article : foundArticles) {
         list.add(article);
         model.addAttribute("list",list);

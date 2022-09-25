@@ -38,47 +38,6 @@ public class ProductController {
     return "product/saveForm";
   }
 
-//  //등록
-//  //@PostMapping("/add")
-//  public String saveV2(@Valid @ModelAttribute("form") SaveForm saveForm,
-//                     BindingResult bindingResult,
-//                     RedirectAttributes redirectAttributes) throws IOException {
-//
-//    log.info("saveForm={}", saveForm);
-//    if (!saveForm.getFile().isEmpty()) {
-//      log.info("첨부파일이름={}", saveForm.getFile().getOriginalFilename());
-//      log.info("파일크기={}", saveForm.getFile().getSize());
-//      log.info("파일유형={}", saveForm.getFile().getContentType());
-//      String originalFilename = saveForm.getFile().getOriginalFilename();
-//
-//      String storedFileName = storedFileName(originalFilename);
-//      saveForm.getFile().transferTo(new File("d:/tmp/"+storedFileName));
-//
-//      log.info("내부보관파일명={}",storedFileName);
-//
-//
-//    }
-//
-//    if (!saveForm.getFiles().isEmpty()) {
-//      List<MultipartFile> files = saveForm.getFiles();
-//      files.stream().forEach(file->{
-//        log.info("첨부파일이름={}", file.getOriginalFilename());
-//        log.info("파일크기={}", file.getSize());
-//        log.info("파일유형={}", file.getContentType());
-//        String originalFilename = file.getOriginalFilename();
-//        String storedFileName = storedFileName(originalFilename);
-//        log.info("내부보관파일명={}",storedFileName);
-//        try {
-//          file.transferTo(new File("d:/tmp/"+storedFileName));
-//        } catch (IOException e) {
-//          throw new RuntimeException(e);
-//        }
-//      });
-//    }
-//
-//    return "redirect:/products/{id}/detail";
-//  }
-
   //등록
   @PostMapping("/add")
   public String save(@Valid @ModelAttribute("form") SaveForm saveForm,

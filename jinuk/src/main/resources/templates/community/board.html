@@ -58,7 +58,7 @@
     <main class="main container">
       <div class="board-main content">
         <div class="board__title width--900px">
-          <h2><i class="bar"></i>커뮤니티</h2>
+          <a href="/community"><h2><i class="bar"></i>커뮤니티</h2></a>
         </div>
         <div class="board__category width--900px">
           <div class="board__category-select">
@@ -141,10 +141,10 @@
     </footer>
   </div>
   <script>
-  const $postBtn = document.getElementById('board__post-btn');
-  $postBtn.addEventListener('click',e=>{
-    location.href='/community/write';
-  });
+    const $postBtn = document.getElementById('board__post-btn');
+    $postBtn.addEventListener('click',e=>{
+      location.href='/community/write';
+    });
   </script>
 </body>
 
