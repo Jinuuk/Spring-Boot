@@ -1,0 +1,42 @@
+@charset "utf-8";
+
+.globalError, .fieldError, .errmsg{
+    color:red;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+.globalError{
+
+}
+input.fieldError{
+    color:inherit;
+    font-weight: normal;
+    border: 1px solid red;
+}
+
+.fieldSuccess {
+    color:green;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+input.fieldSuccess {
+    color:inherit;
+    font-weight: normal;
+    border: 1px solid green;
+}
+
+.upm-menu-profileimg {
+    display:flex;
+    justify-content:center;
+    width:24px; height:24px;
+    overflow:hidden;
+    border:1px solid #333;
+    border-radius:50%;
+}
+.upm-menu-profileimg img{
+    width:100%;
+    height:100%;
+    align-self:bottom;
+}

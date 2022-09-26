@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragment/main::main(
+        ~{::title},       <!--/* title */-->
+        <!--/*--------------------------*/-->
+        <!--/*외부파일로 정의시*/-->
+        ~{::link},              <!--/* styles */-->
+        ~{::script},              <!--/* scripts */-->
+        <!--/*내부태그로 정의시*/-->
+        ~{},              <!--/* style */-->
+        ~{},              <!--/* script */-->
+        <!--/*--------------------------*/-->
+        ~{::.upm-inner},  <!--/* upm */-->
+        ~{::header},      <!--/* header */-->
+        ~{::nav},         <!--/* nav */-->
+        ~{::main},        <!--/* main */-->
+        _                 <!--/* footer default*/-->
+      )}">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>프로파일 수정</title>
+  <link rel="stylesheet" href="" th:href="@{/css/member/profileEditForm.css}">
+  <script defer th:src="@{/js/member/profileEditForm.js}"></script>
+</head>
+<body>
+<div class="global-wrap">
+  <div class="upm">
+    <div class="inner upm-inner">
+      <th:block th:replace="~{fragment/uppermost::afterLoginUpm}"></th:block>
+    </div>
+  </div>
+  <div class="hdr">
+    <div class="inner hdr-inner">
+      <header>header</header>
+    </div>
+  </div>
+  <div class="gnb">
+    <div class="inner gnb-inner">
+      <nav th:replace="~{fragment/menu::my-page}"></nav>
+    </div>
+  </div>
+  <div class="main">
+    <div class="inner main-inner">
+      <main>
+        <div class="content-wrap">
+          <div class="profile-content">
+            <div class="profile-img">
+              <div>이미지</div>
+              <div>
+                <input type="file" name="" id="attach" style="display:none" accept="image/*">
+                <div id="preview">
+                  <img id="pic" th:src="@{/api/members/{memberId}/pfimg(memberId=${s_memberId})}" alt=""
+                       onerror="this.src='/img/noprofile.jpg'">
+                </div>
+                <div id="profileMsg"></div>
+                <div>
+                  <button id="changeImageBtn">변경</button>
+                  <button id="deleteImageBtn">삭제</button></div>
+              </div>
+            </div>
+            <div class="profile-nick">
+              <div>별칭</div>
+              <div>
+                <div><input type="text" id="nickname" name="nickname" th:value="${s_nickname}"></div>
+                <div><button id="changeNickBtn">변경</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+    <div class="foot">
+      <div class="inner foot-inner">
+        <footer>
+          footer
+        </footer>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

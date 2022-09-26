@@ -136,7 +136,7 @@ public class ArticleSVCImpl implements ArticleSVC {
     articleDAO.save(article);
 
     //첨부파일-이미지
-    uploadFileSVC.addFile(files,AttachCode.P0102,generatedArticleNum);
+    uploadFileSVC.addFile(files, AttachCode.P0102, generatedArticleNum);
 
     return articleDAO.read(generatedArticleNum).get();
   }
@@ -158,7 +158,7 @@ public class ArticleSVCImpl implements ArticleSVC {
     articleDAO.update(articleNum, article);
 
     //2)첨부파일-이미지
-    uploadFileSVC.addFile(files,AttachCode.P0102,articleNum);
+    uploadFileSVC.addFile(files, AttachCode.P0102, articleNum);
 
     return articleDAO.read(articleNum).get();
   }
@@ -186,7 +186,7 @@ public class ArticleSVCImpl implements ArticleSVC {
     articleDAO.delete(articleNum);
 
     //메타정보 삭제
-    uploadFileSVC.deleteFileByCodeWithRid(AttachCode.P0101.name(),articleNum);
-    uploadFileSVC.deleteFileByCodeWithRid(AttachCode.P0102.name(),articleNum);
+    uploadFileSVC.deleteFileByCodeWithRid(AttachCode.P0101.name(), articleNum);
+    uploadFileSVC.deleteFileByCodeWithRid(AttachCode.P0102.name(), articleNum);
   }
 }

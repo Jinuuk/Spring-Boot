@@ -12,128 +12,128 @@
 </head>
 
 <body>
-  <div class="wrapper">
-    <header class="header container">
-      <nav class="top-menu content">
-        <a href="" class="top-menu__join">회원가입</a>
-        <a href="" class="top-menu__login">로그인</a>
-        <a href="" class="top-menu__cs">고객센터</a>
-      </nav>
-      <div class="logo content"><a href="">GR<span>EAT</span></a></div>
-      <nav class="bottom-menu content">
-        <div class="category">
+<div class="wrapper">
+  <header class="header container">
+    <nav class="top-menu content">
+      <a href="" class="top-menu__join">회원가입</a>
+      <a href="" class="top-menu__login">로그인</a>
+      <a href="" class="top-menu__cs">고객센터</a>
+    </nav>
+    <div class="logo content"><a href="">GR<span>EAT</span></a></div>
+    <nav class="bottom-menu content">
+      <div class="category">
+        <ul>
+          <li class="food-category">업종별 카테고리
+            <ul>
+              <li><a href="">한식</a></li>
+              <li><a href="">중식</a></li>
+              <li><a href="">일식</a></li>
+              <li><a href="">양식</a></li>
+              <li><a href="">아시안식</a></li>
+              <li><a href="">분식</a></li>
+              <li><a href="">도시락</a></li>
+              <li><a href="">카페/디저트</a></li>
+            </ul>
+          </li>
+          <li class="region-category">지역별 카테고리
+            <ul>
+              <li><a href="">서울</a></li>
+              <li><a href="">인천</a></li>
+              <li><a href="">대전</a></li>
+              <li><a href="">광주</a></li>
+              <li><a href="">대구</a></li>
+              <li><a href="">울산</a></li>
+              <li><a href="">부산</a></li>
+              <li><a href="">제주</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="search">
+        <input type="text" class="search__search-box" placeholder="  검색어를 입력하세요.">
+        <a href="" class="search__search-icon"><i class="fa-solid fa-magnifying-glass"></i></a>
+      </div>
+    </nav>
+  </header>
+  <main class="main container">
+    <div class="board-write content">
+      <div class="board-write__title width--900px">
+        <h2><i class="bar"></i>글쓰기</h2>
+      </div>
+      <div class="board-write__article-head width--900px">
+        <div class="board-write__article-bullet">
+          <select name="" id="articleCategory">
+            <option value="전체">전체</option>
+            <option value="문의">문의</option>
+            <option value="남구">남구</option>
+            <option value="동구">동구</option>
+            <option value="북구">북구</option>
+            <option value="울주군">울주군</option>
+          </select>
+        </div>
+        <div class="board-write__article-title">
+          <input type="text" name="" id="articleTitle" placeholder="제목을 입력하세요." autofocus>
+        </div>
+      </div>
+      <div class="board-write__tool width--900px">
+        <div class="board-write__tool-box">
           <ul>
-            <li class="food-category">업종별 카테고리
-              <ul>
-                <li><a href="">한식</a></li>
-                <li><a href="">중식</a></li>
-                <li><a href="">일식</a></li>
-                <li><a href="">양식</a></li>
-                <li><a href="">아시안식</a></li>
-                <li><a href="">분식</a></li>
-                <li><a href="">도시락</a></li>
-                <li><a href="">카페/디저트</a></li>
-              </ul>
+            <li>
+              <select name="" id="">
+                <option value="">11</option>
+                <option value="">13</option>
+                <option value="">15</option>
+                <option value="">17</option>
+                <option value="">19</option>
+                <option value="">21</option>
+              </select>
             </li>
-            <li class="region-category">지역별 카테고리
-              <ul>
-                <li><a href="">서울</a></li>
-                <li><a href="">인천</a></li>
-                <li><a href="">대전</a></li>
-                <li><a href="">광주</a></li>
-                <li><a href="">대구</a></li>
-                <li><a href="">울산</a></li>
-                <li><a href="">부산</a></li>
-                <li><a href="">제주</a></li>
-              </ul>
+            <li>
+              <button><i class="fa-solid fa-bold"></i></button>
+            </li>
+            <li>
+              <button><i class="fa-solid fa-italic"></i></button>
+            </li>
+            <li>
+              <button><i class="fa-solid fa-underline"></i></button>
+            </li>
+            <li>
+              <div class="file">
+                <button>
+                  <span><i class="fa-solid fa-image"></i></span>
+                </button>
+              </div>
+            </li>
+            <li>
+              <div class="file">
+                <button>
+                  <span><i class="fa-brands fa-youtube"></i></span>
+                </button>
+              </div>
+            </li>
+            <li>
+              <input type="file" multiple accept="image/*" id="imageFiles">
             </li>
           </ul>
         </div>
-        <div class="search">
-          <input type="text" class="search__search-box" placeholder="  검색어를 입력하세요.">
-          <a href="" class="search__search-icon"><i class="fa-solid fa-magnifying-glass"></i></a>
-        </div>
-      </nav>
-    </header>
-    <main class="main container">
-      <div class="board-write content">
-        <div class="board-write__title width--900px">
-          <h2><i class="bar"></i>글쓰기</h2>
-        </div>
-        <div class="board-write__article-head width--900px">
-          <div class="board-write__article-bullet">
-            <select name="" id="articleCategory">
-              <option value="전체">전체</option>
-              <option value="문의">문의</option>
-              <option value="남구">남구</option>
-              <option value="동구">동구</option>
-              <option value="북구">북구</option>
-              <option value="울주군">울주군</option>
-            </select>
-          </div>
-          <div class="board-write__article-title">
-            <input type="text" name="" id="articleTitle" placeholder="제목을 입력하세요." autofocus>
-          </div>
-        </div>
-        <div class="board-write__tool width--900px">
-          <div class="board-write__tool-box">
-            <ul>
-              <li>
-                <select name="" id="">
-                  <option value="">11</option>
-                  <option value="">13</option>
-                  <option value="">15</option>
-                  <option value="">17</option>
-                  <option value="">19</option>
-                  <option value="">21</option>
-                </select>
-              </li>
-              <li>
-                <button><i class="fa-solid fa-bold"></i></button>
-              </li>
-              <li>
-                <button><i class="fa-solid fa-italic"></i></button>
-              </li>
-              <li>
-                <button><i class="fa-solid fa-underline"></i></button>
-              </li>
-              <li>
-                <div class="file">
-                  <button>
-                    <span><i class="fa-solid fa-image"></i></span>
-                  </button>
-                </div>
-              </li>
-              <li>
-                <div class="file">
-                  <button>
-                    <span><i class="fa-brands fa-youtube"></i></span>
-                  </button>
-                </div>
-              </li>
-              <li>
-                <input type="file" multiple accept="image/*" id="imageFiles">
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="board-write__article-main width--900px">
-          <textarea class="board-write__article-content" name="" id="articleContents" cols="30" rows="10"
-            placeholder="내용을 작성하세요." autofocus></textarea>
-        </div>
-        <form class="board-write__complete width--900px" th:action="@{/community}">
-          <button id="cancelBtn" type="button">취소</button>
-          <button id="addBtn" type="button">등록</button>
-        </form>
       </div>
+      <div class="board-write__article-main width--900px">
+          <textarea class="board-write__article-content" name="" id="articleContents" cols="30" rows="10"
+                    placeholder="내용을 작성하세요." autofocus></textarea>
+      </div>
+      <form class="board-write__complete width--900px" th:action="@{/community}">
+        <button id="cancelBtn" type="button">취소</button>
+        <button id="addBtn" type="button">등록</button>
+      </form>
+    </div>
 
-    </main>
-    <footer class="footer container">
-      <p class="content"></p>
-    </footer>
-  </div>
+  </main>
+  <footer class="footer container">
+    <p class="content"></p>
+  </footer>
+</div>
 
-  <script>
+<script>
     //전역변수
     const form = {
       articleCategory: document.getElementById('articleCategory'),
@@ -142,7 +142,6 @@
       //attachment
     }
 
-    const categoryValue = form.articleCategory.options[articleCategory.selectedIndex].value;
 
     //폼 데이터 객체 생성
     const formData = new FormData();
@@ -155,7 +154,7 @@
       //2)입력 데이터 가져오기
       //2-1)기존 게시글 관련 데이터
       formData.append('memNumber', '1');
-      formData.append('articleCategory', categoryValue);
+      formData.append('articleCategory', form.articleCategory.options[articleCategory.selectedIndex].value);
       formData.append('articleTitle', form.articleTitle.value);
       formData.append('articleContents', form.articleContents.value.replace(/(?:\r\n|\r|\n)/g, '<br>'));
       formData.append('attachment', 'Y');
@@ -176,6 +175,7 @@
         body: formData
       }).then(res => res.json())
         .then(data => {
+          //console.log(data.data.articleNum);
           location.href = `/community/article/${data.data.articleNum}`;
         })
         .catch(err => console.log(err));
@@ -214,7 +214,8 @@
       return true;
     }
 
-  </script>
+
+</script>
 </body>
 
 </html>

@@ -36,15 +36,15 @@ public class ArticleDAOImpl implements ArticleDAO {
     sql.append("order by a.article_num desc ");
 
 //    List<Article> articles = jt.query(sql.toString(), new BeanPropertyRowMapper<>(Article.class));
-        List<Article> articles = jt.query(sql.toString(), new RowMapper<Article>(){
-          @Override
-          public Article mapRow(ResultSet rs, int rowNum) throws SQLException {
-            Member member = (new BeanPropertyRowMapper<>(Member.class)).mapRow(rs,rowNum);
-            Article article = (new BeanPropertyRowMapper<>(Article.class)).mapRow(rs,rowNum);
-            article.setMember(member);
-            return article;
-          }
-        });
+    List<Article> articles = jt.query(sql.toString(), new RowMapper<Article>() {
+      @Override
+      public Article mapRow(ResultSet rs, int rowNum) throws SQLException {
+        Member member = (new BeanPropertyRowMapper<>(Member.class)).mapRow(rs, rowNum);
+        Article article = (new BeanPropertyRowMapper<>(Article.class)).mapRow(rs, rowNum);
+        article.setMember(member);
+        return article;
+      }
+    });
 
     return articles;
   }
@@ -64,15 +64,15 @@ public class ArticleDAOImpl implements ArticleDAO {
     sql.append("order by a.article_num desc ");
 
 //    List<Article> articles = jt.query(sql.toString(), new BeanPropertyRowMapper<>(Article.class),articleCategory);
-    List<Article> articles = jt.query(sql.toString(), new RowMapper<Article>(){
+    List<Article> articles = jt.query(sql.toString(), new RowMapper<Article>() {
       @Override
       public Article mapRow(ResultSet rs, int rowNum) throws SQLException {
-        Member member = (new BeanPropertyRowMapper<>(Member.class)).mapRow(rs,rowNum);
-        Article article = (new BeanPropertyRowMapper<>(Article.class)).mapRow(rs,rowNum);
+        Member member = (new BeanPropertyRowMapper<>(Member.class)).mapRow(rs, rowNum);
+        Article article = (new BeanPropertyRowMapper<>(Article.class)).mapRow(rs, rowNum);
         article.setMember(member);
         return article;
       }
-    },articleCategory);
+    }, articleCategory);
 
     return articles;
   }
@@ -92,15 +92,15 @@ public class ArticleDAOImpl implements ArticleDAO {
     sql.append("order by a.article_num desc ");
 
 //    List<Article> articles = jt.query(sql.toString(), new BeanPropertyRowMapper<>(Article.class),articleTitle);
-    List<Article> articles = jt.query(sql.toString(), new RowMapper<Article>(){
+    List<Article> articles = jt.query(sql.toString(), new RowMapper<Article>() {
       @Override
       public Article mapRow(ResultSet rs, int rowNum) throws SQLException {
-        Member member = (new BeanPropertyRowMapper<>(Member.class)).mapRow(rs,rowNum);
-        Article article = (new BeanPropertyRowMapper<>(Article.class)).mapRow(rs,rowNum);
+        Member member = (new BeanPropertyRowMapper<>(Member.class)).mapRow(rs, rowNum);
+        Article article = (new BeanPropertyRowMapper<>(Article.class)).mapRow(rs, rowNum);
         article.setMember(member);
         return article;
       }
-    },articleTitle);
+    }, articleTitle);
 
 
     return articles;
@@ -121,15 +121,15 @@ public class ArticleDAOImpl implements ArticleDAO {
     sql.append("order by a.article_num desc ");
 
     //List<Article> articles = jt.query(sql.toString(), new BeanPropertyRowMapper<>(Article.class),articleContents);
-    List<Article> articles = jt.query(sql.toString(), new RowMapper<Article>(){
+    List<Article> articles = jt.query(sql.toString(), new RowMapper<Article>() {
       @Override
       public Article mapRow(ResultSet rs, int rowNum) throws SQLException {
-        Member member = (new BeanPropertyRowMapper<>(Member.class)).mapRow(rs,rowNum);
-        Article article = (new BeanPropertyRowMapper<>(Article.class)).mapRow(rs,rowNum);
+        Member member = (new BeanPropertyRowMapper<>(Member.class)).mapRow(rs, rowNum);
+        Article article = (new BeanPropertyRowMapper<>(Article.class)).mapRow(rs, rowNum);
         article.setMember(member);
         return article;
       }
-    },articleContents);
+    }, articleContents);
 
 
     return articles;
@@ -150,15 +150,15 @@ public class ArticleDAOImpl implements ArticleDAO {
     sql.append("order by a.article_num desc ");
 
 //    List<Article> articles = jt.query(sql.toString(), new BeanPropertyRowMapper<>(Article.class),memNickname);
-    List<Article> articles = jt.query(sql.toString(), new RowMapper<Article>(){
+    List<Article> articles = jt.query(sql.toString(), new RowMapper<Article>() {
       @Override
       public Article mapRow(ResultSet rs, int rowNum) throws SQLException {
-        Member member = (new BeanPropertyRowMapper<>(Member.class)).mapRow(rs,rowNum);
-        Article article = (new BeanPropertyRowMapper<>(Article.class)).mapRow(rs,rowNum);
+        Member member = (new BeanPropertyRowMapper<>(Member.class)).mapRow(rs, rowNum);
+        Article article = (new BeanPropertyRowMapper<>(Article.class)).mapRow(rs, rowNum);
         article.setMember(member);
         return article;
       }
-    },memNickname);
+    }, memNickname);
 
     return articles;
   }
@@ -178,15 +178,15 @@ public class ArticleDAOImpl implements ArticleDAO {
 
     try {
 //      Article article = jt.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(Article.class), articleNum);
-      Article article = jt.queryForObject(sql.toString(),new RowMapper<Article>(){
+      Article article = jt.queryForObject(sql.toString(), new RowMapper<Article>() {
         @Override
         public Article mapRow(ResultSet rs, int rowNum) throws SQLException {
-          Member member = (new BeanPropertyRowMapper<>(Member.class)).mapRow(rs,rowNum);
-          Article article = (new BeanPropertyRowMapper<>(Article.class)).mapRow(rs,rowNum);
+          Member member = (new BeanPropertyRowMapper<>(Member.class)).mapRow(rs, rowNum);
+          Article article = (new BeanPropertyRowMapper<>(Article.class)).mapRow(rs, rowNum);
           article.setMember(member);
           return article;
         }
-      },articleNum);
+      }, articleNum);
       return Optional.of(article);
     } catch (EmptyResultDataAccessException e) {
       e.printStackTrace();
@@ -207,12 +207,12 @@ public class ArticleDAOImpl implements ArticleDAO {
     sql.append("values (?,?,?,?,?,?,sysdate,0) ");
 
     int result = jt.update(sql.toString(),
-                          article.getArticleNum(),
-                          article.getMemNumber(),
-                          article.getArticleCategory(),
-                          article.getArticleTitle(),
-                          article.getArticleContents(),
-                          article.getAttachment());
+        article.getArticleNum(),
+        article.getMemNumber(),
+        article.getArticleCategory(),
+        article.getArticleTitle(),
+        article.getArticleContents(),
+        article.getAttachment());
     return result;
   }
 
@@ -220,7 +220,7 @@ public class ArticleDAOImpl implements ArticleDAO {
    * 게시글 수정
    *
    * @param articleNum 게시글 번호
-   * @param article     게시글 수정 내용
+   * @param article    게시글 수정 내용
    */
   @Override
   public int update(Long articleNum, Article article) {
@@ -230,7 +230,7 @@ public class ArticleDAOImpl implements ArticleDAO {
     sql.append("article_contents = ?, attachment = ?, create_date = sysdate ");
     sql.append("where article_num = ? ");
 
-    int affectedRow = jt.update(sql.toString(), article.getArticleCategory() ,article.getArticleTitle(), article.getArticleContents(),article.getAttachment(), articleNum);
+    int affectedRow = jt.update(sql.toString(), article.getArticleCategory(), article.getArticleTitle(), article.getArticleContents(), article.getAttachment(), articleNum);
     return affectedRow;
   }
 
