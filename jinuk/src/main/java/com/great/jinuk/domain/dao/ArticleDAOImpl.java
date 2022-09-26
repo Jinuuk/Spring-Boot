@@ -255,4 +255,17 @@ public class ArticleDAOImpl implements ArticleDAO {
     Long articleNum = jt.queryForObject(sql, Long.class);
     return articleNum;
   }
+
+  /**
+   * 조회수 증가
+   *
+   * @param articleNum 게시글 번호
+   * @return 수정건수
+   */
+  @Override
+  public int increaseViewCount(Long articleNum) {
+    String sql = "update article set views = views +1 where article_num = ? ";
+    int affectedRows = jt.update(sql, articleNum);
+    return affectedRows;
+  }
 }

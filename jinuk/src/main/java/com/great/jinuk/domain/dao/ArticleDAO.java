@@ -77,12 +77,17 @@ public interface ArticleDAO {
    */
   int delete(Long articleNum);
 
-  //조회수 상승 -> 나중에
-
   /**
    * 신규 게시물 번호 생성
    *
    * @return
    */
   Long generatedArticleNum();
+
+  /**
+   * 조회수 증가
+   * @param articleNum 게시글 번호
+   * @return 수정건수
+   */
+  int increaseViewCount(Long articleNum);
 }

@@ -148,13 +148,13 @@ public class BbsController {
 
   @GetMapping({"/list",
                "/list/{reqPage}",
-               "/list/{reqPage}//",
+               "/list/{reqPage}//", //?
                "/list/{reqPage}/{searchType}/{keyword}"})
   public String listAndReqPage(
       @PathVariable(required = false) Optional<Integer> reqPage,
       @PathVariable(required = false) Optional<String> searchType,
       @PathVariable(required = false) Optional<String> keyword,
-      @RequestParam(required = false) Optional<String> category,
+      @RequestParam(required = false) Optional<String> category, //왜 카테고리만 @RequestParam?
       Model model) {
     log.info("/list 요청됨{},{},{},{}",reqPage,searchType,keyword,category);
 
@@ -167,7 +167,7 @@ public class BbsController {
 
     List<Bbs> list = null;
     //게시물 목록 전체
-    if(category == null || StringUtils.isEmpty(cate)) {
+    if(category == null || StringUtils.isEmpty(cate)) { //StringUtils.isEmpty?????
 
       //검색어 있음
       if(searchType.isPresent() && keyword.isPresent()){

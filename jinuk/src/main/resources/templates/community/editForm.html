@@ -63,12 +63,12 @@
         <div class="board-write__article-head width--900px">
           <div class="board-write__article-bullet">
             <select name="" id="articleCategory">
-              <option id="" value="전체">전체</option>
-              <option id="문의" value="문의">문의</option>
+              <option id="전체" value="전체">전체</option>
               <option id="남구" value="남구">남구</option>
               <option id="동구" value="동구">동구</option>
               <option id="북구" value="북구">북구</option>
               <option id="울주군" value="울주군">울주군</option>
+              <option id="문의" value="문의">문의</option>
             </select>
           </div>
           <div class="board-write__article-title">
@@ -151,16 +151,17 @@
     const contentsValue = [[${ articleEditForm.articleContents }]]; //.replaceAll("<br>", "\r\n");
     const categoryValue = [[${ articleEditForm.articleCategory }]];
 
-    const $option = document.getElementById(categoryValue);
-    $option.setAttribute('selected','');
+
 
     //추출한 제목, 내용을 다시 삽입
     const $title = document.getElementById('articleTitle');
     const $contents = document.getElementById('articleContents');
-    //const $category = document.getElementById('articleCategory');
+    const $option = document.getElementById(categoryValue);
+    
+    $option.setAttribute('selected','');
     $title.value = titleValue;
     $contents.textContent = contentsValue.replaceAll("<br>", "\r\n");
-    $category.name = categoryValue;
+
 
     //전역변수
     const form = {

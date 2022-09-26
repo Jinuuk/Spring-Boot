@@ -63,12 +63,12 @@
           <h2 class="article__title" th:text="*{articleTitle}">글 제목</h2>
           <div class="article__information">
             <div class="article__profile">
-              <a href=""><img id="profileImage" src="./img/profile.jpg" alt=""></i></a>
+              <a href=""><img class="profileImage" src="/img/profile.jpg" alt=""></i></a>
               <a href="" th:text="*{member.memNickname}">user</a>
             </div>
             <div class="article__write-information">
-              <span class="font-size--12px" th:text="*{views}">조회 98</span>
               <span class="font-size--12px" th:text="*{{createDate}}">2022.08.01 13:48</span>
+              <span class="font-size--12px" th:text="|조회 : *{views}|">조회 98</span>
             </div>
           </div>
         </div>
@@ -118,7 +118,7 @@
               <li class="writer">
                 <div class="comment-box">
                   <div class="comment-box__profile">
-                    <a href=""><img src="./img/profile.jpg" alt=""></a>
+                    <a href=""><img src="/img/profile.jpg" class="profileImage" alt=""></a>
                   </div>
                   <div class="comment-box__contents">
                     <div class="comment-box__top">
@@ -145,7 +145,7 @@
               <li class="viewer">
                 <div class="comment-box">
                   <div class="comment-box__profile">
-                    <a href=""><img src="./img/profile.jpg" alt=""></a>
+                    <a href=""><img src="/img/profile.jpg"  class="profileImage" alt=""></a>
                   </div>
                   <div class="comment-box__contents">
                     <div class="comment-box__top">
@@ -184,7 +184,7 @@
               <li class="viewer">
                 <div class="comment-box">
                   <div class="comment-box__profile">
-                    <a href=""><img src="./img/profile.jpg" alt=""></a>
+                    <a href=""><img src="/img/profile.jpg" class="profileImage" alt=""></a>
                   </div>
                   <div class="comment-box__contents">
                     <div class="comment-box__top">
@@ -208,7 +208,7 @@
               <li class="reply-viewer">
                 <div class="comment-box">
                   <div class="comment-box__profile">
-                    <a href=""><img src="./img/profile.jpg" alt=""></a>
+                    <a href=""><img src="/img/profile.jpg" class="profileImage" alt=""></a>
                   </div>
                   <div class="comment-box__contents">
                     <div class="comment-box__top">
@@ -232,7 +232,7 @@
               <li class="reply-writer">
                 <div class="comment-box">
                   <div class="comment-box__profile">
-                    <a href=""><img src="./img/profile.jpg" alt=""></a>
+                    <a href=""><img src="/img/profile.jpg"  class="profileImage" alt=""></a>
                   </div>
                   <div class="comment-box__contents">
                     <div class="comment-box__top">

@@ -108,7 +108,7 @@ public class ArticleSVCImpl implements ArticleSVC {
    */
   @Override
   public Optional<Article> read(Long articleNum) {
-
+    articleDAO.increaseViewCount(articleNum);
     return articleDAO.read(articleNum);
   }
 

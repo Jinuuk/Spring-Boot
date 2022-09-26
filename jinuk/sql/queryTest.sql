@@ -48,6 +48,7 @@ delete from article where article_num = 5;
 select * from article;
 
 --조회수 상승
+update article set views = views +1 where article_num = 1;
 
 --[댓글]
 --댓글 조회 (1번 게시글)
