@@ -15,6 +15,7 @@ public interface ArticleDAO {
 
   /**
    * 게시글 목록 조회2 : 카테고리
+   *
    * @param category 카테고리
    * @return 게시글 리스트
    */
@@ -22,61 +23,30 @@ public interface ArticleDAO {
 
   /**
    * 게시글 목록 조회3 : 페이지
+   *
    * @param startRec 첫 페이지
-   * @param endRec 마지막 페이지
+   * @param endRec   마지막 페이지
    * @return 게시글 리스트
    */
   List<Article> findAll(int startRec, int endRec);
 
   /**
    * 게시글 목록 조회4 : 카테고리, 페이지
+   *
    * @param category 카테고리
    * @param startRec 첫 페이지
-   * @param endRec  마지막 페이지
+   * @param endRec   마지막 페이지
    * @return 게시글 리스트
    */
   List<Article> findAll(String category, int startRec, int endRec);
 
   /**
    * 게시글 목록 조회5 : 검색
+   *
    * @param filterCondition 분류, 시작 레코드 번호, 종료 레코드 번호, 검색 유형, 검색어
    * @return
    */
   List<Article> findAll(ArticleFilterCondition filterCondition);
-
-//  /**
-//   * 게시글 목록 조회2 : 카테고리별 분류
-//   *
-//   * @param articleCategory 게시글 카테고리
-//   * @return 게시글 리스트
-//   */
-//  List<Article> findByCategory(String articleCategory);
-//
-//  /**
-//   * 게시글 목록 조회3 : 검색(제목)
-//   *
-//   * @param articleTitle 게시글 제목
-//   * @return 게시글 리스트
-//   */
-//  List<Article> findByTitle(String articleTitle);
-//
-//  /**
-//   * 게시글 목록 조회4 : 검색(내용)
-//   *
-//   * @param articleContents 게시글 내용
-//   * @return 게시글 리스트
-//   */
-//  List<Article> findByContents(String articleContents);
-//
-//  //게시글 목록 조회5 : 검색(제목+내용) -> SVC
-//
-//  /**
-//   * 게시글 목록 조회6 : 검색(닉네임)
-//   *
-//   * @param memNickname 회원 닉네임
-//   * @return 게시글 리스트
-//   */
-//  List<Article> findByNickname(String memNickname);
 
   /**
    * 게시글 조회
@@ -117,6 +87,7 @@ public interface ArticleDAO {
 
   /**
    * 조회수 증가
+   *
    * @param articleNum 게시글 번호
    * @return 수정건수
    */
@@ -124,12 +95,14 @@ public interface ArticleDAO {
 
   /**
    * 전체 건수
+   *
    * @return 게시글 전체 건수
    */
   int totalCount();
 
   /**
    * 전체 건수
+   *
    * @param category 게시글 유형
    * @return 게시글 전체 건수
    */
@@ -137,6 +110,7 @@ public interface ArticleDAO {
 
   /**
    * 전체 건수
+   *
    * @param filterCondition 필터 조건
    * @return 게시글 전체 건수
    */

@@ -39,36 +39,18 @@ public class ArticleController {
   @Qualifier("fc10") //동일한 타입의 객체가 여러개있을때 빈이름을 명시적으로 지정해서 주입받을때
   private FindCriteria fc;
 
-//  //자유게시판 화면 : 전체
-//  @GetMapping
-//  public String board(ArticleSearchForm articleSearchForm, Model model) {
-//    List<Article> articles = articleSVC.findAll();
-//    List<Article> list = new ArrayList<>();
-//
-//    BoardForm boardForm = new BoardForm(); // 왜 필요?
-//
-//    for (Article article : articles) {
-//      BeanUtils.copyProperties(article, boardForm); // 왜 필요?
-//      list.add(article);
-//    }
-//    ;
-//
-//    model.addAttribute("list", list);
-//    return "/community/board";
-//  }
-
   //자유게시판 화면 : 전체
   @GetMapping({"/list",
-               "/list/{reqPage}",
-               "/list/{reqPage}//", //?
-               "/list/{reqPage}/{searchType}/{keyword}"})
+      "/list/{reqPage}",
+      "/list/{reqPage}//", //?
+      "/list/{reqPage}/{searchType}/{keyword}"})
   public String board(
       @PathVariable(required = false) Optional<Integer> reqPage,
       @PathVariable(required = false) Optional<String> searchType,
       @PathVariable(required = false) Optional<String> keyword,
       @RequestParam(required = false) Optional<String> category, //왜 카테고리만 @RequestParam?
       Model model) {
-    log.info("/list 요청됨{},{},{},{}",reqPage,searchType,keyword,category);
+    log.info("/list 요청됨{},{},{},{}", reqPage, searchType, keyword, category);
 
     String cate = getCategory(category);
 
@@ -79,12 +61,12 @@ public class ArticleController {
 
     List<Article> list = null;
     //게시물 목록 전체
-    if(category == null || StringUtils.isEmpty(cate)) { //StringUtils.isEmpty?????
+    if (category == null || StringUtils.isEmpty(cate)) { //StringUtils.isEmpty?????
 
       //검색어 있음
-      if(searchType.isPresent() && keyword.isPresent()){
+      if (searchType.isPresent() && keyword.isPresent()) {
         ArticleFilterCondition filterCondition = new ArticleFilterCondition(
-            "",fc.getRc().getStartRec(), fc.getRc().getEndRec(),
+            "", fc.getRc().getStartRec(), fc.getRc().getEndRec(),
             searchType.get(),
             keyword.get());
         fc.setTotalRec(articleSVC.totalCount(filterCondition));
@@ -93,18 +75,18 @@ public class ArticleController {
         list = articleSVC.findAll(filterCondition);
 
         //검색어 없음
-      }else {
+      } else {
         //총레코드수
         fc.setTotalRec(articleSVC.totalCount());
         list = articleSVC.findAll(fc.getRc().getStartRec(), fc.getRc().getEndRec());
       }
 
       //카테고리별 목록
-    }else{
+    } else {
       //검색어 있음
-      if(searchType.isPresent() && keyword.isPresent()){
+      if (searchType.isPresent() && keyword.isPresent()) {
         ArticleFilterCondition filterCondition = new ArticleFilterCondition(
-            category.get(),fc.getRc().getStartRec(), fc.getRc().getEndRec(),
+            category.get(), fc.getRc().getStartRec(), fc.getRc().getEndRec(),
             searchType.get(),
             keyword.get());
         fc.setTotalRec(articleSVC.totalCount(filterCondition));
@@ -112,7 +94,7 @@ public class ArticleController {
         fc.setKeyword(keyword.get());
         list = articleSVC.findAll(filterCondition);
         //검색어 없음
-      }else {
+      } else {
         fc.setTotalRec(articleSVC.totalCount(cate));
         list = articleSVC.findAll(cate, fc.getRc().getStartRec(), fc.getRc().getEndRec());
       }
@@ -126,61 +108,10 @@ public class ArticleController {
     }
 
     model.addAttribute("list", partOfList);
-    model.addAttribute("fc",fc);
+    model.addAttribute("fc", fc);
     model.addAttribute("category", cate);
 
     return "/community/board";
-  }
-
-
-//  //자유게시판 화면 : 검색(제목, 내용, 제목+내용, 닉네임)
-//  @GetMapping("/search")
-//  public String boardSearch(ArticleSearchForm articleSearchForm, Model model) {
-//    log.info("articleSearchForm : {}", articleSearchForm);
-//
-//    List<Article> list = new ArrayList<>();
-//    List<Article> foundArticles = new ArrayList<>();
-//    String searchCategory = articleSearchForm.getSearchCategory();
-//    String searchKeyword = articleSearchForm.getSearchKeyword();
-//
-//
-//    if (searchCategory.equals("title")) {
-//      log.info("1");
-//      foundArticles.addAll(articleSVC.findByTitle("%" + searchKeyword + "%"));
-//      for (Article article : foundArticles) {
-//        list.add(article);
-//        model.addAttribute("list", list);
-//      }
-//    } else if (searchCategory.equals("contents")) {
-//      log.info("2");
-//      foundArticles.addAll(articleSVC.findByContents("%" + searchKeyword + "%"));
-//      for (Article article : foundArticles) {
-//        list.add(article);
-//        model.addAttribute("list", list);
-//      }
-//    } else if (searchCategory.equals("titleOrContents")) {
-//      log.info("3");
-//      foundArticles.addAll(articleSVC.findByTitleOrContents("%" + searchKeyword + "%"));
-//      for (Article article : foundArticles) {
-//        list.add(article);
-//        model.addAttribute("list", list);
-//      }
-//    } else if (searchCategory.equals("nickname")) {
-//      log.info("4");
-//      foundArticles.addAll(articleSVC.findByNickname("%" + searchKeyword + "%"));
-//      for (Article article : foundArticles) {
-//        list.add(article);
-//        model.addAttribute("list", list);
-//      }
-//    }
-//    log.info("5");
-//    return "/community/board";
-//  }
-
-  @ResponseBody
-  @PostMapping
-  public String sortArticles() {
-    return null;
   }
 
   //글쓰기 화면
@@ -309,6 +240,7 @@ public class ArticleController {
     //세션 완성 후 조건문 추가
     //articleForm.getMemNumber()이 세션에 저장된 회원 번호와 일치하다면 return "/community/articleWriter"
     //아니면  return "/community/articleViewer"
+    //또는 뷰에서 타임리프 조건문
 
     return "/community/articleWriter";
   }
@@ -336,7 +268,7 @@ public class ArticleController {
 
   //쿼리스트링 카테고리 읽기, 없으면 ""반환
   private String getCategory(Optional<String> category) {
-    String cate = category.isPresent()? category.get():"";
+    String cate = category.isPresent() ? category.get() : "";
     log.info("category={}", cate);
     return cate;
   }

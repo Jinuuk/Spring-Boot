@@ -58,7 +58,7 @@
     <main class="main container">
       <div class="board-main content">
         <div class="board__title width--900px">
-          <a href="/community">
+          <a href="/community/list">
             <h2><i class="bar"></i>커뮤니티</h2>
           </a>
         </div>
@@ -96,11 +96,20 @@
             </thead>
             <tbody>
               <tr th:each="article:${list}">
-                <td th:text="${article.articleNum}">1</td>
-                <td th:text="${article.articleCategory}">문의</td>
-                <td class="left"><a th:href="@{/community/article/{id}(id=${article.articleNum})}"
-                    th:text="${article.articleTitle}">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi,
-                    architecto!</a></td>
+                <td class="articleNum" th:text="${article.articleNum}">1</td>
+                <td class="articleCategory" th:text="${article.articleCategory}">문의</td>
+                <td class="articleTitle">
+                  <th:block th:if="${article.attachment == 'Y'}">
+                    <a th:href="@{/community/article/{id}(id=${article.articleNum})}"
+                       th:text="${article.articleTitle}">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi,
+                      architecto!</a><span> <i class="fa-regular fa-image"></i></span>
+                  </th:block>
+                  <th:block th:if="${article.attachment == 'N'}">
+                    <a th:href="@{/community/article/{id}(id=${article.articleNum})}"
+                       th:text="${article.articleTitle}">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi,
+                      architecto!</a>
+                  </th:block>
+                </td>
                 <td><a href="" th:text="${article.member.memNickname}">Lorem.</a></td>
                 <td th:text="${{article.createDate}}">2022.08.01</td>
                 <td th:text="${article.views}">11</td>

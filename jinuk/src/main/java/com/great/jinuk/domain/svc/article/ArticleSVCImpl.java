@@ -55,7 +55,7 @@ public class ArticleSVCImpl implements ArticleSVC {
    */
   @Override
   public List<Article> findAll(int startRec, int endRec) {
-    return articleDAO.findAll(startRec,endRec);
+    return articleDAO.findAll(startRec, endRec);
   }
 
   /**
@@ -68,7 +68,7 @@ public class ArticleSVCImpl implements ArticleSVC {
    */
   @Override
   public List<Article> findAll(String category, int startRec, int endRec) {
-    return articleDAO.findAll(category,startRec,endRec);
+    return articleDAO.findAll(category, startRec, endRec);
   }
 
   /**
@@ -81,71 +81,6 @@ public class ArticleSVCImpl implements ArticleSVC {
   public List<Article> findAll(ArticleFilterCondition filterCondition) {
     return articleDAO.findAll(filterCondition);
   }
-
-//  /**
-//   * 게시글 목록 조회2 : 카테고리별 분류
-//   *
-//   * @param articleCategory 게시글 카테고리
-//   * @return 게시글 리스트
-//   */
-//  @Override
-//  public List<Article> findByCategory(String articleCategory) {
-//    return articleDAO.findByCategory(articleCategory);
-//  }
-//
-//  /**
-//   * 게시글 목록 조회3 : 검색(제목)
-//   *
-//   * @param articleTitle 게시글 제목
-//   * @return 게시글 리스트
-//   */
-//  @Override
-//  public List<Article> findByTitle(String articleTitle) {
-//    return articleDAO.findByTitle(articleTitle);
-//  }
-//
-//  /**
-//   * 게시글 목록 조회4 : 검색(내용)
-//   *
-//   * @param articleContents 게시글 내용
-//   * @return 게시글 리스트
-//   */
-//  @Override
-//  public List<Article> findByContents(String articleContents) {
-//    return articleDAO.findByContents(articleContents);
-//  }
-//
-//  /**
-//   * 게시글 목록 조회5 : 검색(제목+내용)
-//   *
-//   * @param keyword
-//   * @return
-//   */
-//  @Override
-//  public List<Article> findByTitleOrContents(String keyword) {
-//
-//    List<Article> foundList = new ArrayList<>();
-//
-//    List<Article> listFoundByTitle = articleDAO.findByTitle(keyword);
-//    List<Article> listFoundByContents = articleDAO.findByContents(keyword);
-//
-//    foundList.addAll(listFoundByTitle);
-//    foundList.removeAll(listFoundByContents);
-//    foundList.addAll(listFoundByContents);
-//
-//    return foundList;
-//  }
-//
-//  /**
-//   * 게시글 목록 조회6 : 검색(닉네임)
-//   *
-//   * @param memNickname 회원 닉네임
-//   * @return 게시글 리스트
-//   */
-//  @Override
-//  public List<Article> findByNickname(String memNickname) {
-//    return articleDAO.findByNickname(memNickname);
-//  }
 
   /**
    * 게시글 조회
@@ -268,6 +203,5 @@ public class ArticleSVCImpl implements ArticleSVC {
   public int totalCount(ArticleFilterCondition filterCondition) {
     return articleDAO.totalCount(filterCondition);
   }
-
 
 }

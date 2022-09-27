@@ -59,7 +59,7 @@
       <div class="article" th:action th:object="${articleForm}">
 
         <div class="article__header width--900px">
-          <a href="" class="article__bullet"><i class="bar"></i><span th:text="*{articleCategory}">울산</span></a>
+          <a href="/community/list" class="article__bullet"><i class="bar"></i><span th:text="*{articleCategory}">울산</span></a>
           <h2 class="article__title" th:text="*{articleTitle}">글 제목</h2>
           <div class="article__information">
             <div class="article__profile">
@@ -300,14 +300,14 @@
       fetch(url, {
         method: 'DELETE'
       }).then(res => {
-        location.href = '/community';
+        location.href = '/community/list';
       }).catch(err => console.log(err));
     }
 
     //이전 페이지 버튼 클릭
     const $prevPageBtn = document.getElementById('prev-page-btn');
     $prevPageBtn.addEventListener('click', e => {
-      location.href = '/community';
+      location.href = '/community/list';
     });
 
   </script>

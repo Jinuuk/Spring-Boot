@@ -63,7 +63,7 @@
       <div class="board-write__article-head width--900px">
         <div class="board-write__article-bullet">
           <select name="" id="articleCategory">
-            <option value="전체">전체</option>
+<!--            <option value="전체">전체</option>-->
             <option value="남구">남구</option>
             <option value="동구">동구</option>
             <option value="북구">북구</option>
@@ -157,7 +157,11 @@
       formData.append('articleCategory', form.articleCategory.options[articleCategory.selectedIndex].value);
       formData.append('articleTitle', form.articleTitle.value);
       formData.append('articleContents', form.articleContents.value.replace(/(?:\r\n|\r|\n)/g, '<br>'));
-      formData.append('attachment', 'Y');
+      if(imageFiles.files.length == 0){
+        formData.append('attachment', 'N');
+      } else {
+        formData.append('attachment', 'Y');
+      }
       //2-2)이미지 파일
       for (let i = 0; i < imageFiles.files.length; i++) {
         formData.append('files', imageFiles.files[i]);

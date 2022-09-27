@@ -107,8 +107,21 @@ td a {
   text-align: left;
 }
 
+.board__table-content tbody tr .articleNum  {
+  font-size: 11px;
+}
+
+.board__table-content tbody tr .articleCategory  {
+  font-size: 12px;
+}
+
+.board__table-content tbody tr .articleTitle  {
+  text-align: left;
+}
+
+
 .board__table-content tbody tr td a {
-  display: block;
+  display: inline-block;
 }
 
 .board__table-content tbody tr td a:hover{

@@ -46,46 +46,6 @@ public interface ArticleSVC {
    */
   List<Article> findAll(ArticleFilterCondition filterCondition);
 
-//  /**
-//   * 게시글 목록 조회2 : 카테고리별 분류
-//   *
-//   * @param articleCategory 게시글 카테고리
-//   * @return 게시글 리스트
-//   */
-//  List<Article> findByCategory(String articleCategory);
-//
-//  /**
-//   * 게시글 목록 조회3 : 검색(제목)
-//   *
-//   * @param articleTitle 게시글 제목
-//   * @return 게시글 리스트
-//   */
-//  List<Article> findByTitle(String articleTitle);
-//
-//  /**
-//   * 게시글 목록 조회4 : 검색(내용)
-//   *
-//   * @param articleContents 게시글 내용
-//   * @return 게시글 리스트
-//   */
-//  List<Article> findByContents(String articleContents);
-//
-//  /**
-//   * 게시글 목록 조회5 : 검색(제목+내용)
-//   *
-//   * @param keyword
-//   * @return
-//   */
-//  List<Article> findByTitleOrContents(String keyword);
-//
-//  /**
-//   * 게시글 목록 조회6 : 검색(닉네임)
-//   *
-//   * @param memNickname 회원 닉네임
-//   * @return 게시글 리스트
-//   */
-//  List<Article> findByNickname(String memNickname);
-
   /**
    * 게시글 조회
    *
