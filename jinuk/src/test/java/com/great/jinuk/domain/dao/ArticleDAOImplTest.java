@@ -1,6 +1,7 @@
 package com.great.jinuk.domain.dao;
 
-import com.great.jinuk.domain.Article;
+import com.great.jinuk.domain.entity.article.Article;
+import com.great.jinuk.domain.dao.article.ArticleDAO;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

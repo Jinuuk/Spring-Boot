@@ -1,23 +1,27 @@
 package com.great.jinuk.web.controller.community;
 
-import com.great.jinuk.domain.Article;
-import com.great.jinuk.domain.common.file.AttachCode;
-import com.great.jinuk.domain.common.file.UploadFile;
-import com.great.jinuk.domain.common.file.UploadFileSVC;
-import com.great.jinuk.domain.svc.ArticleSVC;
+import com.great.jinuk.domain.common.AttachCode;
+import com.great.jinuk.domain.common.paging.FindCriteria;
+import com.great.jinuk.domain.dao.article.ArticleFilterCondition;
+import com.great.jinuk.domain.entity.article.Article;
+import com.great.jinuk.domain.entity.uploadFile.UploadFile;
+import com.great.jinuk.domain.svc.article.ArticleSVC;
+import com.great.jinuk.domain.svc.uploadFile.UploadFileSVC;
 import com.great.jinuk.web.api.ApiResponse;
-import com.great.jinuk.web.api.article.ArticleAddForm;
-import com.great.jinuk.web.api.article.ArticleEditForm;
+import com.great.jinuk.web.form.community.ArticleAddForm;
+import com.great.jinuk.web.form.community.ArticleEditForm;
 import com.great.jinuk.web.form.community.ArticleForm;
-import com.great.jinuk.web.form.community.ArticleSearchForm;
 import com.great.jinuk.web.form.community.BoardForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.util.StringUtils;
 
 import javax.validation.Valid;
 import java.util.*;
@@ -31,73 +35,147 @@ public class ArticleController {
   private final ArticleSVC articleSVC;
   private final UploadFileSVC uploadFileSVC;
 
+  @Autowired
+  @Qualifier("fc10") //동일한 타입의 객체가 여러개있을때 빈이름을 명시적으로 지정해서 주입받을때
+  private FindCriteria fc;
+
+//  //자유게시판 화면 : 전체
+//  @GetMapping
+//  public String board(ArticleSearchForm articleSearchForm, Model model) {
+//    List<Article> articles = articleSVC.findAll();
+//    List<Article> list = new ArrayList<>();
+//
+//    BoardForm boardForm = new BoardForm(); // 왜 필요?
+//
+//    for (Article article : articles) {
+//      BeanUtils.copyProperties(article, boardForm); // 왜 필요?
+//      list.add(article);
+//    }
+//    ;
+//
+//    model.addAttribute("list", list);
+//    return "/community/board";
+//  }
+
   //자유게시판 화면 : 전체
-  @GetMapping
-  public String board(ArticleSearchForm articleSearchForm, Model model) {
-    List<Article> articles = articleSVC.findAll();
-    List<Article> list = new ArrayList<>();
+  @GetMapping({"/list",
+               "/list/{reqPage}",
+               "/list/{reqPage}//", //?
+               "/list/{reqPage}/{searchType}/{keyword}"})
+  public String board(
+      @PathVariable(required = false) Optional<Integer> reqPage,
+      @PathVariable(required = false) Optional<String> searchType,
+      @PathVariable(required = false) Optional<String> keyword,
+      @RequestParam(required = false) Optional<String> category, //왜 카테고리만 @RequestParam?
+      Model model) {
+    log.info("/list 요청됨{},{},{},{}",reqPage,searchType,keyword,category);
 
-    BoardForm boardForm = new BoardForm(); // 왜 필요?
+    String cate = getCategory(category);
 
-    for (Article article : articles) {
-      BeanUtils.copyProperties(article, boardForm); // 왜 필요?
-      list.add(article);
+    //FindCriteria 값 설정
+    fc.getRc().setReqPage(reqPage.orElse(1)); //요청페이지, 요청없으면 1
+    fc.setSearchType(searchType.orElse(""));  //검색유형
+    fc.setKeyword(keyword.orElse(""));        //검색어
+
+    List<Article> list = null;
+    //게시물 목록 전체
+    if(category == null || StringUtils.isEmpty(cate)) { //StringUtils.isEmpty?????
+
+      //검색어 있음
+      if(searchType.isPresent() && keyword.isPresent()){
+        ArticleFilterCondition filterCondition = new ArticleFilterCondition(
+            "",fc.getRc().getStartRec(), fc.getRc().getEndRec(),
+            searchType.get(),
+            keyword.get());
+        fc.setTotalRec(articleSVC.totalCount(filterCondition));
+        fc.setSearchType(searchType.get());
+        fc.setKeyword(keyword.get());
+        list = articleSVC.findAll(filterCondition);
+
+        //검색어 없음
+      }else {
+        //총레코드수
+        fc.setTotalRec(articleSVC.totalCount());
+        list = articleSVC.findAll(fc.getRc().getStartRec(), fc.getRc().getEndRec());
+      }
+
+      //카테고리별 목록
+    }else{
+      //검색어 있음
+      if(searchType.isPresent() && keyword.isPresent()){
+        ArticleFilterCondition filterCondition = new ArticleFilterCondition(
+            category.get(),fc.getRc().getStartRec(), fc.getRc().getEndRec(),
+            searchType.get(),
+            keyword.get());
+        fc.setTotalRec(articleSVC.totalCount(filterCondition));
+        fc.setSearchType(searchType.get());
+        fc.setKeyword(keyword.get());
+        list = articleSVC.findAll(filterCondition);
+        //검색어 없음
+      }else {
+        fc.setTotalRec(articleSVC.totalCount(cate));
+        list = articleSVC.findAll(cate, fc.getRc().getStartRec(), fc.getRc().getEndRec());
+      }
     }
-    ;
 
-    model.addAttribute("list", list);
+    List<BoardForm> partOfList = new ArrayList<>();
+    for (Article article : list) {
+      BoardForm boardForm = new BoardForm();
+      BeanUtils.copyProperties(article, boardForm);
+      partOfList.add(boardForm);
+    }
+
+    model.addAttribute("list", partOfList);
+    model.addAttribute("fc",fc);
+    model.addAttribute("category", cate);
+
     return "/community/board";
   }
 
-  //자유게시판 화면 : 카테고리 분류
-  @GetMapping("/category")
-  public String boardCategory() {
-    return null;
-  }
 
-  //자유기시판 화면 : 검색(제목, 내용, 제목+내용, 닉네임)
-  @GetMapping("/search")
-  public String boardSearch(ArticleSearchForm articleSearchForm, Model model) {
-    log.info("articleSearchForm : {}", articleSearchForm);
-
-    List<Article> list = new ArrayList<>();
-    List<Article> foundArticles = new ArrayList<>();
-    String searchCategory = articleSearchForm.getSearchCategory();
-    String searchKeyword = articleSearchForm.getSearchKeyword();
-
-
-    if (searchCategory.equals("title")) {
-      log.info("1");
-      foundArticles.addAll(articleSVC.findByTitle("%" + searchKeyword + "%"));
-      for (Article article : foundArticles) {
-        list.add(article);
-        model.addAttribute("list", list);
-      }
-    } else if (searchCategory.equals("contents")) {
-      log.info("2");
-      foundArticles.addAll(articleSVC.findByContents("%" + searchKeyword + "%"));
-      for (Article article : foundArticles) {
-        list.add(article);
-        model.addAttribute("list", list);
-      }
-    } else if (searchCategory.equals("titleOrContents")) {
-      log.info("3");
-      foundArticles.addAll(articleSVC.findByTitleOrContents("%" + searchKeyword + "%"));
-      for (Article article : foundArticles) {
-        list.add(article);
-        model.addAttribute("list", list);
-      }
-    } else if (searchCategory.equals("nickname")) {
-      log.info("4");
-      foundArticles.addAll(articleSVC.findByNickname("%" + searchKeyword + "%"));
-      for (Article article : foundArticles) {
-        list.add(article);
-        model.addAttribute("list", list);
-      }
-    }
-    log.info("5");
-    return "/community/board";
-  }
+//  //자유게시판 화면 : 검색(제목, 내용, 제목+내용, 닉네임)
+//  @GetMapping("/search")
+//  public String boardSearch(ArticleSearchForm articleSearchForm, Model model) {
+//    log.info("articleSearchForm : {}", articleSearchForm);
+//
+//    List<Article> list = new ArrayList<>();
+//    List<Article> foundArticles = new ArrayList<>();
+//    String searchCategory = articleSearchForm.getSearchCategory();
+//    String searchKeyword = articleSearchForm.getSearchKeyword();
+//
+//
+//    if (searchCategory.equals("title")) {
+//      log.info("1");
+//      foundArticles.addAll(articleSVC.findByTitle("%" + searchKeyword + "%"));
+//      for (Article article : foundArticles) {
+//        list.add(article);
+//        model.addAttribute("list", list);
+//      }
+//    } else if (searchCategory.equals("contents")) {
+//      log.info("2");
+//      foundArticles.addAll(articleSVC.findByContents("%" + searchKeyword + "%"));
+//      for (Article article : foundArticles) {
+//        list.add(article);
+//        model.addAttribute("list", list);
+//      }
+//    } else if (searchCategory.equals("titleOrContents")) {
+//      log.info("3");
+//      foundArticles.addAll(articleSVC.findByTitleOrContents("%" + searchKeyword + "%"));
+//      for (Article article : foundArticles) {
+//        list.add(article);
+//        model.addAttribute("list", list);
+//      }
+//    } else if (searchCategory.equals("nickname")) {
+//      log.info("4");
+//      foundArticles.addAll(articleSVC.findByNickname("%" + searchKeyword + "%"));
+//      for (Article article : foundArticles) {
+//        list.add(article);
+//        model.addAttribute("list", list);
+//      }
+//    }
+//    log.info("5");
+//    return "/community/board";
+//  }
 
   @ResponseBody
   @PostMapping
@@ -254,6 +332,13 @@ public class ArticleController {
     });
 
     return errmsg;
+  }
+
+  //쿼리스트링 카테고리 읽기, 없으면 ""반환
+  private String getCategory(Optional<String> category) {
+    String cate = category.isPresent()? category.get():"";
+    log.info("category={}", cate);
+    return cate;
   }
 
 }

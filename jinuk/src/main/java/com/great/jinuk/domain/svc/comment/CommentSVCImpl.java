@@ -1,0 +1,11 @@
+package com.great.jinuk.domain.svc.comment;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class CommentSVCImpl {
+}

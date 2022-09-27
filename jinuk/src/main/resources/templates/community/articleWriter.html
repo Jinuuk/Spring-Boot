@@ -290,7 +290,7 @@
     $delBtn.addEventListener('click', e => {
       console.log("삭제 버튼 클릭");
       if (!confirm('게시글을 삭제하시겠습니까?')) return;
-      const id = [[${ articleForm.articleNum }]];
+      const id = [[${articleForm.articleNum}]];
       deleteById(id);
     });
 
