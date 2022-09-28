@@ -1,7 +1,5 @@
 package com.great.jinuk.domain.dao.article;
 
-import com.great.jinuk.domain.entity.article.Article;
-
 import java.util.List;
 import java.util.Optional;
 

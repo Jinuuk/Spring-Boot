@@ -3,7 +3,7 @@ package com.great.jinuk.web.controller.community;
 import com.great.jinuk.domain.common.AttachCode;
 import com.great.jinuk.domain.common.paging.FindCriteria;
 import com.great.jinuk.domain.dao.article.ArticleFilterCondition;
-import com.great.jinuk.domain.entity.article.Article;
+import com.great.jinuk.domain.dao.article.Article;
 import com.great.jinuk.domain.entity.uploadFile.UploadFile;
 import com.great.jinuk.domain.svc.article.ArticleSVC;
 import com.great.jinuk.domain.svc.uploadFile.UploadFileSVC;

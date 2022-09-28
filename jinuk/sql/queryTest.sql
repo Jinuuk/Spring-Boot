@@ -51,31 +51,37 @@ select * from article;
 update article set views = views +1 where article_num = 1;
 
 --[댓글]
+
+select * from comments;
+rollback;
+
 --댓글 조회 (1번 게시글)
-select mem_nickname "닉네임", comment_contents "댓글 내용", create_date "작성일"
+select article_num, comment_group, comment_num, p_comment_num,
+c.mem_number, comment_contents, create_date, comment_indent
 from comments c, member m
-where a.mem_number = m.mem_number and a.article_num = 1;
+where c.mem_number = m.mem_number
+order by comment_group asc, comment_num asc;
 
 --댓글 작성 (1번 게시글에 댓글 작성)
-insert into comments values (5,1,2,'댓글 내용5',sysdate,null,null);
+insert into comments 
+(article_num, comment_group, comment_num,
+mem_number, comment_contents, create_date)
+values (2,1,5,1,'댓글 내용5', sysdate);
 
 --대댓글 작성 (1번 게시글의 2번 댓글에 대댓글 작성)
-insert into comments values (6,1,3,'댓글 내용6',sysdate,2,3);
+insert into comments 
+(article_num, comment_group, comment_num, p_comment_num,
+mem_number, comment_contents, create_date, comment_indent)
+values (2,1,5,null,1,'댓글 내용5', sysdate, 0);
 
 --댓글 수정
-update comments set comment_contents = '댓글 내용1(수정)' where comment_num = 1;
+update comments 
+set comment_contents = '댓글 내용1(수정)', create_date = sysdate
+where comment_num = 1;
 
 --댓글 삭제
 delete from comments where comment_num = 1;
 
---[첨부파일]
---첨부파일 업로드
-insert into attachment values (5,null,2,null,null,null,'첨부파일5','png');
-select * from attachment;
-
---첨부파일 삭제
-delete from attachment where attachment_num = 5;
-select * from attachment;
 
 --[신고]
 --신고 내용 작성

@@ -4,7 +4,7 @@ import com.great.jinuk.domain.common.AttachCode;
 import com.great.jinuk.domain.common.FileUtils;
 import com.great.jinuk.domain.dao.article.ArticleDAO;
 import com.great.jinuk.domain.dao.article.ArticleFilterCondition;
-import com.great.jinuk.domain.entity.article.Article;
+import com.great.jinuk.domain.dao.article.Article;
 import com.great.jinuk.domain.entity.uploadFile.UploadFile;
 import com.great.jinuk.domain.svc.uploadFile.UploadFileSVC;
 import lombok.RequiredArgsConstructor;

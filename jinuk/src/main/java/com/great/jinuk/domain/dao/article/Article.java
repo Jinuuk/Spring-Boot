@@ -1,4 +1,4 @@
-package com.great.jinuk.domain.entity.article;
+package com.great.jinuk.domain.dao.article;
 
 import com.great.jinuk.domain.Member;
 import lombok.AllArgsConstructor;

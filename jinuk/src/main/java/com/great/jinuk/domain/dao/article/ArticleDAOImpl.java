@@ -1,7 +1,6 @@
 package com.great.jinuk.domain.dao.article;
 
 import com.great.jinuk.domain.Member;
-import com.great.jinuk.domain.entity.article.Article;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;

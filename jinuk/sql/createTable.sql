@@ -1,7 +1,7 @@
 --테이블 삭제
 drop table penalty;
 drop table report;
-drop table attachment;
+drop table uploadfile;
 drop table comments;
 drop table article;
 drop table notice;
@@ -9,6 +9,11 @@ drop table review;
 drop table product_info;
 drop table profile;
 drop table member;
+
+--시퀀스 삭제
+drop sequence article_article_num_seq;
+drop sequence comments_comment_num_seq;
+drop sequence uploadfile_uploadfile_id_seq;
 
 --회원 임시 테이블 생성
 create table member (
@@ -34,13 +39,12 @@ create table notice (
   notice_number number(6),
   primary key (notice_number)
 );
-`
+
 --프로필 임시 테이블 생성
 create table profile (
   profile_number number(6),
   primary key (profile_number)
 );
-
 
 --커뮤니티 테이블 생성
 create table article (
@@ -76,17 +80,19 @@ nocycle
 nocache
 noorder;
 
-
 --댓글 테이블 생성
 create table comments (
-  comment_num          number(6),
-  article_num          number(6),
-  mem_number           number(6),
-  comment_contents     clob,
-  create_date          date,
-  p_comment_num        number(5),
-  comment_indent       number(1)
+  article_num          number(6),  -- 게시글 번호
+  comment_group        number(6),   -- 댓글 그룹
+  comment_num          number(6),  -- 댓글 번호
+  p_comment_num        number(6),  -- 부모 댓글 번호
+  mem_number           number(6),           -- 회원 번호
+  comment_contents     varchar2(300),       -- 댓글 내용
+  create_date          date,       -- 댓글 생성일
+  comment_indent       number(3)  -- 대댓글 들여쓰기
 );
+
+
 --primary key
 alter table comments add constraint comments_comment_num_pk primary key(comment_num);
 --foreign key
@@ -95,33 +101,19 @@ alter table comments add constraint comments_mem_number_fk foreign key(mem_numbe
 alter table comments add constraint comments_p_comment_num_fk foreign key(p_comment_num) references comments(comment_num) on delete set null;
 --default
 alter table comments modify create_date date default sysdate;
+alter table comments modify comment_indent number default 0;
 --not null
 alter table comments modify comment_contents constraint comments_comment_contents_nn not null;
 
-
---첨부파일 테이블 생성
-create table attachment (
-  attachment_num         number(6),
-  s_article_num          number(6),
-  c_article_num          number(6),
-  n_article_num          number(6),
-  review_num             number(6),
-  profile_num            number(6),
-  attachment_name        varchar2(30),
-  attachment_type        varchar2(12)
-);
---primary key
-alter table attachment add constraint attachment_attachment_num_pk primary key(attachment_num);
---foreign key
-alter table attachment add constraint attachment_s_article_num_fk foreign key(s_article_num) references product_info(p_number) on delete cascade;
-alter table attachment add constraint attachment_c_article_num_fk foreign key(c_article_num) references article(article_num) on delete cascade;
-alter table attachment add constraint attachment_n_article_num_fk foreign key(n_article_num) references notice(notice_number) on delete cascade;
-alter table attachment add constraint attachment_review_num_fk foreign key(review_num) references review(review_number) on delete cascade;
-alter table attachment add constraint attachment_profile_num_fk foreign key(profile_num) references profile(profile_number) on delete cascade;
---not null
-alter table attachment modify attachment_name constraint attachment_attachment_name_nn not null;
-alter table attachment modify attachment_type constraint attachment_attachment_type_nn not null;
-
+--댓글 번호 시퀀스 생성
+create sequence comments_comment_num_seq
+increment by 1
+start with 1
+minvalue 1
+maxvalue 999999
+nocycle
+nocache
+noorder;
 
 --신고 테이블 생성
 create table report (

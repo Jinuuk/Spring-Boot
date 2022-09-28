@@ -1,7 +1,7 @@
 package com.great.jinuk.domain.svc.article;
 
 import com.great.jinuk.domain.dao.article.ArticleFilterCondition;
-import com.great.jinuk.domain.entity.article.Article;
+import com.great.jinuk.domain.dao.article.Article;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

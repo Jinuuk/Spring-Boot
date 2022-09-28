@@ -4,6 +4,7 @@ insert into member values (2, '닉네임2');
 insert into member values (3, '닉네임3');
 insert into member values (4, '닉네임4');
 
+
 --판매 임시 테이블 샘플 데이터 삽입
 insert into product_info values (1);
 insert into product_info values (2);
@@ -35,16 +36,10 @@ insert into article values (3,2,'부산','글제목3','글내용3','Y',sysdate,0
 insert into article values (4,4,'서울','글제목4','글내용4','N',sysdate,0);
 
 --댓글 테이블 샘플 데이터 삽입
-insert into comments values (1,1,4,'댓글 내용1',sysdate,null,null);
-insert into comments values (2,1,1,'댓글 내용2',sysdate,1,3);
-insert into comments values (3,2,4,'댓글 내용3',sysdate,null,null);
-insert into comments values (4,3,4,'댓글 내용4',sysdate,null,null);
-
---첨부파일 테이블 샘플 데이터 삽입
-insert into attachment values (1,null,1,null,null,null,'첨부파일1','jpg');
-insert into attachment values (2,null,1,null,null,null,'첨부파일2','jpg');
-insert into attachment values (3,null,3,null,null,null,'첨부파일3','png');
-insert into attachment values (4,null,3,null,null,null,'첨부파일4','png');
+insert into comments values (1,1,1,null,1,'댓글 내용1',sysdate,0);
+insert into comments values (1,2,2,null,2,'댓글 내용2',sysdate,0);
+insert into comments values (1,1,3,1,3,'댓글 내용3',sysdate,0);
+insert into comments values (1,2,4,2,4,'댓글 내용4',sysdate,0);
 
 --신고 테이블 샘플 데이터 삽입
 insert into report values (1,1,2,sysdate,1,'신고 내용1',null,1,null,null);
@@ -58,6 +53,7 @@ insert into penalty values (2,2,2,'제재 내용','2022-08-28');
 insert into penalty values (3,3,3,'제재 내용','2022-09-01');
 insert into penalty values (4,4,4,'제재 내용','2022-09-22');
 
+delete from article;
 commit;
 
 --테이블 조회
@@ -68,6 +64,6 @@ select * from notice;
 select * from profile;
 select * from article;
 select * from comments;
-select * from attachment;
+select * from uploadfile;
 select * from report;
 select * from penalty;
