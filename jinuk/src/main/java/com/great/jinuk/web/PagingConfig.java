@@ -37,7 +37,8 @@ public class PagingConfig {
 
   @Bean
   public FindCriteria fc10() {
-    return new FindCriteria(rc10(),PAGE_COUNT_10_PER_PAGE);
+    return new FindCriteria(rc10(),PAGE_COUNT_5_PER_PAGE);
+    //return new FindCriteria(rc10(),PAGE_COUNT_10_PER_PAGE);
   }
 
   @Bean
