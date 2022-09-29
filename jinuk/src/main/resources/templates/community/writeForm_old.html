@@ -8,7 +8,6 @@
   <link rel="stylesheet" href="../common/common.css">
   <link rel="stylesheet" href="../css/writeForm.css">
   <script src="https://kit.fontawesome.com/038578f405.js" crossorigin="anonymous"></script>
-  <script th:src="@{/common/js/ckeditor.js}"></script>
   <title>GREAT 게시글 작성</title>
 </head>
 
@@ -157,9 +156,7 @@
       formData.append('memNumber', '1');
       formData.append('articleCategory', form.articleCategory.options[articleCategory.selectedIndex].value);
       formData.append('articleTitle', form.articleTitle.value);
-      //formData.append('articleContents', form.articleContents.value.replace(/(?:\r\n|\r|\n)/g, '<br>'));
-      formData.append('articleContents', window.editor.getData());
-
+      formData.append('articleContents', form.articleContents.value.replace(/(?:\r\n|\r|\n)/g, '<br>'));
       if(imageFiles.files.length == 0){
         formData.append('attachment', 'N');
       } else {
@@ -169,7 +166,6 @@
       for (let i = 0; i < imageFiles.files.length; i++) {
         formData.append('files', imageFiles.files[i]);
       }
-
       //3)게시글 등록 처리
       add(formData);
     });
@@ -209,13 +205,7 @@
         return;
       }
       //내용 입력 필수
-      /*
       if (form.articleContents.value.replace(regex, '').length == 0) {
-        alert('내용을 입력해주세요.');
-        return;
-      }
-      */
-      if (window.editor.getData().length == 0) {
         alert('내용을 입력해주세요.');
         return;
       }
@@ -228,69 +218,7 @@
       return true;
     }
 
-    //ckeditor
-    ClassicEditor
-		.create( document.querySelector( '#articleContents' ), {
-		 plugin:['ListStyle','Markdown','MediaEmbed','MediaEmbedToolbar'],
-			toolbar: {
-				items: [
-					'heading',
-					'|',
-					'underline',
-					'bold',
-					'italic',
-					'link',
-					'bulletedList',
-					'numberedList',
-					'todoList',
-					'|',
-					'outdent',
-					'indent',
-					'|',
-					'imageInsert',
-					'imageUpload',
-					'blockQuote',
-					'insertTable',
-					'mediaEmbed',
-					'markdown',
-					'undo',
-					'redo',
-					'|',
-					'highlight',
-					'fontFamily',
-					'fontColor',
-					'fontBackgroundColor',
-					'fontSize',
-					'|',
-					'htmlEmbed',
-					'specialCharacters'
-				]
-			},
-			language: 'en',
-			image: {
-				toolbar: [
-					'imageTextAlternative',
-					'imageStyle:full',
-					'imageStyle:side'
-				]
-			},
-			table: {
-				contentToolbar: [
-					'tableColumn',
-					'tableRow',
-					'mergeTableCells',
-					'tableCellProperties',
-					'tableProperties'
-				]
-			},
-		})
-		.then( editor => {
 
-			window.editor = editor;
-		} )
-		.catch( error => {
-			console.error( error );
-		} );
 </script>
 </body>
 

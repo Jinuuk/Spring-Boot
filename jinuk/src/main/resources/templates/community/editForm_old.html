@@ -8,7 +8,6 @@
   <link rel="stylesheet" href="/common/common.css">
   <link rel="stylesheet" href="/css/editForm.css">
   <script src="https://kit.fontawesome.com/038578f405.js" crossorigin="anonymous"></script>
-  <script th:src="@{/common/js/ckeditor.js}"></script>
   <title>GREAT 게시글 수정</title>
 </head>
 
@@ -184,7 +183,7 @@
       //2-1)기존 게시글 관련 데이터
       formData.append('articleCategory', form.articleCategory.options[articleCategory.selectedIndex].value);
       formData.append('articleTitle', form.articleTitle.value);
-      formData.append('articleContents', window.editor.getData());
+      formData.append('articleContents', form.articleContents.value.replace(/(?:\r\n|\r|\n)/g, '<br>'));
       if(inputImageFiles.files.length == 0 && ![[${articleEditForm.imageFiles}]]){
         formData.append('attachment', 'N');
       } else {
@@ -236,8 +235,13 @@
         return;
       }
       //내용 입력 필수
-      if (window.editor.getData().length == 0) {
+      if (form.articleContents.value.replace(regex, '').length == 0) {
         alert('내용을 입력해주세요.');
+        return;
+      }
+      //내용 500자 이하
+      if (form.articleContents.value.length > 500) {
+        alert('내용은 500자 이내여야합니다.');
         return;
       }
 
@@ -277,69 +281,7 @@
         .catch(err => console.log(err));
     }
 
-  //ckeditor
-    ClassicEditor
-		.create( document.querySelector( '#articleContents' ), {
-		 plugin:['ListStyle','Markdown','MediaEmbed','MediaEmbedToolbar'],
-			toolbar: {
-				items: [
-					'heading',
-					'|',
-					'underline',
-					'bold',
-					'italic',
-					'link',
-					'bulletedList',
-					'numberedList',
-					'todoList',
-					'|',
-					'outdent',
-					'indent',
-					'|',
-					'imageInsert',
-					'imageUpload',
-					'blockQuote',
-					'insertTable',
-					'mediaEmbed',
-					'markdown',
-					'undo',
-					'redo',
-					'|',
-					'highlight',
-					'fontFamily',
-					'fontColor',
-					'fontBackgroundColor',
-					'fontSize',
-					'|',
-					'htmlEmbed',
-					'specialCharacters'
-				]
-			},
-			language: 'en',
-			image: {
-				toolbar: [
-					'imageTextAlternative',
-					'imageStyle:full',
-					'imageStyle:side'
-				]
-			},
-			table: {
-				contentToolbar: [
-					'tableColumn',
-					'tableRow',
-					'mergeTableCells',
-					'tableCellProperties',
-					'tableProperties'
-				]
-			},
-		})
-		.then( editor => {
 
-			window.editor = editor;
-		} )
-		.catch( error => {
-			console.error( error );
-		} );
   </script>
 </body>
 

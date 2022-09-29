@@ -52,7 +52,8 @@ create table article (
   mem_number            number(6),
   article_category      varchar2(10),
   article_title         varchar2(90),
-  article_contents      varchar2(1500),
+ -- article_contents      varchar2(1500),
+  article_contents      clob,
   attachment            varchar2(1),
   create_date           date,
   views                 number(5)
