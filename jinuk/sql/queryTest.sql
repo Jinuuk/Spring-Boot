@@ -55,24 +55,31 @@ update article set views = views +1 where article_num = 1;
 select * from comments;
 rollback;
 
---댓글 조회 (1번 게시글)
+--댓글 조회
 select article_num, comment_group, comment_num, p_comment_num,
-c.mem_number, comment_contents, create_date, comment_indent
+m.mem_nickname, comment_contents, create_date, comment_indent
 from comments c, member m
-where c.mem_number = m.mem_number
+where c.mem_number = m.mem_number and c.comment_num = 4;
+
+
+--댓글 목록 조회 (1번 게시글)
+select article_num, comment_group, comment_num, p_comment_num,
+m.mem_nickname, comment_contents, create_date, comment_indent
+from comments c, member m
+where c.mem_number = m.mem_number and c.article_num = 1
 order by comment_group asc, comment_num asc;
 
---댓글 작성 (1번 게시글에 댓글 작성)
+--댓글 작성
 insert into comments 
 (article_num, comment_group, comment_num,
 mem_number, comment_contents, create_date)
 values (2,1,5,1,'댓글 내용5', sysdate);
 
---대댓글 작성 (1번 게시글의 2번 댓글에 대댓글 작성)
+--대댓글 작성
 insert into comments 
 (article_num, comment_group, comment_num, p_comment_num,
 mem_number, comment_contents, create_date, comment_indent)
-values (2,1,5,null,1,'댓글 내용5', sysdate, 0);
+values (2,1,6,5,2,'댓글 내용5', sysdate, 5);
 
 --댓글 수정
 update comments 
@@ -82,6 +89,11 @@ where comment_num = 1;
 --댓글 삭제
 delete from comments where comment_num = 1;
 
+--댓글 번호 증가
+select comments_comment_num_seq.nextval from dual;
+
+--게시글 댓글 건수 조회
+select count(*) from comments where article_num = 1;
 
 --[신고]
 --신고 내용 작성

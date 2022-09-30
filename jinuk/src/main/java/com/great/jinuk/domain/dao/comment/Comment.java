@@ -1,5 +1,6 @@
 package com.great.jinuk.domain.dao.comment;
 
+import com.great.jinuk.domain.Member;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,4 +19,6 @@ public class Comment {
   private String commentContents;   //  comment_contents     clob,       -- 댓글 내용
   private LocalDateTime createDate; //  create_date          date,       -- 댓글 생성일
   private Long commentIndent;       //  comment_indent       number(3)  -- 대댓글 들여쓰기
+  private Member member;
 }
+

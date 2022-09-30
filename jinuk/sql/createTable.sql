@@ -1,6 +1,6 @@
 --테이블 삭제
-drop table penalty;
-drop table report;
+--drop table penalty;
+--drop table report;
 drop table uploadfile;
 drop table comments;
 drop table article;
@@ -52,7 +52,6 @@ create table article (
   mem_number            number(6),
   article_category      varchar2(10),
   article_title         varchar2(90),
- -- article_contents      varchar2(1500),
   article_contents      clob,
   attachment            varchar2(1),
   create_date           date,
@@ -87,8 +86,8 @@ create table comments (
   comment_group        number(6),   -- 댓글 그룹
   comment_num          number(6),  -- 댓글 번호
   p_comment_num        number(6),  -- 부모 댓글 번호
-  mem_number           number(6),           -- 회원 번호
-  comment_contents     varchar2(300),       -- 댓글 내용
+  mem_number           number(6),  -- 회원 번호
+  comment_contents     clob,       -- 댓글 내용
   create_date          date,       -- 댓글 생성일
   comment_indent       number(3)  -- 대댓글 들여쓰기
 );
@@ -116,48 +115,48 @@ nocycle
 nocache
 noorder;
 
---신고 테이블 생성
-create table report (
-  report_num         number(6),
-  a_mem_num          number(6),
-  d_mem_num          number(6),
-  report_date        date,
-  report_type        number(1),
-  report_contents    clob,
-  s_article_num      number(6),
-  c_article_num      number(6),
-  comment_num        number(6),
-  review_num         number(6)
-);
---primary key
-alter table report add constraint report_report_num_pk primary key(report_num);
---foreign key
-alter table report add constraint report_a_mem_num_fk foreign key(a_mem_num) references member(mem_number) on delete cascade;
-alter table report add constraint report_d_mem_num_fk foreign key(d_mem_num) references member(mem_number) on delete cascade;
-alter table report add constraint report_s_article_num_fk foreign key(s_article_num) references product_info(p_number) on delete cascade;
-alter table report add constraint report_c_article_num_fk foreign key(c_article_num) references article(article_num) on delete cascade;
-alter table report add constraint report_review_num_fk foreign key(review_num) references review(review_number) on delete cascade;
-alter table report add constraint report_comment_num_fk foreign key(comment_num) references comments(comment_num ) on delete cascade;
---default
-alter table report modify report_date date default sysdate;
---not null
-alter table report modify report_type constraint report_report_type_nn not null;
-alter table report modify report_contents constraint report_report_contents_nn not null;
-
-
---제재 테이블 생성
-create table penalty (
-  penalty_num         number(6),
-  d_mem_num           number(6),
-  report_num          number(6),
-  penalty_content     clob,
-  penalty_peroid      date
-);
---primary key
-alter table penalty add constraint penalty_penalty_num_pk primary key(penalty_num);
---foreign key
-alter table penalty add constraint penalty_report_num_fk foreign key(report_num) references report(report_num) on delete cascade;
-alter table penalty add constraint penalty_d_mem_num_fk foreign key(d_mem_num) references member(mem_number) on delete cascade;
---not null
-alter table penalty modify penalty_peroid constraint penalty_penalty_peroid_nn not null;
+----신고 테이블 생성
+--create table report (
+--  report_num         number(6),
+--  a_mem_num          number(6),
+--  d_mem_num          number(6),
+--  report_date        date,
+--  report_type        number(1),
+--  report_contents    clob,
+--  s_article_num      number(6),
+--  c_article_num      number(6),
+--  comment_num        number(6),
+--  review_num         number(6)
+--);
+----primary key
+--alter table report add constraint report_report_num_pk primary key(report_num);
+----foreign key
+--alter table report add constraint report_a_mem_num_fk foreign key(a_mem_num) references member(mem_number) on delete cascade;
+--alter table report add constraint report_d_mem_num_fk foreign key(d_mem_num) references member(mem_number) on delete cascade;
+--alter table report add constraint report_s_article_num_fk foreign key(s_article_num) references product_info(p_number) on delete cascade;
+--alter table report add constraint report_c_article_num_fk foreign key(c_article_num) references article(article_num) on delete cascade;
+--alter table report add constraint report_review_num_fk foreign key(review_num) references review(review_number) on delete cascade;
+--alter table report add constraint report_comment_num_fk foreign key(comment_num) references comments(comment_num ) on delete cascade;
+----default
+--alter table report modify report_date date default sysdate;
+----not null
+--alter table report modify report_type constraint report_report_type_nn not null;
+--alter table report modify report_contents constraint report_report_contents_nn not null;
+--
+--
+----제재 테이블 생성
+--create table penalty (
+--  penalty_num         number(6),
+--  d_mem_num           number(6),
+--  report_num          number(6),
+--  penalty_content     clob,
+--  penalty_peroid      date
+--);
+----primary key
+--alter table penalty add constraint penalty_penalty_num_pk primary key(penalty_num);
+----foreign key
+--alter table penalty add constraint penalty_report_num_fk foreign key(report_num) references report(report_num) on delete cascade;
+--alter table penalty add constraint penalty_d_mem_num_fk foreign key(d_mem_num) references member(mem_number) on delete cascade;
+----not null
+--alter table penalty modify penalty_peroid constraint penalty_penalty_peroid_nn not null;
 

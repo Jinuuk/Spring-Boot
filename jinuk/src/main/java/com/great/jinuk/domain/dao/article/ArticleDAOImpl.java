@@ -206,7 +206,6 @@ public class ArticleDAOImpl implements ArticleDAO {
 
 
     try {
-//      Article article = jt.queryForObject(sql.toString(), new BeanPropertyRowMapper<>(Article.class), articleNum);
       Article article = jt.queryForObject(sql.toString(), new RowMapper<Article>() {
         @Override
         public Article mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -235,14 +234,15 @@ public class ArticleDAOImpl implements ArticleDAO {
     sql.append("insert into article (article_num, mem_number, article_category, article_title, article_contents, attachment, create_date,views) ");
     sql.append("values (?,?,?,?,?,?,sysdate,0) ");
 
-    int result = jt.update(sql.toString(),
+    int affectedRow = jt.update(sql.toString(),
         article.getArticleNum(),
         article.getMemNumber(),
         article.getArticleCategory(),
         article.getArticleTitle(),
         article.getArticleContents(),
         article.getAttachment());
-    return result;
+
+    return affectedRow;
   }
 
   /**
@@ -294,8 +294,8 @@ public class ArticleDAOImpl implements ArticleDAO {
   @Override
   public int increaseViewCount(Long articleNum) {
     String sql = "update article set views = views +1 where article_num = ? ";
-    int affectedRows = jt.update(sql, articleNum);
-    return affectedRows;
+    int affectedRow = jt.update(sql, articleNum);
+    return affectedRow;
   }
 
   /**

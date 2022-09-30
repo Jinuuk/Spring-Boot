@@ -78,14 +78,12 @@ public interface ArticleDAO {
 
   /**
    * 신규 게시물 번호 생성
-   *
-   * @return
+   * @return 게시글 번호
    */
   Long generatedArticleNum();
 
   /**
    * 조회수 증가
-   *
    * @param articleNum 게시글 번호
    * @return 수정건수
    */
@@ -93,14 +91,12 @@ public interface ArticleDAO {
 
   /**
    * 전체 건수
-   *
    * @return 게시글 전체 건수
    */
   int totalCount();
 
   /**
    * 전체 건수
-   *
    * @param category 게시글 유형
    * @return 게시글 전체 건수
    */
@@ -108,7 +104,6 @@ public interface ArticleDAO {
 
   /**
    * 전체 건수
-   *
    * @param filterCondition 필터 조건
    * @return 게시글 전체 건수
    */

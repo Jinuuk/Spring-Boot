@@ -4,7 +4,6 @@ insert into member values (2, '닉네임2');
 insert into member values (3, '닉네임3');
 insert into member values (4, '닉네임4');
 
-
 --판매 임시 테이블 샘플 데이터 삽입
 insert into product_info values (1);
 insert into product_info values (2);
@@ -41,19 +40,18 @@ insert into comments values (1,2,2,null,2,'댓글 내용2',sysdate,0);
 insert into comments values (1,1,3,1,3,'댓글 내용3',sysdate,0);
 insert into comments values (1,2,4,2,4,'댓글 내용4',sysdate,0);
 
---신고 테이블 샘플 데이터 삽입
-insert into report values (1,1,2,sysdate,1,'신고 내용1',null,1,null,null);
-insert into report values (2,3,2,sysdate,2,'신고 내용2',null,2,null,null);
-insert into report values (3,1,3,sysdate,3,'신고 내용3',null,3,null,null);
-insert into report values (4,2,4,sysdate,4,'신고 내용4',null,4,null,null);
+----신고 테이블 샘플 데이터 삽입
+--insert into report values (1,1,2,sysdate,1,'신고 내용1',null,1,null,null);
+--insert into report values (2,3,2,sysdate,2,'신고 내용2',null,2,null,null);
+--insert into report values (3,1,3,sysdate,3,'신고 내용3',null,3,null,null);
+--insert into report values (4,2,4,sysdate,4,'신고 내용4',null,4,null,null);
+--
+----제재 테이블 샘플 데이터 삽입
+--insert into penalty values (1,1,2,'제재 내용','2022-08-28');
+--insert into penalty values (2,2,2,'제재 내용','2022-08-28');
+--insert into penalty values (3,3,3,'제재 내용','2022-09-01');
+--insert into penalty values (4,4,4,'제재 내용','2022-09-22');
 
---제재 테이블 샘플 데이터 삽입
-insert into penalty values (1,1,2,'제재 내용','2022-08-28');
-insert into penalty values (2,2,2,'제재 내용','2022-08-28');
-insert into penalty values (3,3,3,'제재 내용','2022-09-01');
-insert into penalty values (4,4,4,'제재 내용','2022-09-22');
-
-delete from article;
 commit;
 
 --테이블 조회
@@ -65,5 +63,5 @@ select * from profile;
 select * from article;
 select * from comments;
 select * from uploadfile;
-select * from report;
-select * from penalty;
+--select * from report;
+--select * from penalty;
