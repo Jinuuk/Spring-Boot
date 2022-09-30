@@ -43,6 +43,14 @@ button:hover {
   align-items: center;
 }
 
+.ck-reset_all {
+    display :none;
+}
+
+.ck-blurred.ck.ck-content.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline.ck-read-only{
+    border:none;
+}
+
 /* article */
 .article {
   display: flex;

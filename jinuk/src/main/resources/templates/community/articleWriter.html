@@ -84,21 +84,6 @@
           </div>
           <textarea class="board-write__article-content" name="" id="articleContents" cols="30" rows="10"
                     placeholder="내용을 작성하세요." autofocus th:text="*{articleContents}"></textarea>
-<!--          <p th:utext="*{articleContents}">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ab, aperiam.-->
-<!--            Voluptas eaque modi eius, commodi-->
-<!--            culpa architecto! Tempore repellendus assumenda non numquam aliquid saepe, asperiores reprehenderit a-->
-<!--            sapiente consequuntur architecto.-->
-<!--            Iste veniam quod maiores voluptatem hic eos totam iure facere aut repellat aspernatur cupiditate alias-->
-<!--            tempora rem velit itaque inventore fuga cum eaque id, perferendis fugit sed. Debitis, architecto numquam.-->
-<!--            Necessitatibus ipsum deleniti, neque architecto provident possimus aliquid dolorum sequi eaque impedit-->
-<!--            perspiciatis adipisci, autem mollitia dolor laborum repellendus blanditiis porro quisquam incidunt,-->
-<!--            temporibus hic. Minima obcaecati harum cum officia?-->
-<!--            Culpa distinctio animi impedit tempora quas dolorum doloremque facilis minus voluptate? Obcaecati, hic ad-->
-<!--            magni excepturi, recusandae iste molestias illo quo adipisci beatae voluptatem ut et dignissimos fugit-->
-<!--            architecto quasi.-->
-<!--            Consequatur, debitis dignissimos? Vitae dicta magni suscipit possimus! Asperiores culpa expedita ratione sed-->
-<!--            numquam neque earum odit! Iste mollitia quod dolorem animi, corrupti omnis sint, optio ea asperiores magni-->
-<!--            voluptates. </p>-->
           <form th:action="@{/community/edit/{id}(id=${articleForm.articleNum})}">
             <div class="article__btn-box">
               <button id="article__modify-btn">수정</button>
