@@ -51,7 +51,7 @@ select * from article;
 update article set views = views +1 where article_num = 1;
 
 --게시글 댓글 수 변경
-update article set comments =4 where article_num =1;
+update article set comments = 4 where article_num =1;
 commit;
 
 --[댓글]

@@ -3,6 +3,11 @@ insert into member values (1, '닉네임1');
 insert into member values (2, '닉네임2');
 insert into member values (3, '닉네임3');
 insert into member values (4, '닉네임4');
+
+select article_article_num_seq.nextval from dual;
+select article_article_num_seq.nextval from dual;
+select article_article_num_seq.nextval from dual;
+select article_article_num_seq.nextval from dual;
 commit;
 
 ----판매 임시 테이블 샘플 데이터 삽입
