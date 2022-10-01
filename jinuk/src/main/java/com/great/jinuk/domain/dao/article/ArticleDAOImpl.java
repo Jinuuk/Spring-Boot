@@ -30,7 +30,7 @@ public class ArticleDAOImpl implements ArticleDAO {
   @Override
   public List<Article> findAll() {
     StringBuffer sql = new StringBuffer();
-    sql.append("select article_num, article_category, article_title, attachment, mem_nickname, create_date, views ");
+    sql.append("select article_num, article_category, article_title, attachment, mem_nickname, create_date, views, comments ");
     sql.append("from article a, member m ");
     sql.append("where a.mem_number = m.mem_number ");
     sql.append("order by a.article_num desc ");
@@ -58,7 +58,7 @@ public class ArticleDAOImpl implements ArticleDAO {
   public List<Article> findAll(String category) {
 
     StringBuffer sql = new StringBuffer();
-    sql.append("select article_num, article_category, article_title, attachment, mem_nickname, create_date, views ");
+    sql.append("select article_num, article_category, article_title, attachment, mem_nickname, create_date, views, comments ");
     sql.append("from article a, member m ");
     sql.append("where a.mem_number = m.mem_number and a.article_category = ? ");
     sql.append("order by a.article_num desc ");
@@ -89,7 +89,7 @@ public class ArticleDAOImpl implements ArticleDAO {
 
     sql.append("select t1.* ");
     sql.append("from (select row_number() over (order by a.article_num desc) no, article_num, article_category, ");
-    sql.append("article_title, attachment, mem_nickname, create_date, views ");
+    sql.append("article_title, attachment, mem_nickname, create_date, views, comments ");
     sql.append("from article a, member m where a.mem_number = m.mem_number) t1 ");
     sql.append("where t1.no between ? and ? ");
 
@@ -120,7 +120,7 @@ public class ArticleDAOImpl implements ArticleDAO {
 
     sql.append("select t1.* ");
     sql.append("from (select row_number() over (order by a.article_num desc) no, article_num, article_category, ");
-    sql.append("article_title, attachment, mem_nickname, create_date, views ");
+    sql.append("article_title, attachment, mem_nickname, create_date, views, comments ");
     sql.append("from article a, member m where a.mem_number = m.mem_number and a.article_category = ?) t1 ");
     sql.append("where t1.no between ? and ? ");
 
@@ -149,7 +149,7 @@ public class ArticleDAOImpl implements ArticleDAO {
 
     sql.append("select t1.* ");
     sql.append("from (select row_number() over (order by a.article_num desc) no, article_num, article_category, ");
-    sql.append("article_title, article_contents, attachment, mem_nickname, create_date, views ");
+    sql.append("article_title, article_contents, attachment, mem_nickname, create_date, views, comments ");
     sql.append("from article a, member m where a.mem_number = m.mem_number and ");
 
     //분류
@@ -200,7 +200,7 @@ public class ArticleDAOImpl implements ArticleDAO {
   @Override
   public Optional<Article> read(Long articleNum) {
     StringBuffer sql = new StringBuffer();
-    sql.append("select article_num, article_category, article_title, article_contents, attachment, mem_nickname, create_date, views ");
+    sql.append("select article_num, article_category, article_title, article_contents, attachment, mem_nickname, create_date, views, comments ");
     sql.append("from article a, member m ");
     sql.append("where a.mem_number = m.mem_number and a.article_num = ? ");
 
@@ -231,8 +231,10 @@ public class ArticleDAOImpl implements ArticleDAO {
   @Override
   public int save(Article article) {
     StringBuffer sql = new StringBuffer();
-    sql.append("insert into article (article_num, mem_number, article_category, article_title, article_contents, attachment, create_date,views) ");
-    sql.append("values (?,?,?,?,?,?,sysdate,0) ");
+    sql.append("insert into article (article_num, mem_number, article_category, article_title, article_contents, attachment, create_date, views, comments) ");
+    sql.append("values (?,?,?,?,?,?,sysdate,0,0) ");
+
+    log.info("아티클 넘버 : {}",article.getArticleNum());
 
     int affectedRow = jt.update(sql.toString(),
         article.getArticleNum(),
@@ -295,6 +297,20 @@ public class ArticleDAOImpl implements ArticleDAO {
   public int increaseViewCount(Long articleNum) {
     String sql = "update article set views = views +1 where article_num = ? ";
     int affectedRow = jt.update(sql, articleNum);
+    return affectedRow;
+  }
+
+  /**
+   * 게시물의 댓글 수 업데이트
+   *
+   * @param articleNum          게시물 번호
+   * @param totalCountOfArticle 댓글 수
+   * @return 수정건수
+   */
+  @Override
+  public int updateCommentsCnt(Long articleNum, Long totalCountOfArticle) {
+    String sql = "update article set comments = ? where article_num = ? ";
+    int affectedRow = jt.update(sql,totalCountOfArticle,articleNum);
     return affectedRow;
   }
 

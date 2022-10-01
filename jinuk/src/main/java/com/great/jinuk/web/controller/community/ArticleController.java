@@ -1,17 +1,15 @@
 package com.great.jinuk.web.controller.community;
 
-import com.great.jinuk.domain.common.AttachCode;
 import com.great.jinuk.domain.common.paging.FindCriteria;
-import com.great.jinuk.domain.dao.article.ArticleFilterCondition;
 import com.great.jinuk.domain.dao.article.Article;
-import com.great.jinuk.domain.entity.uploadFile.UploadFile;
+import com.great.jinuk.domain.dao.article.ArticleFilterCondition;
 import com.great.jinuk.domain.svc.article.ArticleSVC;
 import com.great.jinuk.domain.svc.uploadFile.UploadFileSVC;
 import com.great.jinuk.web.api.ApiResponse;
-import com.great.jinuk.web.form.community.ArticleAddForm;
-import com.great.jinuk.web.form.community.ArticleEditForm;
-import com.great.jinuk.web.form.community.ArticleForm;
-import com.great.jinuk.web.form.community.BoardForm;
+import com.great.jinuk.web.form.article.ArticleAddForm;
+import com.great.jinuk.web.form.article.ArticleEditForm;
+import com.great.jinuk.web.form.article.ArticleForm;
+import com.great.jinuk.web.form.article.BoardForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -138,23 +136,24 @@ public class ArticleController {
     Article article = new Article();
     BeanUtils.copyProperties(articleAddForm, article);
     log.info("article : {}", article);
-    Article savedArticle = new Article();
+    Article savedArticle = articleSVC.save(article);
+//    Article savedArticle = new Article();
 
     //주의 : view에서 multiple인 경우 파일 첨부가 없더라도 빈문자열("")이 반환되어
     // List<MultipartFile>에 빈 객체 1개가 포함됨
-    log.info("0");
-    if (articleAddForm.getFiles() == null) {
-      log.info("1");
-      savedArticle = articleSVC.save(article);
-      //이미지 첨부
-    } else if (!articleAddForm.getFiles().get(0).isEmpty()) {
-      log.info("2");
-      savedArticle = articleSVC.save(article, articleAddForm.getFiles());
-    }
-    log.info("3");
+//    log.info("0");
+//    if (articleAddForm.getFiles() == null) {
+//      log.info("1");
+//      savedArticle = articleSVC.save(article);
+//      //이미지 첨부
+//    } else if (!articleAddForm.getFiles().get(0).isEmpty()) {
+//      log.info("2");
+//      savedArticle = articleSVC.save(article, articleAddForm.getFiles());
+//    }
+//    log.info("3");
 
 
-    log.info("savedArticle : {}", savedArticle);
+//    log.info("savedArticle : {}", article);
     return ApiResponse.createApiResMsg("00", "성공", savedArticle);
   }
 
@@ -170,14 +169,14 @@ public class ArticleController {
     }
 
     //2)이미지 조회
-    List<UploadFile> uploadFiles = uploadFileSVC.getFilesByCodeWithRid(AttachCode.P0102.name(), articleNum);
-    if (uploadFiles.size() > 0) {
-      List<UploadFile> imageFiles = new ArrayList<>();
-      for (UploadFile file : uploadFiles) {
-        imageFiles.add(file);
-      }
-      articleEditForm.setImageFiles(imageFiles);
-    }
+//    List<UploadFile> uploadFiles = uploadFileSVC.getFilesByCodeWithRid(AttachCode.P0102.name(), articleNum);
+//    if (uploadFiles.size() > 0) {
+//      List<UploadFile> imageFiles = new ArrayList<>();
+//      for (UploadFile file : uploadFiles) {
+//        imageFiles.add(file);
+//      }
+//      articleEditForm.setImageFiles(imageFiles);
+//    }
 
     model.addAttribute("articleEditForm", articleEditForm);
 
@@ -201,15 +200,16 @@ public class ArticleController {
     Article article = new Article();
     BeanUtils.copyProperties(articleEditForm, article);
     log.info("article : {}", article);
-    Article updatedArticle = new Article();
+    Article updatedArticle = articleSVC.update(articleNum, article);
+//    Article updatedArticle = new Article();
 
-    //메타정보 수정
-    if (articleEditForm.getFiles() == null) {
-      updatedArticle = articleSVC.update(articleNum, article);
-      //사진 첨부
-    } else if (!articleEditForm.getFiles().get(0).isEmpty()) {
-      updatedArticle = articleSVC.update(articleNum, article, articleEditForm.getFiles());
-    }
+//    //메타정보 수정
+//    if (articleEditForm.getFiles() == null) {
+//      updatedArticle = articleSVC.update(articleNum, article);
+//      //사진 첨부
+//    } else if (!articleEditForm.getFiles().get(0).isEmpty()) {
+//      updatedArticle = articleSVC.update(articleNum, article, articleEditForm.getFiles());
+//    }
 
     return ApiResponse.createApiResMsg("00", "성공", updatedArticle);
   }
@@ -226,14 +226,14 @@ public class ArticleController {
     }
 
     //2)게시글 이미지 조회
-    List<UploadFile> uploadFiles = uploadFileSVC.getFilesByCodeWithRid(AttachCode.P0102.name(), articleNum);
-    if (uploadFiles.size() > 0) {
-      List<UploadFile> imageFiles = new ArrayList<>();
-      for (UploadFile file : uploadFiles) {
-        imageFiles.add(file);
-      }
-      articleForm.setImageFiles(imageFiles);
-    }
+//    List<UploadFile> uploadFiles = uploadFileSVC.getFilesByCodeWithRid(AttachCode.P0102.name(), articleNum);
+//    if (uploadFiles.size() > 0) {
+//      List<UploadFile> imageFiles = new ArrayList<>();
+//      for (UploadFile file : uploadFiles) {
+//        imageFiles.add(file);
+//      }
+//      articleForm.setImageFiles(imageFiles);
+//    }
 
     model.addAttribute("articleForm", articleForm);
 

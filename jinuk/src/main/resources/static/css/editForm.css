@@ -30,6 +30,10 @@ select:focus{
   margin-right: 10px;
 }
 
+//.ck-editor__editable {
+//  min-height: 500px;
+//}
+
 /* board-write */
 
 .board-write {

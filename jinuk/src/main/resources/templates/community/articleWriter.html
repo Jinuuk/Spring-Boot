@@ -69,19 +69,19 @@
             </div>
             <div class="article__write-information">
               <span class="font-size--12px" th:text="*{{createDate}}">2022.08.01 13:48</span>
-              <span class="font-size--12px" th:text="|조회 : *{views}|">조회 98</span>
+              <span class="font-size--12px" th:text="|조회  *{views}|">조회 98</span>
             </div>
           </div>
         </div>
 
         <div class="article__content width--900px">
-          <div th:if="*{imageFiles}">
-            <div th:each="imageFile:*{imageFiles}">
-              <img width="800px" src=""
-                th:src="@{/api/attach/img/{attachCode}/{storeFilename}(attachCode=${imageFile.code},storeFilename=${imageFile.storeFilename})}"
-                alt="이미지를 불러올 수 없습니다.">
-            </div>
-          </div>
+<!--          <div th:if="*{imageFiles}">-->
+<!--            <div th:each="imageFile:*{imageFiles}">-->
+<!--              <img width="800px" src=""-->
+<!--                th:src="@{/api/attach/img/{attachCode}/{storeFilename}(attachCode=${imageFile.code},storeFilename=${imageFile.storeFilename})}"-->
+<!--                alt="이미지를 불러올 수 없습니다.">-->
+<!--            </div>-->
+<!--          </div>-->
           <textarea class="board-write__article-content" name="" id="articleContents" cols="30" rows="10"
                     placeholder="내용을 작성하세요." autofocus th:text="*{articleContents}"></textarea>
           <form th:action="@{/community/edit/{id}(id=${articleForm.articleNum})}">
@@ -98,11 +98,11 @@
           <div class="comment__title">
             <span><i class="fa-regular fa-comments"></i></span>
             <span>댓글</span>
-            <span class="font-size--13px">5</span>
+            <span class="font-size--13px" th:text="*{comments}">5</span>
           </div>
 
           <div class="comment__list">
-            <ul>
+            <ul id="commentList">
               <li class="writer">
                 <div class="comment-box">
                   <div class="comment-box__profile">
@@ -273,12 +273,15 @@
     </footer>
   </div>
   <script>
+    //게시글 번호
+    const id = [[${articleForm.articleNum}]];
+
+    //게시글
     //삭제 버튼 클릭
     const $delBtn = document.getElementById('article__delete-btn');
     $delBtn.addEventListener('click', e => {
       console.log("삭제 버튼 클릭");
       if (!confirm('게시글을 삭제하시겠습니까?')) return;
-      const id = [[${articleForm.articleNum}]];
       deleteById(id);
     });
 
@@ -297,6 +300,64 @@
     $prevPageBtn.addEventListener('click', e => {
       location.href = '/community/list';
     });
+
+    //댓글
+    findAll(id);
+
+    //댓글 목록 함수
+    function findAll(id){
+      const url = `http://localhost:9080/comment/list/${id}`;
+      fetch(url,{
+        method:'GET',
+        headers:{
+          'Accept':'application/json'
+        }
+      }).then(res=>res.json())
+        .then(res=>{
+          console.log(res);
+          if(res.header.rtcd == '00'){
+            const result =
+              res.data.map(comment=>{
+                return `
+                  <li id="${comment.commentNum}" data-comment-group="${comment.commentGroup}" class="writer" >
+                  <div class="comment-box">
+                    <div class="comment-box__profile">
+                      <a href=""><img src="/img/profile.jpg" class="profileImage" alt=""></a>
+                    </div>
+                    <div class="comment-box__contents">
+                      <div class="comment-box__top">
+                        <a href="" class="comment-box__nickname font-size--13px  ">${comment.member.memNickname}</a>
+                        <div class="comment-box__info">
+                          <a class="comment-box__modify font-size--12px" href=""><i
+                              class="fa-regular fa-pen-to-square"></i></a>
+                          <a class="comment-box__delete font-size--12px" href=""><i
+                              class="fa-regular fa-trash-can"></i></a>
+                        </div>
+                      </div>
+                      <div class="comment-box__middle">
+                        <p class="comment-box__text font-size--13px ">${comment.commentContents.replaceAll("<br>", "\r\n")}</p>
+                      </div>
+                      <div class="comment-box__bottom">
+                        <span class="comment-box__date font-size--12px">${comment.createDate}</span>
+                        <a class="comment-box__reply font-size--12px" href=""><i class="fa-solid fa-reply"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                `;
+              });
+              console.log(result.join(''));
+              document.querySelector('#commentList').innerHTML=result.join('');
+          }else{
+            console.log('목록 불러오기 실패');
+          }
+        }).catch(err=>console.log(err));
+    }
+
+    //댓글 등록 함수
+    //대댓글 등록 함수
+    //댓글 수정 함수
+    //댓글 삭제 함수
 
     //ckeditor
     ClassicEditor

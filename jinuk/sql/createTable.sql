@@ -50,12 +50,13 @@ create table profile (
 create table article (
   article_num           number(6),
   mem_number            number(6),
-  article_category      varchar2(10),
+  article_category      varchar2(30),
   article_title         varchar2(90),
   article_contents      clob,
   attachment            varchar2(1),
   create_date           date,
-  views                 number(5)
+  views                 number(5),
+  comments              number(5)
 );
 --primary key
 alter table article add constraint article_article_num_pk primary key(article_num);
@@ -64,6 +65,7 @@ alter table article add constraint article_mem_number_fk foreign key(mem_number)
 --default
 alter table article modify create_date date default sysdate;
 alter table article modify views number(5) default 0;
+alter table article modify comments number(5) default 0;
 --not null
 alter table article modify article_category constraint article_article_category_nn not null;
 alter table article modify article_title constraint article_article_title_nn not null;

@@ -90,6 +90,14 @@ public interface ArticleDAO {
   int increaseViewCount(Long articleNum);
 
   /**
+   * 게시물의 댓글 수 업데이트
+   * @param articleNum 게시물 번호
+   * @param totalCountOfArticle 댓글 수
+   * @return 수정건수
+   */
+  int updateCommentsCnt(Long articleNum, Long totalCountOfArticle);
+
+  /**
    * 전체 건수
    * @return 게시글 전체 건수
    */

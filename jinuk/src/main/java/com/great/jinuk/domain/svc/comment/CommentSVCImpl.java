@@ -1,5 +1,6 @@
 package com.great.jinuk.domain.svc.comment;
 
+import com.great.jinuk.domain.dao.article.ArticleDAO;
 import com.great.jinuk.domain.dao.comment.Comment;
 import com.great.jinuk.domain.dao.comment.CommentDAO;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import java.util.Optional;
 public class CommentSVCImpl implements CommentSVC {
 
   private final CommentDAO commentDAO;
+  private final ArticleDAO articleDAO;
 
   /**
    * 댓글 조회
@@ -51,20 +53,26 @@ public class CommentSVCImpl implements CommentSVC {
     comment.setCommentNum(generatedCommentNum);
     commentDAO.save(comment);
 
+    int totalCountOfArticle = commentDAO.totalCountOfArticle(comment.getArticleNum());
+    articleDAO.updateCommentsCnt(Long.valueOf(totalCountOfArticle),comment.getArticleNum());
+
     return commentDAO.find(generatedCommentNum).get();
   }
 
   /**
    * 대댓글 작성 (필요할까?)
    *
-   * @param comment 댓글 정보
+   * @param replyComment 댓글 정보
    * @return 작성된 댓글 수
    */
   @Override
-  public Comment saveReply(Comment comment) {
+  public Comment saveReply(Long pCommentNum, Comment replyComment) {
     Long generatedCommentNum = commentDAO.generatedCommentNum();
-    comment.setCommentNum(generatedCommentNum);
-    commentDAO.saveReply(comment);
+    replyComment.setCommentNum(generatedCommentNum);
+    commentDAO.saveReply(pCommentNum,replyComment);
+
+    int totalCountOfArticle = commentDAO.totalCountOfArticle(replyComment.getArticleNum());
+    articleDAO.updateCommentsCnt(Long.valueOf(totalCountOfArticle),replyComment.getArticleNum());
 
     return commentDAO.find(generatedCommentNum).get();
   }
@@ -79,6 +87,10 @@ public class CommentSVCImpl implements CommentSVC {
   @Override
   public Comment update(Long commentNum, Comment comment) {
     commentDAO.update(commentNum,comment);
+
+    int totalCountOfArticle = commentDAO.totalCountOfArticle(comment.getArticleNum());
+    articleDAO.updateCommentsCnt(Long.valueOf(totalCountOfArticle),commentDAO.find(commentNum).get().getArticleNum());
+
     return commentDAO.find(commentNum).get();
   }
 
@@ -90,17 +102,24 @@ public class CommentSVCImpl implements CommentSVC {
    */
   @Override
   public void delete(Long commentNum) {
+
+    Optional<Comment> foundComment = commentDAO.find(commentNum);
+    Long articleNum = foundComment.get().getArticleNum();
+
     commentDAO.delete(commentNum);
+
+    int totalCountOfArticle = commentDAO.totalCountOfArticle(articleNum);
+    articleDAO.updateCommentsCnt(Long.valueOf(totalCountOfArticle),articleNum);
   }
 
-  /**
-   * 게시물 댓글 건수 조회
-   *
-   * @param articleNum 게시글 번호
-   * @return 댓글 건수
-   */
-  @Override
-  public int totalCountOfArticle(Long articleNum) {
-    return commentDAO.totalCountOfArticle(articleNum);
-  }
+//  /**
+//   * 게시물 댓글 건수 조회
+//   *
+//   * @param articleNum 게시글 번호
+//   * @return 댓글 건수
+//   */
+//  @Override
+//  public int totalCountOfArticle(Long articleNum) {
+//    return commentDAO.totalCountOfArticle(articleNum);
+//  }
 }

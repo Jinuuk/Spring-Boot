@@ -66,6 +66,7 @@
           <select name="" id="articleCategory">
 <!--            <option value="전체">전체</option>-->
             <option value="남구">남구</option>
+            <option value="중구">중구</option>
             <option value="동구">동구</option>
             <option value="북구">북구</option>
             <option value="울주군">울주군</option>
@@ -76,6 +77,48 @@
           <input type="text" name="" id="articleTitle" placeholder="제목을 입력하세요." autofocus>
         </div>
       </div>
+      <!-- <div class="board-write__tool width--900px">
+        <div class="board-write__tool-box">
+          <ul>
+            <li>
+              <select name="" id="">
+                <option value="">11</option>
+                <option value="">13</option>
+                <option value="">15</option>
+                <option value="">17</option>
+                <option value="">19</option>
+                <option value="">21</option>
+              </select>
+            </li>
+            <li>
+              <button><i class="fa-solid fa-bold"></i></button>
+            </li>
+            <li>
+              <button><i class="fa-solid fa-italic"></i></button>
+            </li>
+            <li>
+              <button><i class="fa-solid fa-underline"></i></button>
+            </li>
+            <li>
+              <div class="file">
+                <button>
+                  <span><i class="fa-solid fa-image"></i></span>
+                </button>
+              </div>
+            </li>
+            <li>
+              <div class="file">
+                <button>
+                  <span><i class="fa-brands fa-youtube"></i></span>
+                </button>
+              </div>
+            </li>
+            <li>
+              <input type="file" multiple accept="image/*" id="imageFiles">
+            </li>
+          </ul>
+        </div>
+      </div> -->
       <div class="board-write__article-main width--900px">
           <textarea class="board-write__article-content" name="" id="articleContents" cols="30" rows="10"
                     placeholder="내용을 작성하세요." autofocus></textarea>
@@ -101,7 +144,6 @@
       //attachment
     }
 
-
     //폼 데이터 객체 생성
     const formData = new FormData();
 
@@ -118,15 +160,15 @@
       //formData.append('articleContents', form.articleContents.value.replace(/(?:\r\n|\r|\n)/g, '<br>'));
       formData.append('articleContents', window.editor.getData());
 
-      if(imageFiles.files.length == 0){
-        formData.append('attachment', 'N');
-      } else {
+      if(document.getElementsByTagName('img').length > 0){
         formData.append('attachment', 'Y');
+      } else {
+        formData.append('attachment', 'N');
       }
       //2-2)이미지 파일
-      for (let i = 0; i < imageFiles.files.length; i++) {
-        formData.append('files', imageFiles.files[i]);
-      }
+      // for (let i = 0; i < imageFiles.files.length; i++) {
+      //   formData.append('files', imageFiles.files[i]);
+      // }
 
       //3)게시글 등록 처리
       add(formData);

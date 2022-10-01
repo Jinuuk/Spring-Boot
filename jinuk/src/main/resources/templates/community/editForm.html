@@ -66,6 +66,7 @@
             <select name="" id="articleCategory">
 <!--              <option id="전체" value="전체">전체</option>-->
               <option id="남구" value="남구">남구</option>
+              <option value="중구">중구</option>
               <option id="동구" value="동구">동구</option>
               <option id="북구" value="북구">북구</option>
               <option id="울주군" value="울주군">울주군</option>
@@ -76,21 +77,63 @@
             <input type="text" id="articleTitle" placeholder="제목을 입력하세요." autofocus>
           </div>
         </div>
+        <!-- <div class="board-write__tool width--900px">
+          <div class="board-write__tool-box">
+            <ul>
+              <li>
+                <select name="" id="">
+                  <option value="">11</option>
+                  <option value="">13</option>
+                  <option value="">15</option>
+                  <option value="">17</option>
+                  <option value="">19</option>
+                  <option value="">21</option>
+                </select>
+              </li>
+              <li>
+                <button><i class="fa-solid fa-bold"></i></button>
+              </li>
+              <li>
+                <button><i class="fa-solid fa-italic"></i></button>
+              </li>
+              <li>
+                <button><i class="fa-solid fa-underline"></i></button>
+              </li>
+              <li>
+                <div class="file">
+                  <button>
+                    <span><i class="fa-solid fa-image"></i></span>
+                  </button>
+                </div>
+              </li>
+              <li>
+                <div class="file">
+                  <button>
+                    <span><i class="fa-brands fa-youtube"></i></span>
+                  </button>
+                </div>
+              </li>
+              <li>
+                <input type="file" multiple accept="image/*" id="inputImageFiles">
+              </li>
+            </ul>
+          </div>
+        </div> -->
         <div class="board-write__article-main width--900px">
           <textarea class="board-write__article-content" id="articleContents" cols="30" rows="10"
             placeholder="내용을 작성하세요." autofocus></textarea>
         </div>
-        <div id="imageFiles" th:if="${articleEditForm.imageFiles}">
-          <th:block th:each="imageFile:${articleEditForm.imageFiles}">
-            <div th:class="|item item${imageFileStat.count}|">
-              <img width="100px" src=""
-                th:src="@{/api/attach/img/{attachCode}/{storeFilename}(attachCode=${imageFile.code},storeFilename=${imageFile.storeFilename})}"
-                alt="이미지를 불러올 수 없습니다.">
-              <a href="" th:data-ftype="imageFiles" class="delBtn"
-                th:onclick="|delAttachFile(event,${imageFile.uploadfileId})|">삭제</a>
-            </div>
-          </th:block>
-        </div>
+<!--        <div id="imageFiles" th:if="${articleEditForm.imageFiles}">-->
+<!--          <th:block th:each="imageFile:${articleEditForm.imageFiles}">-->
+<!--            <div th:class="|item item${imageFileStat.count}|">-->
+<!--              <img width="100px" src=""-->
+<!--                th:src="@{/api/attach/img/{attachCode}/{storeFilename}(attachCode=${imageFile.code},storeFilename=${imageFile.storeFilename})}"-->
+<!--                alt="이미지를 불러올 수 없습니다.">-->
+<!--              <a href="" th:data-ftype="imageFiles" class="delBtn"-->
+<!--                th:onclick="|delAttachFile(event,${imageFile.uploadfileId})|">삭제</a>-->
+<!--            </div>-->
+<!--          </th:block>-->
+<!--        </div>-->
         <form class="board-write__modify width--900px"
           th:action="@{/community/article/{id}(id=${articleEditForm.articleNum})}">
           <button id="cancelBtn" type="button">취소</button>
@@ -143,15 +186,16 @@
       formData.append('articleCategory', form.articleCategory.options[articleCategory.selectedIndex].value);
       formData.append('articleTitle', form.articleTitle.value);
       formData.append('articleContents', window.editor.getData());
-      if(inputImageFiles.files.length == 0 && ![[${articleEditForm.imageFiles}]]){
-        formData.append('attachment', 'N');
-      } else {
+
+      if(document.getElementsByTagName('img').length > 0){
         formData.append('attachment', 'Y');
+      } else {
+        formData.append('attachment', 'N');
       }
       //2-2)이미지 파일
-      for (let i = 0; i < inputImageFiles.files.length; i++) {
-        formData.append('files', inputImageFiles.files[i]);
-      }
+      // for (let i = 0; i < inputImageFiles.files.length; i++) {
+      //   formData.append('files', inputImageFiles.files[i]);
+      // }
       //3)게시글 번호
       const id = [[${ articleEditForm.articleNum }]];
       //4)게시글 수정 처리

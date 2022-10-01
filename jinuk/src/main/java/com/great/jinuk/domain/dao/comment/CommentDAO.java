@@ -27,10 +27,10 @@ public interface CommentDAO {
 
   /**
    * 대댓글 작성 (필요할까?)
-   * @param comment 댓글 정보
+   * @param replyComment 댓글 정보
    * @return 작성된 댓글 수
    */
-  int saveReply(Comment comment);
+  int saveReply(Long pCommentNum, Comment replyComment);
 
 
   /**

@@ -29,10 +29,10 @@ public interface CommentSVC {
 
   /**
    * 대댓글 작성 (필요할까?)
-   * @param comment 댓글 정보
+   * @param replyComment 댓글 정보
    * @return 작성된 댓글 수
    */
-  Comment saveReply(Comment comment);
+  Comment saveReply(Long pCommentNum, Comment replyComment);
 
 
   /**
@@ -51,10 +51,10 @@ public interface CommentSVC {
   void delete(Long commentNum);
 
 
-  /**
-   * 게시물 댓글 건수 조회
-   * @param articleNum 게시글 번호
-   * @return 댓글 건수
-   */
-  int totalCountOfArticle(Long articleNum);
+//  /**
+//   * 게시물 댓글 건수 조회
+//   * @param articleNum 게시글 번호
+//   * @return 댓글 건수
+//   */
+//  int totalCountOfArticle(Long articleNum);
 }

@@ -24,5 +24,6 @@ public class Article {
   @DateTimeFormat(pattern = "yyyy.MM.dd.")
   private LocalDateTime createDate;      //  create_date           date,         작성일
   private Long views;                    //  views                 number(5)     조회수
+  private Long comments;                 //  comments              number(5)     댓글수
   private Member member;
 }

@@ -1,8 +1,9 @@
 --[커뮤니티]
 --게시글 목록 조회1 : 전체
-select article_num "게시글 번호", article_category "말머리", article_title "글 제목", attachment "첨부파일 유무", mem_nickname "닉네임", create_date "작성일", views "조회수"
+select article_num "게시글 번호", article_category "말머리", article_title "글 제목", attachment "첨부파일 유무", mem_nickname "닉네임", create_date "작성일", views "조회수", comments "댓글수"
 from article a, member m
 where a.mem_number = m.mem_number;
+
 
 --게시글 목록 조회2 : 카테고리별 분류
 select article_num "게시글 번호", article_category "말머리", article_title "글 제목", attachment "첨부파일 유무", mem_nickname "닉네임", create_date "작성일", views "조회수"
@@ -30,7 +31,7 @@ from article a, member m
 where a.mem_number = m.mem_number and m.mem_nickname = '닉네임2';
 
 --게시글 조회 (3번 게시글)
-select article_num "게시글 번호", article_category "말머리", article_title "글 제목", article_contents "글 내용", attachment "첨부파일 유무", mem_nickname "닉네임", create_date "작성일", views "조회수"
+select article_num "게시글 번호", article_category "말머리", article_title "글 제목", article_contents "글 내용", attachment "첨부파일 유무", mem_nickname "닉네임", create_date "작성일", views "조회수", comments "댓글수"
 from article a, member m
 where a.mem_number = m.mem_number and a.article_num = 3;
 
@@ -49,6 +50,10 @@ select * from article;
 
 --조회수 상승
 update article set views = views +1 where article_num = 1;
+
+--게시글 댓글 수 변경
+update article set comments =4 where article_num =1;
+commit;
 
 --[댓글]
 

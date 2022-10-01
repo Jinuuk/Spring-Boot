@@ -3,6 +3,7 @@ insert into member values (1, '닉네임1');
 insert into member values (2, '닉네임2');
 insert into member values (3, '닉네임3');
 insert into member values (4, '닉네임4');
+commit;
 
 --판매 임시 테이블 샘플 데이터 삽입
 insert into product_info values (1);
@@ -29,16 +30,18 @@ insert into profile values (3);
 insert into profile values (4);
 
 --커뮤니티 테이블 샘플 데이터 삽입
-insert into article values (1,1,'문의','글제목1','글내용1','Y',sysdate,0);
-insert into article values (2,2,'울산','글제목2','글내용2','N',sysdate,0);
-insert into article values (3,2,'부산','글제목3','글내용3','Y',sysdate,0);
-insert into article values (4,4,'서울','글제목4','글내용4','N',sysdate,0);
+insert into article values (1,1,'문의','글제목1','글내용1','Y',sysdate,0,0);
+insert into article values (2,2,'남구','글제목2','글내용2','N',sysdate,0,0);
+insert into article values (3,2,'북구','글제목3','글내용3','Y',sysdate,0,0);
+insert into article values (4,4,'울주군','글제목4','글내용4','N',sysdate,0,0);
+commit;
 
 --댓글 테이블 샘플 데이터 삽입
 insert into comments values (1,1,1,null,1,'댓글 내용1',sysdate,0);
 insert into comments values (1,2,2,null,2,'댓글 내용2',sysdate,0);
 insert into comments values (1,1,3,1,3,'댓글 내용3',sysdate,0);
 insert into comments values (1,2,4,2,4,'댓글 내용4',sysdate,0);
+commit;
 
 ----신고 테이블 샘플 데이터 삽입
 --insert into report values (1,1,2,sysdate,1,'신고 내용1',null,1,null,null);

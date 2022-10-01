@@ -103,6 +103,10 @@ td a {
   line-height: 40px;
 }
 
+.board__table-content tbody tr td .commentsCnt {
+  color : var(--main-color-yel);
+}
+
 .board__table-content tbody tr .left {
   text-align: left;
 }

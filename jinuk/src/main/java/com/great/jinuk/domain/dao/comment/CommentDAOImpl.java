@@ -33,6 +33,7 @@ public class CommentDAOImpl implements CommentDAO {
 
     sql.append("select article_num, comment_group, comment_num, p_comment_num, ");
     sql.append("m.mem_nickname, comment_contents, create_date, comment_indent ");
+//    sql.append("m.mem_nickname, comment_contents, TO_char(create_date, 'YYYY-MM-DD'), comment_indent ");
     sql.append("from comments c, member m ");
     sql.append("where c.mem_number = m.mem_number and c.comment_num = ? ");
 
@@ -110,11 +111,15 @@ public class CommentDAOImpl implements CommentDAO {
   /**
    * 대댓글 작성 (필요할까?)
    *
-   * @param comment 댓글 정보
+   * @param replyComment 댓글 정보
    * @return 작성된 댓글 수
    */
   @Override
-  public int saveReply(Comment comment) {
+  public int saveReply(Long pCommentNum, Comment replyComment) {
+
+    //부모 댓글 참조 반영
+    Comment comment = addInfoOfParentToChild(pCommentNum, replyComment);
+
     StringBuffer sql = new StringBuffer();
 
     sql.append("insert into comments ");
@@ -126,12 +131,24 @@ public class CommentDAOImpl implements CommentDAO {
         comment.getArticleNum(),
         comment.getCommentGroup(),
         comment.getCommentNum(),
-        comment.getPCommentNum(),
+        pCommentNum,
         comment.getMemNumber(),
         comment.getCommentContents()
     );
 
     return affectedRow;
+  }
+
+  //대댓글에 부모 댓글 정보 반영
+  private Comment addInfoOfParentToChild(Long pCommentNum, Comment replyComment) {
+
+    //부모 댓글
+    Optional<Comment> comment = find(pCommentNum);
+
+    //comment group 로직 : 대댓글의 comment group = 댓글의 comment group
+    replyComment.setCommentGroup(comment.get().getCommentGroup());
+
+    return replyComment;
   }
 
   /**

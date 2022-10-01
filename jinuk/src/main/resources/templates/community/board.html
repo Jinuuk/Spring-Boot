@@ -68,6 +68,7 @@
               <option value="">전체</option>
               <option th:value="문의">문의</option>
               <option th:value="남구">남구</option>
+              <option th:value="중구">중구</option>
               <option th:value="동구">동구</option>
               <option th:value="북구">북구</option>
               <option th:value="울주군">울주군</option>
@@ -102,12 +103,12 @@
                   <th:block th:if="${article.attachment == 'Y'}">
                     <a th:href="@{/community/article/{id}(id=${article.articleNum})}"
                        th:text="${article.articleTitle}">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi,
-                      architecto!</a><span> <i class="fa-regular fa-image"></i></span>
+                      architecto!</a><span th:class="commentsCnt" th:text="${article.comments} == 0 ? _ : |[${article.comments}]|"></span><span><i class="fa-regular fa-image"></i></span>
                   </th:block>
                   <th:block th:if="${article.attachment == 'N'}">
                     <a th:href="@{/community/article/{id}(id=${article.articleNum})}"
                        th:text="${article.articleTitle}">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi,
-                      architecto!</a>
+                      architecto!</a><span th:class="commentsCnt" th:text="${article.comments} == 0 ? _ : |[${article.comments}]|"></span>
                   </th:block>
                 </td>
                 <td><a href="" th:text="${article.member.memNickname}">Lorem.</a></td>
