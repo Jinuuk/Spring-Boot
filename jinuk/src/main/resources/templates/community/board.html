@@ -79,7 +79,8 @@
           <table class="board__table-content width--900px">
             <colgroup>
               <col width="5%" />
-              <col width="10%" />
+              <col width="5%" />
+              <col width="5%" />
               <col width="60%" />
               <col width="10%" />
               <col width="10%" />
@@ -87,6 +88,7 @@
             </colgroup>
             <thead>
               <tr>
+                <th></th>
                 <th></th>
                 <th></th>
                 <th>제목</th>
@@ -97,23 +99,35 @@
             </thead>
             <tbody>
               <tr th:each="article:${list}">
-                <td class="articleNum" th:text="${article.articleNum}">1</td>
-                <td class="articleCategory" th:text="${article.articleCategory}">문의</td>
-                <td class="articleTitle">
+                <td th:class="articleNum" th:text="${article.articleNum}">1</td>
+                <td th:class="articleCategory" th:text="${article.articleCategory}">문의</td>
+                <td th:class="attachment">
                   <th:block th:if="${article.attachment == 'Y'}">
-                    <a th:href="@{/community/article/{id}(id=${article.articleNum})}"
-                       th:text="${article.articleTitle}">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi,
-                      architecto!</a><span th:class="commentsCnt" th:text="${article.comments} == 0 ? _ : |[${article.comments}]|"></span><span><i class="fa-regular fa-image"></i></span>
+<!--                    <span><i class="fa-regular fa-image"></i></span>-->
+                    <span><i class="fa-solid fa-image"></i></span>
                   </th:block>
                   <th:block th:if="${article.attachment == 'N'}">
+                    <span><i class="fa-regular fa-file-lines"></i></span>
+                  </th:block>
+                </td>
+                <td class="articleTitle">
+<!--/*                  <th:block th:if="${article.attachment == 'Y'}">-->
+<!--                    <a th:href="@{/community/article/{id}(id=${article.articleNum})}"-->
+<!--                       th:text="${article.articleTitle}">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi,-->
+<!--                      architecto!</a><span th:class="commentsCnt" th:text="${article.comments} == 0 ? _ : |[${article.comments}]|"></span><span><i class="fa-regular fa-image"></i></span>-->
+<!--                  </th:block>-->
+<!--                  <th:block th:if="${article.attachment == 'N'}">-->
+<!--                    <a th:href="@{/community/article/{id}(id=${article.articleNum})}"-->
+<!--                       th:text="${article.articleTitle}">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi,-->
+<!--                      architecto!</a><span th:class="commentsCnt" th:text="${article.comments} == 0 ? _ : |[${article.comments}]|"></span>-->
+<!--                  </th:block>*/-->
                     <a th:href="@{/community/article/{id}(id=${article.articleNum})}"
                        th:text="${article.articleTitle}">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi,
                       architecto!</a><span th:class="commentsCnt" th:text="${article.comments} == 0 ? _ : |[${article.comments}]|"></span>
-                  </th:block>
                 </td>
                 <td><a href="" th:text="${article.member.memNickname}">Lorem.</a></td>
-                <td th:text="${{article.createDate}}">2022.08.01</td>
-                <td th:text="${article.views}">11</td>
+                <td th:class="createDate" th:text="${{article.createDate}}">2022.08.01</td>
+                <td th:class="views" th:text="${article.views}">11</td>
               </tr>
             </tbody>
           </table>

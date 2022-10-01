@@ -1,12 +1,11 @@
 package com.great.jinuk.domain.svc.comment;
 
 import com.great.jinuk.domain.dao.comment.Comment;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface CommentSVC {
+public interface CommentSVC_old {
 
   /**
    * 댓글 조회
@@ -28,13 +27,6 @@ public interface CommentSVC {
    */
   Comment save(Comment comment);
 
-  /**
-   * 댓글 작성 with 첨부파일
-   * @param comment 댓글 정보
-   * @param file 첨부 파일
-   * @return 댓글 정보
-   */
-  Comment save(Comment comment, MultipartFile file);
 
   /**
    * 대댓글 작성 (필요할까?)
@@ -42,7 +34,6 @@ public interface CommentSVC {
    * @return 댓글 정보
    */
   Comment saveReply(Long pCommentNum, Comment replyComment);
-
 
   /**
    * 댓글 수정
@@ -52,14 +43,6 @@ public interface CommentSVC {
    */
   Comment update(Long commentNum, Comment comment);
 
-  /**
-   * 댓글 수정 with 첨부파일
-   * @param commentNum 댓글 번호
-   * @param comment 댓글 정보
-   * @param file 첨부파일
-   * @return 댓글 정보
-   */
-  Comment update(Long commentNum, Comment comment, MultipartFile file);
 
   /**
    * 댓글 삭제

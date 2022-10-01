@@ -4,7 +4,6 @@ select article_num "게시글 번호", article_category "말머리", article_tit
 from article a, member m
 where a.mem_number = m.mem_number;
 
-
 --게시글 목록 조회2 : 카테고리별 분류
 select article_num "게시글 번호", article_category "말머리", article_title "글 제목", attachment "첨부파일 유무", mem_nickname "닉네임", create_date "작성일", views "조회수"
 from article a, member m

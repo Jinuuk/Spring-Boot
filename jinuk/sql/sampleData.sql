@@ -5,29 +5,29 @@ insert into member values (3, '닉네임3');
 insert into member values (4, '닉네임4');
 commit;
 
---판매 임시 테이블 샘플 데이터 삽입
-insert into product_info values (1);
-insert into product_info values (2);
-insert into product_info values (3);
-insert into product_info values (4);
-
---리뷰 임시 테이블 샘플 데이터 삽입
-insert into review values (1);
-insert into review values (2);
-insert into review values (3);
-insert into review values (4);
-
---공지 임시 테이블 샘플 데이터 삽입
-insert into notice values (1);
-insert into notice values (2);
-insert into notice values (3);
-insert into notice values (4);
-
---프로필 임시 테이블 샘플 데이터 삽입
-insert into profile values (1);
-insert into profile values (2);
-insert into profile values (3);
-insert into profile values (4);
+----판매 임시 테이블 샘플 데이터 삽입
+--insert into product_info values (1);
+--insert into product_info values (2);
+--insert into product_info values (3);
+--insert into product_info values (4);
+--
+----리뷰 임시 테이블 샘플 데이터 삽입
+--insert into review values (1);
+--insert into review values (2);
+--insert into review values (3);
+--insert into review values (4);
+--
+----공지 임시 테이블 샘플 데이터 삽입
+--insert into notice values (1);
+--insert into notice values (2);
+--insert into notice values (3);
+--insert into notice values (4);
+--
+----프로필 임시 테이블 샘플 데이터 삽입
+--insert into profile values (1);
+--insert into profile values (2);
+--insert into profile values (3);
+--insert into profile values (4);
 
 --커뮤니티 테이블 샘플 데이터 삽입
 insert into article values (1,1,'문의','글제목1','글내용1','Y',sysdate,0,0);
@@ -59,10 +59,10 @@ commit;
 
 --테이블 조회
 select * from member;
-select * from product_info;
-select * from review;
-select * from notice;
-select * from profile;
+--select * from product_info;
+--select * from review;
+--select * from notice;
+--select * from profile;
 select * from article;
 select * from comments;
 select * from uploadfile;

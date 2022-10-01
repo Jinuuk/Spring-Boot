@@ -2,6 +2,7 @@ package com.great.jinuk.web.form.comment;
 
 import com.great.jinuk.domain.Member;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
@@ -16,4 +17,5 @@ public class CommentAddForm {
   private LocalDateTime createDate; //  create_date          date,       -- 댓글 생성일
   private Long commentIndent;       //  comment_indent       number(3)  -- 대댓글 들여쓰기
   private Member member;
+  private MultipartFile file;        //상품 이미지 첨부 : 단건
 }

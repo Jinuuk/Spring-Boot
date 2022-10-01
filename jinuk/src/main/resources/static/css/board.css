@@ -123,6 +123,14 @@ td a {
   text-align: left;
 }
 
+.board__table-content tbody tr .createDate {
+   font-size: 12px;
+}
+
+.board__table-content tbody tr .views {
+   font-size: 12px;
+}
+
 
 .board__table-content tbody tr td a {
   display: inline-block;

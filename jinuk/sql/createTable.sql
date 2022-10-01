@@ -22,29 +22,29 @@ create table member (
   primary key (mem_number)
 );
 
---판매 임시 테이블 생성
-create table product_info (
-  p_number number(6),
-  primary key (p_number)
-);
+----판매 임시 테이블 생성
+--create table product_info (
+--  p_number number(6),
+--  primary key (p_number)
+--);
 
---리뷰 임시 테이블 생성
-create table review (
-  review_number number(6),
-  primary key (review_number)
-);
+----리뷰 임시 테이블 생성
+--create table review (
+--  review_number number(6),
+--  primary key (review_number)
+--);
 
---공지사항 임시 테이블 생성
-create table notice (
-  notice_number number(6),
-  primary key (notice_number)
-);
+----공지사항 임시 테이블 생성
+--create table notice (
+--  notice_number number(6),
+--  primary key (notice_number)
+--);
 
---프로필 임시 테이블 생성
-create table profile (
-  profile_number number(6),
-  primary key (profile_number)
-);
+----프로필 임시 테이블 생성
+--create table profile (
+--  profile_number number(6),
+--  primary key (profile_number)
+--);
 
 --커뮤니티 테이블 생성
 create table article (
