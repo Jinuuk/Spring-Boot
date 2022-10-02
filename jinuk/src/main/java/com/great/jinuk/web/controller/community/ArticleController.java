@@ -120,7 +120,7 @@ public class ArticleController {
   //글쓰기 처리
   @ResponseBody
   @PostMapping("/write")
-  public ApiResponse<Object> write(@Valid ArticleAddForm articleAddForm,
+  public ApiResponse<Object> write(@Valid @RequestBody ArticleAddForm articleAddForm,
                                    BindingResult bindingResult) {
 
     log.info("articleAddForm : {}", articleAddForm);
@@ -159,7 +159,7 @@ public class ArticleController {
   @ResponseBody
   @PatchMapping("edit/{id}")
   public ApiResponse<Object> edit(@PathVariable("id") Long articleNum,
-                                  @Valid ArticleEditForm articleEditForm,
+                                  @Valid @RequestBody ArticleEditForm articleEditForm,
                                   BindingResult bindingResult) {
 
     log.info("articleEditForm : {}", articleEditForm);

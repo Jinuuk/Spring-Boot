@@ -14,6 +14,7 @@ drop table member;
 drop sequence article_article_num_seq;
 drop sequence comments_comment_num_seq;
 drop sequence uploadfile_uploadfile_id_seq;
+drop sequence comments_comment_group_seq
 
 --회원 임시 테이블 생성
 create table member (
@@ -90,10 +91,9 @@ create table comments (
   p_comment_num        number(6),  -- 부모 댓글 번호
   mem_number           number(6),  -- 회원 번호
   comment_contents     clob,       -- 댓글 내용
-  create_date          date,       -- 댓글 생성일
-  comment_indent       number(3)  -- 대댓글 들여쓰기
+  create_date          date       -- 댓글 생성일
+  --comment_indent       number(3)  -- 대댓글 들여쓰기
 );
-
 
 --primary key
 alter table comments add constraint comments_comment_num_pk primary key(comment_num);
@@ -103,12 +103,22 @@ alter table comments add constraint comments_mem_number_fk foreign key(mem_numbe
 alter table comments add constraint comments_p_comment_num_fk foreign key(p_comment_num) references comments(comment_num) on delete set null;
 --default
 alter table comments modify create_date date default sysdate;
-alter table comments modify comment_indent number default 0;
+--alter table comments modify comment_indent number(3) default 0;
 --not null
 alter table comments modify comment_contents constraint comments_comment_contents_nn not null;
 
 --댓글 번호 시퀀스 생성
 create sequence comments_comment_num_seq
+increment by 1
+start with 1
+minvalue 1
+maxvalue 999999
+nocycle
+nocache
+noorder;
+
+--댓글 그룹 번호 시퀀스 생성
+create sequence comments_comment_group_seq
 increment by 1
 start with 1
 minvalue 1

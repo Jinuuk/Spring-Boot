@@ -104,6 +104,7 @@ td a {
 }
 
 .board__table-content tbody tr td .commentsCnt {
+  font-size: 12px;
   color : var(--main-color-yel);
 }
 

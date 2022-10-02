@@ -42,10 +42,12 @@ insert into article values (4,4,'울주군','글제목4','글내용4','N',sysdat
 commit;
 
 --댓글 테이블 샘플 데이터 삽입
-insert into comments values (1,1,1,null,1,'댓글 내용1',sysdate,0);
-insert into comments values (1,2,2,null,2,'댓글 내용2',sysdate,0);
-insert into comments values (1,1,3,1,3,'댓글 내용3',sysdate,0);
-insert into comments values (1,2,4,2,4,'댓글 내용4',sysdate,0);
+insert into comments values (1,1,1,null,1,'댓글 내용1',sysdate);
+insert into comments values (1,2,2,null,2,'댓글 내용2',sysdate);
+insert into comments values (1,1,3,1,3,'댓글 내용3',sysdate);
+insert into comments values (1,2,4,2,4,'댓글 내용4',sysdate);
+select comments_comment_group_seq.nextval from dual;
+select comments_comment_group_seq.nextval from dual;
 commit;
 
 ----신고 테이블 샘플 데이터 삽입

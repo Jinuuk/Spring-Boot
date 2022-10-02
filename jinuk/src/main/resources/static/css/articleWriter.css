@@ -74,10 +74,11 @@ button:hover {
 
 .article__bullet {
   display:flex;
+  padding-left: 7px;
 }
 
 .article__title {
-  padding:0;
+  padding:0 0 0 7px;
   margin:0;
   
 }
@@ -202,7 +203,7 @@ button:hover {
   height: 30px;
 }
 
-.comment__write .reply-box .reply-box__bottom .reply-box__register-btn {
+.comment__write .reply-box .reply-box__bottom #commentSaveBtn{
   width: 60px;
   height: 25px;
   margin:5px 0 10px 5px;
@@ -212,6 +213,32 @@ button:hover {
   background-color: var(--main-color-yel);
   color:black;
 }
+
+.comment__write .reply-box .reply-box__bottom #replySaveBtn{
+  width: 60px;
+  height: 25px;
+  margin:5px 0 10px 5px;
+  border:none;
+  border-radius: 8px;
+  font-weight: bold;
+  background-color: var(--main-color-yel);
+  color:black;
+}
+
+.comment__write .reply-box .reply-box__bottom #replyCancelBtn{
+  width: 60px;
+  height: 25px;
+  margin:5px 0 10px 5px;
+  border:none;
+  border-radius: 8px;
+  font-weight: bold;
+  background-color: var(--mainBtn-color-gre);
+  color:black;
+}
+
+
+
+.comment__write .reply-box .reply-box__bottom
 
 /* article__bottom */
 .article__bottom {

@@ -308,7 +308,7 @@ public class ArticleDAOImpl implements ArticleDAO {
    * @return 수정건수
    */
   @Override
-  public int updateCommentsCnt(Long articleNum, Long totalCountOfArticle) {
+  public int updateCommentsCnt(Long totalCountOfArticle,Long articleNum) {
     String sql = "update article set comments = ? where article_num = ? ";
     int affectedRow = jt.update(sql,totalCountOfArticle,articleNum);
     return affectedRow;

@@ -32,8 +32,7 @@ public class CommentDAOImpl implements CommentDAO {
     StringBuffer sql = new StringBuffer();
 
     sql.append("select article_num, comment_group, comment_num, p_comment_num, ");
-    sql.append("m.mem_nickname, comment_contents, create_date, comment_indent ");
-//    sql.append("m.mem_nickname, comment_contents, TO_char(create_date, 'YYYY-MM-DD'), comment_indent ");
+    sql.append("m.mem_nickname, comment_contents, create_date ");
     sql.append("from comments c, member m ");
     sql.append("where c.mem_number = m.mem_number and c.comment_num = ? ");
 
@@ -65,7 +64,7 @@ public class CommentDAOImpl implements CommentDAO {
     StringBuffer sql = new StringBuffer();
 
     sql.append("select article_num, comment_group, comment_num, p_comment_num, ");
-    sql.append("m.mem_nickname, comment_contents, create_date, comment_indent ");
+    sql.append("m.mem_nickname, comment_contents, create_date ");
     sql.append("from comments c, member m ");
     sql.append("where c.mem_number = m.mem_number and c.article_num = ? ");
     sql.append("order by comment_group asc, comment_num asc ");
@@ -96,11 +95,11 @@ public class CommentDAOImpl implements CommentDAO {
     sql.append("insert into comments ");
     sql.append("(article_num, comment_group, comment_num, ");
     sql.append("mem_number, comment_contents, create_date) ");
-    sql.append("values (?,?,?,?,?,sysdate) ");
+    sql.append("values (?,comments_comment_group_seq.nextval,?,?,?,sysdate) ");
 
     int affectedRow = jt.update(sql.toString(),
         comment.getArticleNum(),
-        comment.getCommentGroup(),
+//        comment.getCommentGroup(),
         comment.getCommentNum(),
         comment.getMemNumber(),
         comment.getCommentContents());
@@ -124,8 +123,8 @@ public class CommentDAOImpl implements CommentDAO {
 
     sql.append("insert into comments ");
     sql.append("(article_num, comment_group, comment_num, p_comment_num, ");
-    sql.append("mem_number, comment_contents, create_date, comment_indent) ");
-    sql.append("values (?,?,?,?,?,?, sysdate, 5) ");
+    sql.append("mem_number, comment_contents, create_date) ");
+    sql.append("values (?,?,?,?,?,?, sysdate) ");
 
     int affectedRow = jt.update(sql.toString(),
         comment.getArticleNum(),
@@ -210,7 +209,7 @@ public class CommentDAOImpl implements CommentDAO {
   public int totalCountOfArticle(Long articleNum) {
 
     String sql = "select count(*) from comments where article_num = ? ";
-    Integer cntPerArticle = jt.queryForObject(sql, Integer.class);
+    Integer cntPerArticle = jt.queryForObject(sql, Integer.class, articleNum);
     return cntPerArticle;
   }
 }

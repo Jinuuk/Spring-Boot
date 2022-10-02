@@ -94,37 +94,50 @@
 </div>
 
 <script>
+    //전역변수
+    const form = {
+      articleCategory: document.getElementById('articleCategory'),
+      articleTitle: document.getElementById('articleTitle'),
+      articleContents: document.getElementById('articleContents')
+      //attachment
+    }
+
+    //폼 데이터 객체 생성
+    const formData = new FormData();
+
     //등록 버튼 클릭
     addBtn.addEventListener('click', e => {
       console.log("등록 버튼 클릭");
       //1)유효성 체크
       if (!validChk()) return;
       //2)입력 데이터 가져오기
-      const attachmentValue = document.getElementsByTagName('img').length > 0 ? 'Y' : 'N';
-      const article = {
-        memNumber : 1,
-        articleCategory : articleCategory.options[articleCategory.selectedIndex].value,
-        articleTitle : articleTitle.value,
-        articleContents : window.editor.getData(),
-        attachment : attachmentValue
-      };
+      //2-1)기존 게시글 관련 데이터
+      formData.append('memNumber', '1'); //세션 설정 후 수정
+      formData.append('articleCategory', form.articleCategory.options[articleCategory.selectedIndex].value);
+      formData.append('articleTitle', form.articleTitle.value);
+      //formData.append('articleContents', form.articleContents.value.replace(/(?:\r\n|\r|\n)/g, '<br>'));
+      formData.append('articleContents', window.editor.getData());
+
+      if(document.getElementsByTagName('img').length > 0){
+        formData.append('attachment', 'Y');
+      } else {
+        formData.append('attachment', 'N');
+      }
+
       //3)게시글 등록 처리
-      add(article);
+      add(formData);
     });
 
     //게시글 등록 함수
-    function add(article) {
-      console.log(article);
+    function add(formData) {
+      console.log(formData);
       const url = `http://localhost:9080/community/write`;
       fetch(url, {
         method: 'POST',
-        headers:{
-          'Content-Type':'application/json',
-          'Accept':'application/json'
-        },
-        body: JSON.stringify(article) 
+        body: formData
       }).then(res => res.json())
         .then(data => {
+          //console.log(data.data.articleNum);
           location.href = `/community/article/${data.data.articleNum}`;
         })
         .catch(err => console.log(err));
@@ -133,27 +146,39 @@
     //취소 버튼 클릭
     cancelBtn.addEventListener('click', e => {
       if (!confirm('게시글 작성을 취소하시겠습니까?')) return;
-      location.href = `/community/list`;
+      location.href = `/community`;
     });
 
     //유효성 체크 함수
     function validChk() {
       const regex = / /gi;
       //제목 입력 필수
-      if (articleTitle.value.replace(regex, '').length == 0) {
+      if (form.articleTitle.value.replace(regex, '').length == 0) {
         alert('제목을 입력해주세요.');
         return;
       }
       //제목 50자 이하
-      if (articleTitle.value.length > 50) {
+      if (form.articleTitle.value.length > 50) {
         alert('제목은 50자 이내여야합니다.');
         return;
       }
       //내용 입력 필수
+      /*
+      if (form.articleContents.value.replace(regex, '').length == 0) {
+        alert('내용을 입력해주세요.');
+        return;
+      }
+      */
       if (window.editor.getData().length == 0) {
         alert('내용을 입력해주세요.');
         return;
       }
+      //내용 500자 이하
+      if (form.articleContents.value.length > 500) {
+        alert('내용은 500자 이내여야합니다.');
+        return;
+      }
+
       return true;
     }
 

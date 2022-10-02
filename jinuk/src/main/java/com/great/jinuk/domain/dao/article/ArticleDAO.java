@@ -95,7 +95,7 @@ public interface ArticleDAO {
    * @param totalCountOfArticle 댓글 수
    * @return 수정건수
    */
-  int updateCommentsCnt(Long articleNum, Long totalCountOfArticle);
+  int updateCommentsCnt(Long totalCountOfArticle, Long articleNum);
 
   /**
    * 전체 건수

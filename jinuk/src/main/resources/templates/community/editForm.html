@@ -64,9 +64,8 @@
         <div class="board-write__article-head width--900px">
           <div class="board-write__article-bullet">
             <select name="" id="articleCategory">
-<!--              <option id="전체" value="전체">전체</option>-->
               <option id="남구" value="남구">남구</option>
-              <option value="중구">중구</option>
+              <option id ="중구" value="중구">중구</option>
               <option id="동구" value="동구">동구</option>
               <option id="북구" value="북구">북구</option>
               <option id="울주군" value="울주군">울주군</option>
@@ -77,70 +76,16 @@
             <input type="text" id="articleTitle" placeholder="제목을 입력하세요." autofocus>
           </div>
         </div>
-        <!-- <div class="board-write__tool width--900px">
-          <div class="board-write__tool-box">
-            <ul>
-              <li>
-                <select name="" id="">
-                  <option value="">11</option>
-                  <option value="">13</option>
-                  <option value="">15</option>
-                  <option value="">17</option>
-                  <option value="">19</option>
-                  <option value="">21</option>
-                </select>
-              </li>
-              <li>
-                <button><i class="fa-solid fa-bold"></i></button>
-              </li>
-              <li>
-                <button><i class="fa-solid fa-italic"></i></button>
-              </li>
-              <li>
-                <button><i class="fa-solid fa-underline"></i></button>
-              </li>
-              <li>
-                <div class="file">
-                  <button>
-                    <span><i class="fa-solid fa-image"></i></span>
-                  </button>
-                </div>
-              </li>
-              <li>
-                <div class="file">
-                  <button>
-                    <span><i class="fa-brands fa-youtube"></i></span>
-                  </button>
-                </div>
-              </li>
-              <li>
-                <input type="file" multiple accept="image/*" id="inputImageFiles">
-              </li>
-            </ul>
-          </div>
-        </div> -->
         <div class="board-write__article-main width--900px">
           <textarea class="board-write__article-content" id="articleContents" cols="30" rows="10"
             placeholder="내용을 작성하세요." autofocus></textarea>
         </div>
-<!--        <div id="imageFiles" th:if="${articleEditForm.imageFiles}">-->
-<!--          <th:block th:each="imageFile:${articleEditForm.imageFiles}">-->
-<!--            <div th:class="|item item${imageFileStat.count}|">-->
-<!--              <img width="100px" src=""-->
-<!--                th:src="@{/api/attach/img/{attachCode}/{storeFilename}(attachCode=${imageFile.code},storeFilename=${imageFile.storeFilename})}"-->
-<!--                alt="이미지를 불러올 수 없습니다.">-->
-<!--              <a href="" th:data-ftype="imageFiles" class="delBtn"-->
-<!--                th:onclick="|delAttachFile(event,${imageFile.uploadfileId})|">삭제</a>-->
-<!--            </div>-->
-<!--          </th:block>-->
-<!--        </div>-->
         <form class="board-write__modify width--900px"
           th:action="@{/community/article/{id}(id=${articleEditForm.articleNum})}">
           <button id="cancelBtn" type="button">취소</button>
           <button id="modifyBtn" type="button">수정</button>
         </form>
       </div>
-
     </main>
     <footer class="footer container">
       <p class="content"></p>
@@ -148,12 +93,9 @@
   </div>
   <script th:inline="javascript">
     //articleEditForm에서 제목, 내용 추출
-
     const titleValue = [[${ articleEditForm.articleTitle }]];
-    const contentsValue = [[${ articleEditForm.articleContents }]]; //.replaceAll("<br>", "\r\n");
+    const contentsValue = [[${ articleEditForm.articleContents }]];
     const categoryValue = [[${ articleEditForm.articleCategory }]];
-
-
 
     //추출한 제목, 내용을 다시 삽입
     const $title = document.getElementById('articleTitle');
@@ -161,20 +103,9 @@
     const $option = document.getElementById(categoryValue);
     
     $option.setAttribute('selected','');
-    $title.value = titleValue;
-    $contents.textContent = contentsValue.replaceAll("<br>", "\r\n");
+    articleTitle.value = titleValue;
+    $contents.textContent = contentsValue;
 
-
-    //전역변수
-    const form = {
-      articleCategory: document.getElementById('articleCategory'),
-      articleTitle: document.getElementById('articleTitle'),
-      articleContents: document.getElementById('articleContents')
-      //attachment
-    }
-
-    //폼 데이터 객체 생성
-    const formData = new FormData();
 
     //수정 버튼 클릭
     modifyBtn.addEventListener('click', e => {
@@ -182,34 +113,32 @@
       //1)유효성 체크
       if (!validChk()) return;
       //2)입력 데이터 가져오기
-      //2-1)기존 게시글 관련 데이터
-      formData.append('articleCategory', form.articleCategory.options[articleCategory.selectedIndex].value);
-      formData.append('articleTitle', form.articleTitle.value);
-      formData.append('articleContents', window.editor.getData());
-
-      if(document.getElementsByTagName('img').length > 0){
-        formData.append('attachment', 'Y');
-      } else {
-        formData.append('attachment', 'N');
-      }
-      //2-2)이미지 파일
-      // for (let i = 0; i < inputImageFiles.files.length; i++) {
-      //   formData.append('files', inputImageFiles.files[i]);
-      // }
+      const attachmentValue = document.getElementsByTagName('img').length > 0 ? 'Y' : 'N';
+      const article = {
+        memNumber : 1,
+        articleCategory : articleCategory.options[articleCategory.selectedIndex].value,
+        articleTitle : articleTitle.value,
+        articleContents : window.editor.getData(),
+        attachment : attachmentValue
+      };
       //3)게시글 번호
       const id = [[${ articleEditForm.articleNum }]];
       //4)게시글 수정 처리
-      modify(formData, id);
+      modify(article, id);
     });
 
     //게시글 수정 함수
-    function modify(formData, id) {
-      console.log(formData);
+    function modify(article, id) {
+      console.log(article);
       console.log(id);
       const url = `http://localhost:9080/community/edit/${id}`;
       fetch(url, {
         method: 'PATCH',
-        body: formData
+        headers:{
+          'Content-Type':'application/json',
+          'Accept':'application/json'
+        },
+        body: JSON.stringify(article) 
       }).then(res => res.json())
         .then(data => {
           location.href = `/community/article/${data.data.articleNum}`;
@@ -220,7 +149,7 @@
     //취소 버튼 클릭
     cancelBtn.addEventListener('click', e => {
       if (!confirm('게시글 수정을 취소하시겠습니까?')) return;
-      location.href = [[@{/community/article / { id }(id = ${ articleEditForm.articleNum })
+      location.href = [[@{/community/article/{id}(id=${articleEditForm.articleNum})
     }]];
       });
 
@@ -228,12 +157,12 @@
     function validChk() {
       const regex = / /gi;
       //제목 입력 필수
-      if (form.articleTitle.value.replace(regex, '').length == 0) {
+      if (articleTitle.value.replace(regex, '').length == 0) {
         alert('제목을 입력해주세요.');
         return;
       }
       //제목 50자 이하
-      if (form.articleTitle.value.length > 50) {
+      if (articleTitle.value.length > 50) {
         alert('제목은 50자 이내여야합니다.');
         return;
       }
@@ -244,39 +173,6 @@
       }
 
       return true;
-    }
-
-    //첨부파일 삭제
-    function delAttachFile(event, fid) {
-      event.preventDefault(); //기본 이벤트 막기
-
-      if (!confirm('삭제하시겠습니까?')) return;
-      const url = `/api/attach/${fid}`;
-      fetch(url, {
-        method: 'DELETE',
-        headers: {
-          'Accept': 'application/json'
-        }
-      }).then(res => res.json())
-        .then(res => {
-          console.log(res);
-          if (res.header.rtcd == '00') {
-            const currEle = event.target;                 //현재 요소(삭제버튼)
-            const ftype = currEle.dataset.ftype;          //첨부유형
-            const toDelEle = currEle.closest('.item')     //삭제할 요소(첨부)
-            let parentEle = "";
-            switch (ftype) {
-              case "attachFile":
-                parentEle = toDelEle.closest('#attachFile'); break;
-              case "imageFiles":
-                parentEle = toDelEle.closest('#imageFiles'); break;
-            }
-            parentEle.removeChild(toDelEle);
-          } else {
-            throw new Error('삭제오류');
-          }
-        })
-        .catch(err => console.log(err));
     }
 
   //ckeditor

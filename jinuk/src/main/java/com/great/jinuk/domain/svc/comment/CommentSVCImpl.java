@@ -61,8 +61,9 @@ public class CommentSVCImpl implements CommentSVC {
     commentDAO.save(comment);
 
     int totalCountOfArticle = commentDAO.totalCountOfArticle(comment.getArticleNum());
+    log.info("댓글작성1");
     articleDAO.updateCommentsCnt(Long.valueOf(totalCountOfArticle),comment.getArticleNum());
-
+    log.info("댓글작성2");
     return commentDAO.find(generatedCommentNum).get();
   }
 

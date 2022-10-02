@@ -111,16 +111,6 @@
                   </th:block>
                 </td>
                 <td class="articleTitle">
-<!--/*                  <th:block th:if="${article.attachment == 'Y'}">-->
-<!--                    <a th:href="@{/community/article/{id}(id=${article.articleNum})}"-->
-<!--                       th:text="${article.articleTitle}">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi,-->
-<!--                      architecto!</a><span th:class="commentsCnt" th:text="${article.comments} == 0 ? _ : |[${article.comments}]|"></span><span><i class="fa-regular fa-image"></i></span>-->
-<!--                  </th:block>-->
-<!--                  <th:block th:if="${article.attachment == 'N'}">-->
-<!--                    <a th:href="@{/community/article/{id}(id=${article.articleNum})}"-->
-<!--                       th:text="${article.articleTitle}">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi,-->
-<!--                      architecto!</a><span th:class="commentsCnt" th:text="${article.comments} == 0 ? _ : |[${article.comments}]|"></span>-->
-<!--                  </th:block>*/-->
                     <a th:href="@{/community/article/{id}(id=${article.articleNum})}"
                        th:text="${article.articleTitle}">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi,
                       architecto!</a><span th:class="commentsCnt" th:text="${article.comments} == 0 ? _ : |[${article.comments}]|"></span>
@@ -231,7 +221,7 @@
     //검색 버튼 클릭시
     $searchBtn?.addEventListener('click', search_f);
 
-    //키워드 입력필드에 엔터키 눌렀을때 검색
+    //키워드 입력 필드에 엔터 눌렀을 때 검색
     $keyword?.addEventListener('keydown', e=>{
         if(e.key === 'Enter') {
             search_f(e);

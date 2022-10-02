@@ -16,43 +16,43 @@
   <div class="wrapper">
     <header class="header container">
       <nav class="top-menu content">
-        <a href="" class="top-menu__join">회원가입</a>
-        <a href="" class="top-menu__login">로그인</a>
-        <a href="" class="top-menu__cs">고객센터</a>
+        <a href="#" class="top-menu__join">회원가입</a>
+        <a href="#" class="top-menu__login">로그인</a>
+        <a href="#" class="top-menu__cs">고객센터</a>
       </nav>
-      <div class="logo content"><a href="">GR<span>EAT</span></a></div>
+      <div class="logo content"><a href="#">GR<span>EAT</span></a></div>
       <nav class="bottom-menu content">
         <div class="category">
           <ul>
             <li class="food-category">업종별 카테고리
               <ul>
-                <li><a href="">한식</a></li>
-                <li><a href="">중식</a></li>
-                <li><a href="">일식</a></li>
-                <li><a href="">양식</a></li>
-                <li><a href="">아시안식</a></li>
-                <li><a href="">분식</a></li>
-                <li><a href="">도시락</a></li>
-                <li><a href="">카페/디저트</a></li>
+                <li><a href="#">한식</a></li>
+                <li><a href="#">중식</a></li>
+                <li><a href="#">일식</a></li>
+                <li><a href="#">양식</a></li>
+                <li><a href="#">아시안식</a></li>
+                <li><a href="#">분식</a></li>
+                <li><a href="#">도시락</a></li>
+                <li><a href="#">카페/디저트</a></li>
               </ul>
             </li>
             <li class="region-category">지역별 카테고리
               <ul>
-                <li><a href="">서울</a></li>
-                <li><a href="">인천</a></li>
-                <li><a href="">대전</a></li>
-                <li><a href="">광주</a></li>
-                <li><a href="">대구</a></li>
-                <li><a href="">울산</a></li>
-                <li><a href="">부산</a></li>
-                <li><a href="">제주</a></li>
+                <li><a href="#">서울</a></li>
+                <li><a href="#">인천</a></li>
+                <li><a href="#">대전</a></li>
+                <li><a href="#">광주</a></li>
+                <li><a href="#">대구</a></li>
+                <li><a href="#">울산</a></li>
+                <li><a href="#">부산</a></li>
+                <li><a href="#">제주</a></li>
               </ul>
             </li>
           </ul>
         </div>
         <div class="search">
           <input type="text" class="search__search-box" placeholder="  검색어를 입력하세요.">
-          <a href="" class="search__search-icon"><i class="fa-solid fa-magnifying-glass"></i></a>
+          <a href="#" class="search__search-icon"><i class="fa-solid fa-magnifying-glass"></i></a>
         </div>
       </nav>
     </header>
@@ -64,8 +64,8 @@
           <h2 class="article__title" th:text="*{articleTitle}">글 제목</h2>
           <div class="article__information">
             <div class="article__profile">
-              <a href=""><img class="profileImage" src="/img/profile.jpg" alt=""></i></a>
-              <a href="" th:text="*{member.memNickname}">user</a>
+              <a href="#"><img class="profileImage" src="/img/profile.jpg" alt=""></i></a>
+              <a href="#" th:text="*{member.memNickname}">user</a>
             </div>
             <div class="article__write-information">
               <span class="font-size--12px" th:text="*{{createDate}}">2022.08.01 13:48</span>
@@ -75,13 +75,6 @@
         </div>
 
         <div class="article__content width--900px">
-<!--          <div th:if="*{imageFiles}">-->
-<!--            <div th:each="imageFile:*{imageFiles}">-->
-<!--              <img width="800px" src=""-->
-<!--                th:src="@{/api/attach/img/{attachCode}/{storeFilename}(attachCode=${imageFile.code},storeFilename=${imageFile.storeFilename})}"-->
-<!--                alt="이미지를 불러올 수 없습니다.">-->
-<!--            </div>-->
-<!--          </div>-->
           <textarea class="board-write__article-content" name="" id="articleContents" cols="30" rows="10"
                     placeholder="내용을 작성하세요." autofocus th:text="*{articleContents}"></textarea>
           <form th:action="@{/community/edit/{id}(id=${articleForm.articleNum})}">
@@ -98,7 +91,7 @@
           <div class="comment__title">
             <span><i class="fa-regular fa-comments"></i></span>
             <span>댓글</span>
-            <span class="font-size--13px" th:text="*{comments}">5</span>
+            <span class="font-size--13px" id="commentsCnt" th:text="*{comments}">5</span>
           </div>
 
           <div class="comment__list">
@@ -106,15 +99,15 @@
               <li class="writer">
                 <div class="comment-box">
                   <div class="comment-box__profile">
-                    <a href=""><img src="/img/profile.jpg" class="profileImage" alt=""></a>
+                    <a href="#"><img src="/img/profile.jpg" class="profileImage" alt=""></a>
                   </div>
                   <div class="comment-box__contents">
                     <div class="comment-box__top">
-                      <a href="" class="comment-box__nickname font-size--13px  ">닉네임</a>
+                      <a href="#" class="comment-box__nickname font-size--13px  ">닉네임</a>
                       <div class="comment-box__info">
-                        <a class="comment-box__modify font-size--12px" href=""><i
+                        <a class="comment-box__modify font-size--12px" href="#"><i
                             class="fa-regular fa-pen-to-square"></i></a>
-                        <a class="comment-box__delete font-size--12px" href=""><i
+                        <a class="comment-box__delete font-size--12px" href="#"><i
                             class="fa-regular fa-trash-can"></i></a>
                       </div>
                     </div>
@@ -124,7 +117,7 @@
                     </div>
                     <div class="comment-box__bottom">
                       <span class="comment-box__date font-size--12px">2022.08.02 14:25</span>
-                      <a class="comment-box__reply font-size--12px" href=""><i class="fa-solid fa-reply"></i></a>
+                      <a class="comment-box__reply font-size--12px" href="#"><i class="fa-solid fa-reply"></i></a>
                     </div>
                   </div>
                 </div>
@@ -133,13 +126,13 @@
               <li class="viewer">
                 <div class="comment-box">
                   <div class="comment-box__profile">
-                    <a href=""><img src="/img/profile.jpg"  class="profileImage" alt=""></a>
+                    <a href="#"><img src="/img/profile.jpg"  class="profileImage" alt=""></a>
                   </div>
                   <div class="comment-box__contents">
                     <div class="comment-box__top">
-                      <a href="" class="comment-box__nickname font-size--13px  ">닉네임</a>
+                      <a href="#" class="comment-box__nickname font-size--13px  ">닉네임</a>
                       <div class="comment-box__info">
-                        <a class="comment-box__report font-size--12px" href=""><i class="fa-solid fa-flag"></i></a>
+                        <a class="comment-box__report font-size--12px" href="#"><i class="fa-solid fa-flag"></i></a>
                       </div>
                     </div>
                     <div class="comment-box__middle">
@@ -148,7 +141,7 @@
                     </div>
                     <div class="comment-box__bottom">
                       <span class="comment-box__date font-size--12px">2022.08.02 14:25</span>
-                      <a class="comment-box__reply font-size--12px" href=""><i class="fa-solid fa-reply"></i></a>
+                      <a class="comment-box__reply font-size--12px" href="#"><i class="fa-solid fa-reply"></i></a>
                     </div>
                   </div>
                 </div>
@@ -160,11 +153,12 @@
                     <span class="reply-box__nickname font-size--13px">닉네임</span>
                   </div>
                   <div class="reply-box__middle">
-                    <textarea class="reply-box__text" name="" id="" cols="30" rows="10" placeholder="댓글을 입력하세요."
+                    <textarea class="reply-box__text" name="" id="commentReplyBox" cols="30" rows="10" placeholder="댓글을 입력하세요."
                       autofocus></textarea>
                   </div>
                   <div class="reply-box__bottom">
-                    <button class="reply-box__register-btn font-size--12px" href="">등록</button>
+                    <button class="reply-box__register-btn font-size--12px" href="#">취소</button>
+                    <button class="reply-box__register-btn font-size--12px" href="#">등록</button>
                   </div>
                 </div>
               </li>
@@ -172,13 +166,13 @@
               <li class="viewer">
                 <div class="comment-box">
                   <div class="comment-box__profile">
-                    <a href=""><img src="/img/profile.jpg" class="profileImage" alt=""></a>
+                    <a href="#"><img src="/img/profile.jpg" class="profileImage" alt=""></a>
                   </div>
                   <div class="comment-box__contents">
                     <div class="comment-box__top">
-                      <a href="" class="comment-box__nickname font-size--13px  ">닉네임</a>
+                      <a href="#" class="comment-box__nickname font-size--13px  ">닉네임</a>
                       <div class="comment-box__info">
-                        <a class="comment-box__report font-size--12px" href=""><i class="fa-solid fa-flag"></i></a>
+                        <a class="comment-box__report font-size--12px" href="#"><i class="fa-solid fa-flag"></i></a>
                       </div>
                     </div>
                     <div class="comment-box__middle">
@@ -187,7 +181,7 @@
                     </div>
                     <div class="comment-box__bottom">
                       <span class="comment-box__date font-size--12px">2022.08.02 14:25</span>
-                      <a class="comment-box__reply font-size--12px" href=""><i class="fa-solid fa-reply"></i></a>
+                      <a class="comment-box__reply font-size--12px" href="#"><i class="fa-solid fa-reply"></i></a>
                     </div>
                   </div>
                 </div>
@@ -196,13 +190,13 @@
               <li class="reply-viewer">
                 <div class="comment-box">
                   <div class="comment-box__profile">
-                    <a href=""><img src="/img/profile.jpg" class="profileImage" alt=""></a>
+                    <a href="#"><img src="/img/profile.jpg" class="profileImage" alt=""></a>
                   </div>
                   <div class="comment-box__contents">
                     <div class="comment-box__top">
-                      <a href="" class="comment-box__nickname font-size--13px  ">닉네임</a>
+                      <a href="#" class="comment-box__nickname font-size--13px  ">닉네임</a>
                       <div class="comment-box__info">
-                        <a class="comment-box__report font-size--12px" href=""><i class="fa-solid fa-flag"></i></a>
+                        <a class="comment-box__report font-size--12px" href="#"><i class="fa-solid fa-flag"></i></a>
                       </div>
                     </div>
                     <div class="comment-box__middle">
@@ -211,7 +205,7 @@
                     </div>
                     <div class="comment-box__bottom">
                       <span class="comment-box__date font-size--12px">2022.08.02 14:25</span>
-                      <a class="comment-box__reply font-size--12px" href=""><i class="fa-solid fa-reply"></i></a>
+                      <a class="comment-box__reply font-size--12px" href="#"><i class="fa-solid fa-reply"></i></a>
                     </div>
                   </div>
                 </div>
@@ -220,15 +214,15 @@
               <li class="reply-writer">
                 <div class="comment-box">
                   <div class="comment-box__profile">
-                    <a href=""><img src="/img/profile.jpg"  class="profileImage" alt=""></a>
+                    <a href="#"><img src="/img/profile.jpg"  class="profileImage" alt=""></a>
                   </div>
                   <div class="comment-box__contents">
                     <div class="comment-box__top">
-                      <a href="" class="comment-box__nickname font-size--13px  ">닉네임</a>
+                      <a href="#" class="comment-box__nickname font-size--13px  ">닉네임</a>
                       <div class="comment-box__info">
-                        <a class="comment-box__modify font-size--12px" href=""><i
+                        <a class="comment-box__modify font-size--12px" href="#"><i
                             class="fa-regular fa-pen-to-square"></i></a>
-                        <a class="comment-box__delete font-size--12px" href=""><i
+                        <a class="comment-box__delete font-size--12px" href="#"><i
                             class="fa-regular fa-trash-can"></i></a>
                       </div>
                     </div>
@@ -238,7 +232,7 @@
                     </div>
                     <div class="comment-box__bottom">
                       <span class="comment-box__date font-size--12px">2022.08.02 14:25</span>
-                      <a class="comment-box__reply font-size--12px" href=""><i class="fa-solid fa-reply"></i></a>
+                      <a class="comment-box__reply font-size--12px" href="#"><i class="fa-solid fa-reply"></i></a>
                     </div>
                   </div>
                 </div>
@@ -252,11 +246,12 @@
                 <span class="reply-box__nickname font-size--13px">닉네임</span>
               </div>
               <div class="reply-box__middle">
-                <textarea class="reply-box__text" name="" id="" cols="30" rows="10" placeholder="댓글을 입력하세요."
+                <textarea class="reply-box__text" name="" id="commentInputBox" cols="30" rows="10" placeholder="댓글을 입력하세요."
                   autofocus></textarea>
               </div>
               <div class="reply-box__bottom">
-                <button class="reply-box__register-btn font-size--12px" href="">등록</button>
+                <button id="commentSaveBtn" class = "font-size--12px" href="#">등록</button>
+                <input type="file" accept="image/*" id="imageFiles">
               </div>
             </div>
           </div>
@@ -273,11 +268,11 @@
     </footer>
   </div>
   <script>
+    //게시글
     //게시글 번호
     const id = [[${articleForm.articleNum}]];
 
-    //게시글
-    //삭제 버튼 클릭
+    //게시글 삭제 버튼 클릭
     const $delBtn = document.getElementById('article__delete-btn');
     $delBtn.addEventListener('click', e => {
       console.log("삭제 버튼 클릭");
@@ -285,6 +280,7 @@
       deleteById(id);
     });
 
+    //게시글 삭제 함수
     function deleteById(id) {
       console.log(id);
       const url = `http://localhost:9080/community/article/${id}/del`;
@@ -302,9 +298,15 @@
     });
 
     //댓글
+    //댓글 목록 조회
     findAll(id);
 
-    //댓글 목록 함수
+    //댓글 수 실시간 카운팅 함수 
+    function commentCountFnc(){
+      document.querySelector('#commentsCnt').textContent = document.getElementsByClassName('comment-box').length; 
+    }
+
+    //댓글 목록 조회 함수
     function findAll(id){
       const url = `http://localhost:9080/comment/list/${id}`;
       fetch(url,{
@@ -322,15 +324,15 @@
                   <li id="${comment.commentNum}" data-comment-group="${comment.commentGroup}" class="writer" >
                   <div class="comment-box">
                     <div class="comment-box__profile">
-                      <a href=""><img src="/img/profile.jpg" class="profileImage" alt=""></a>
+                      <a href="#"><img src="/img/profile.jpg" class="profileImage" alt=""></a>
                     </div>
                     <div class="comment-box__contents">
                       <div class="comment-box__top">
-                        <a href="" class="comment-box__nickname font-size--13px  ">${comment.member.memNickname}</a>
+                        <a href="#" class="comment-box__nickname font-size--13px  ">${comment.member.memNickname}</a>
                         <div class="comment-box__info">
-                          <a class="comment-box__modify font-size--12px" href=""><i
+                          <a class="comment-box__modify font-size--12px" href="#"><i
                               class="fa-regular fa-pen-to-square"></i></a>
-                          <a class="comment-box__delete font-size--12px" href=""><i
+                          <a class="comment-box__delete font-size--12px" href="#" name="commentDeleteBtn"><i
                               class="fa-regular fa-trash-can"></i></a>
                         </div>
                       </div>
@@ -339,7 +341,7 @@
                       </div>
                       <div class="comment-box__bottom">
                         <span class="comment-box__date font-size--12px">${comment.createDate}</span>
-                        <a class="comment-box__reply font-size--12px" href=""><i class="fa-solid fa-reply"></i></a>
+                        <a class="comment-box__reply font-size--12px" href="#" name="commentReplyBtn"><i class="fa-solid fa-reply"></i></a>
                       </div>
                     </div>
                   </div>
@@ -348,16 +350,114 @@
               });
               console.log(result.join(''));
               document.querySelector('#commentList').innerHTML=result.join('');
+              commentCountFnc();
           }else{
             console.log('목록 불러오기 실패');
           }
         }).catch(err=>console.log(err));
     }
 
+    //폼 데이터 객체 생성
+    const CommentAddForm = new FormData();
+
+    //폼 데이터 초기화 함수
+    function resetCommentAddForm(){
+      CommentAddForm.delete('articleNum');
+      CommentAddForm.delete('memNumber');
+      CommentAddForm.delete('commentContents');
+      CommentAddForm.delete('files');
+    }
+
+    //댓글 등록 버튼 클릭
+    commentSaveBtn.addEventListener('click',e=>{
+      console.log("댓글 등록 버튼 클릭!")
+      //1)유효성 체크
+      //2)입력 데이터 가져오기
+      CommentAddForm.append('articleNum',id);
+      // CommentAddForm.append('commentGroup',null);
+      // CommentAddForm.append('pCommentNum',null);
+      CommentAddForm.append('memNumber','1'); //세션 설정 후 수정
+      CommentAddForm.append('commentContents',commentInputBox.value.replace(/(?:\r\n|\r|\n)/g, '<br>'));
+      // CommentAddForm.append('commentIndent',null);
+      CommentAddForm.append('files', imageFiles.files[0]);
+
+      //3)댓글 등록 처리
+      addComment(CommentAddForm);
+      //4)폼 데이터 초기화
+      resetCommentAddForm();
+      //5)댓글 입력창 초기화
+      commentInputBox.value = '';
+    });
+
     //댓글 등록 함수
-    //대댓글 등록 함수
+    function addComment(CommentAddForm){
+      console.log(CommentAddForm);
+      const url = `http://localhost:9080/comment/write/${id}`;
+      fetch(url,{
+        method:'POST',
+        body: CommentAddForm
+      }).then(res => res.json())
+        .then(data => {
+          console.log(data);
+          findAll(id);
+        })
+        .catch(err => console.log(err));
+    }
+
+
+    //답댓글 작성 버튼 클릭
+    commentList.addEventListener('click',e=>{
+      e.preventDefault();
+      if(e.target.parentElement.name == 'commentReplyBtn'){
+        console.log('답댓글 작성 버튼 클릭!');
+        if(document.getElementsByClassName('comment__write').length == 2) return;
+        const etc = document.createElement('div');
+        etc.innerHTML = `<li class="comment__write">
+                <div class="reply-box reply-write">
+                  <div class="reply-box__top">
+                    <span class="reply-box__nickname font-size--13px">닉네임</span>
+                  </div>
+                  <div class="reply-box__middle">
+                    <textarea class="reply-box__text" name="" id="commentReplyBox" cols="30" rows="10" placeholder="댓글을 입력하세요."
+                      autofocus></textarea>
+                  </div>
+                  <div class="reply-box__bottom">
+                    <button class="font-size--12px" id="replyCancelBtn" href="#">취소</button>
+                    <button class="font-size--12px" id="replySaveBtn" href="#">등록</button>
+                  </div>
+                </div>
+              </li>`;
+        e.target.closest('li').insertAdjacentElement('afterend',etc);
+      }
+    });
+
+
+
+
+
     //댓글 수정 함수
+
+    //댓글 삭제 버튼 클릭
+    commentList.addEventListener('click',e=>{
+      e.preventDefault();
+      if(e.target.parentElement.name == 'commentDeleteBtn'){
+        console.log('삭제 버튼 클릭!');
+        if(!confirm('댓글을 삭제하시겠습니까?')) return;
+        const commentNumToDelete = e.target.closest('li').id;
+        deleteComment(commentNumToDelete);
+      }
+    });
+
     //댓글 삭제 함수
+    function deleteComment(commentNum) {
+      const url = `http://localhost:9080/comment/delete/${commentNum}`;
+      fetch(url, {
+        method: 'DELETE'
+      }).then(res => {
+        findAll(id);
+      }).catch(err => console.log(err));
+  }
+
 
     //ckeditor
     ClassicEditor

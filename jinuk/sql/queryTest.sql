@@ -61,14 +61,14 @@ rollback;
 
 --댓글 조회
 select article_num, comment_group, comment_num, p_comment_num,
-m.mem_nickname, comment_contents, create_date, comment_indent
+m.mem_nickname, comment_contents, create_date
 from comments c, member m
 where c.mem_number = m.mem_number and c.comment_num = 4;
 
 
 --댓글 목록 조회 (1번 게시글)
 select article_num, comment_group, comment_num, p_comment_num,
-m.mem_nickname, comment_contents, create_date, comment_indent
+m.mem_nickname, comment_contents, create_date
 from comments c, member m
 where c.mem_number = m.mem_number and c.article_num = 1
 order by comment_group asc, comment_num asc;
@@ -82,8 +82,8 @@ values (2,1,5,1,'댓글 내용5', sysdate);
 --대댓글 작성
 insert into comments 
 (article_num, comment_group, comment_num, p_comment_num,
-mem_number, comment_contents, create_date, comment_indent)
-values (2,1,6,5,2,'댓글 내용5', sysdate, 5);
+mem_number, comment_contents, create_date)
+values (2,1,6,5,2,'댓글 내용5', sysdate);
 
 --댓글 수정
 update comments 
