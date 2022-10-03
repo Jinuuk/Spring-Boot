@@ -56,8 +56,15 @@ public class CommentSVCImpl implements CommentSVC {
    */
   @Override
   public Comment save(Comment comment) {
+
     Long generatedCommentNum = commentDAO.generatedCommentNum();
     comment.setCommentNum(generatedCommentNum);
+
+    if (comment.getCommentGroup() == null) {
+      Long generatedCommentGroupNum = commentDAO.generatedCommentGroupNum();
+      comment.setCommentGroup(generatedCommentGroupNum);
+    }
+
     commentDAO.save(comment);
 
     int totalCountOfArticle = commentDAO.totalCountOfArticle(comment.getArticleNum());

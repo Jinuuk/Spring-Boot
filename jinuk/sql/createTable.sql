@@ -85,14 +85,16 @@ noorder;
 
 --댓글 테이블 생성
 create table comments (
-  article_num          number(6),  -- 게시글 번호
-  comment_group        number(6),   -- 댓글 그룹
-  comment_num          number(6),  -- 댓글 번호
-  p_comment_num        number(6),  -- 부모 댓글 번호
-  mem_number           number(6),  -- 회원 번호
-  comment_contents     clob,       -- 댓글 내용
-  create_date          date       -- 댓글 생성일
-  --comment_indent       number(3)  -- 대댓글 들여쓰기
+  article_num          number(6),    -- 게시글 번호
+  comment_group        number(6),    -- 댓글 그룹
+  comment_num          number(6),    -- 댓글 번호
+  p_comment_num        number(6),    -- 부모 댓글 번호
+  step                 number(3),    -- 댓글 스텝
+  p_comment_nickname   varchar2(18), -- 부모 댓글 닉네임
+  mem_number           number(6),    -- 회원 번호
+  comment_contents     clob,         -- 댓글 내용
+  create_date          date,         -- 댓글 생성일
+  reply                varchar2(1)   -- 답글 여부
 );
 
 --primary key

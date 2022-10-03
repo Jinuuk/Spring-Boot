@@ -55,6 +55,12 @@ public interface CommentDAO {
   Long generatedCommentNum();
 
   /**
+   * 신규 댓글 그룹 번호 생성
+   * @return 댓글 그룹 번호
+   */
+  Long generatedCommentGroupNum();
+
+  /**
    * 게시물 댓글 건수 조회
    * @param articleNum 게시글 번호
    * @return 댓글 건수

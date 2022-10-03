@@ -48,6 +48,7 @@ insert into comments values (1,1,3,1,3,'댓글 내용3',sysdate);
 insert into comments values (1,2,4,2,4,'댓글 내용4',sysdate);
 select comments_comment_group_seq.nextval from dual;
 select comments_comment_group_seq.nextval from dual;
+select comments_comment_num_seq.nextval from dual;
 commit;
 
 ----신고 테이블 샘플 데이터 삽입

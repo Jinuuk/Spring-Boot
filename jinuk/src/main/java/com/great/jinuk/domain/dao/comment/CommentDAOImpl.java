@@ -31,8 +31,8 @@ public class CommentDAOImpl implements CommentDAO {
   public Optional<Comment> find(Long commentNum) {
     StringBuffer sql = new StringBuffer();
 
-    sql.append("select article_num, comment_group, comment_num, p_comment_num, ");
-    sql.append("m.mem_nickname, comment_contents, create_date ");
+    sql.append("select article_num, comment_group, comment_num, p_comment_num, step, ");
+    sql.append("p_comment_nickname, m.mem_nickname, comment_contents, create_date, reply ");
     sql.append("from comments c, member m ");
     sql.append("where c.mem_number = m.mem_number and c.comment_num = ? ");
 
@@ -63,11 +63,11 @@ public class CommentDAOImpl implements CommentDAO {
   public List<Comment> findAll(Long articleNum) {
     StringBuffer sql = new StringBuffer();
 
-    sql.append("select article_num, comment_group, comment_num, p_comment_num, ");
-    sql.append("m.mem_nickname, comment_contents, create_date ");
+    sql.append("select article_num, comment_group, comment_num, p_comment_num, step, ");
+    sql.append("p_comment_nickname, m.mem_nickname, comment_contents, create_date, reply ");
     sql.append("from comments c, member m ");
     sql.append("where c.mem_number = m.mem_number and c.article_num = ? ");
-    sql.append("order by comment_group asc, comment_num asc ");
+    sql.append("order by comment_group asc, step asc ");
 
     List<Comment> comments = jt.query(sql.toString(), new RowMapper<Comment>() {
       @Override
@@ -90,22 +90,55 @@ public class CommentDAOImpl implements CommentDAO {
    */
   @Override
   public int save(Comment comment) {
+
+    if (comment.getPCommentNum() != null) {
+      //부모 댓글 조회
+      Optional<Comment> parentComment = find(comment.getPCommentNum());
+      //부모 댓글과 동일한 그룹의 답댓글들의 step 변경
+      int updateStep = updateStep(parentComment.get());
+      //답댓글 step = 부모 댓글 step + 1
+      comment.setStep(parentComment.get().getStep() + 1);
+
+    }
+
     StringBuffer sql = new StringBuffer();
 
     sql.append("insert into comments ");
-    sql.append("(article_num, comment_group, comment_num, ");
-    sql.append("mem_number, comment_contents, create_date) ");
-    sql.append("values (?,comments_comment_group_seq.nextval,?,?,?,sysdate) ");
+    sql.append("(article_num, comment_group, comment_num, p_comment_num, step, ");
+    sql.append("p_comment_nickname, mem_number, comment_contents, create_date, reply) ");
+    sql.append("values (?,?,?,?,?,?,?,?,sysdate, ?) ");
+
+    log.info("쿼리 삽입하기 전 코멘트 내용 : {}", comment);
+
 
     int affectedRow = jt.update(sql.toString(),
         comment.getArticleNum(),
-//        comment.getCommentGroup(),
+        comment.getCommentGroup(),
         comment.getCommentNum(),
+        comment.getPCommentNum(),
+        comment.getStep(),
+        comment.getPCommentNickname(),
         comment.getMemNumber(),
-        comment.getCommentContents());
+        comment.getCommentContents(),
+        comment.getReply());
 
     return affectedRow;
   }
+
+  //부모 댓글과 동일한 그룹의 답댓글들의 step 변경
+  private int updateStep(Comment comment){
+    StringBuffer sql = new StringBuffer();
+
+    sql.append("update comments ");
+    sql.append("set step = step + 1 ");
+    sql.append("where comment_group = ? ");
+    sql.append("and step > ? ");
+
+    int affectedRows = jt.update(sql.toString(), comment.getCommentGroup(), comment.getStep());
+
+    return affectedRows;
+  }
+
 
   /**
    * 대댓글 작성 (필요할까?)
@@ -197,6 +230,18 @@ public class CommentDAOImpl implements CommentDAO {
     String sql = "select comments_comment_num_seq.nextval from dual ";
     Long commentNum = jt.queryForObject(sql, Long.class);
     return commentNum;
+  }
+
+  /**
+   * 신규 댓글 그룹 번호 생성
+   *
+   * @return 댓글 그룹 번호
+   */
+  @Override
+  public Long generatedCommentGroupNum() {
+    String sql = "select comments_comment_group_seq.nextval from dual ";
+    Long commentGroupNum = jt.queryForObject(sql, Long.class);
+    return commentGroupNum;
   }
 
   /**

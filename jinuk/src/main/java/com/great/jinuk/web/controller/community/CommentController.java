@@ -39,7 +39,7 @@ public class CommentController {
         comment.setAttachFile(attachFile);
       }
     }
-
+    log.info("commentList : {}",commentList);
     return ApiResponse.createApiResMsg("00", "성공", commentList);
   }
 

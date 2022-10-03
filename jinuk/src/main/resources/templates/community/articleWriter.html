@@ -250,8 +250,12 @@
                   autofocus></textarea>
               </div>
               <div class="reply-box__bottom">
+                <div class="filebox">
+                  <label for="imageFile"><i class="fa-regular fa-image"></i></label>
+                  <input type="text" id="fileName" value=""  readonly>
+                  <input type="file" accept="image/*" id="imageFile">
+                </div>
                 <button id="commentSaveBtn" class = "font-size--12px" href="#">등록</button>
-                <input type="file" accept="image/*" id="imageFiles">
               </div>
             </div>
           </div>
@@ -321,16 +325,16 @@
             const result =
               res.data.map(comment=>{
                 return `
-                  <li id="${comment.commentNum}" data-comment-group="${comment.commentGroup}" class="writer" >
-                  <div class="comment-box">
-                    <div class="comment-box__profile">
+                  <li id="${comment.commentNum}" data-comment-group="${comment.commentGroup}" data-member-nickname="${comment.member.memNickname}" class="writer" >
+                  <div class="comment-box ${comment.reply}">
+                    <div class="comment-box__profile" >
                       <a href="#"><img src="/img/profile.jpg" class="profileImage" alt=""></a>
                     </div>
                     <div class="comment-box__contents">
                       <div class="comment-box__top">
-                        <a href="#" class="comment-box__nickname font-size--13px  ">${comment.member.memNickname}</a>
+                        <span href="#" class="font-size--13px" id="comment-box__nickname">${comment.member.memNickname}</span>
                         <div class="comment-box__info">
-                          <a class="comment-box__modify font-size--12px" href="#"><i
+                          <a class="comment-box__modify font-size--12px" href="#" name="commentEditBtn"><i
                               class="fa-regular fa-pen-to-square"></i></a>
                           <a class="comment-box__delete font-size--12px" href="#" name="commentDeleteBtn"><i
                               class="fa-regular fa-trash-can"></i></a>
@@ -363,23 +367,34 @@
     //폼 데이터 초기화 함수
     function resetCommentAddForm(){
       CommentAddForm.delete('articleNum');
+      CommentAddForm.delete('commentGroup');
+      CommentAddForm.delete('pCommentNum');
+      CommentAddForm.delete('step');
+      CommentAddForm.delete('pCommentNickname');
       CommentAddForm.delete('memNumber');
       CommentAddForm.delete('commentContents');
       CommentAddForm.delete('files');
+      CommentAddForm.delete('reply');
     }
 
     //댓글 등록 버튼 클릭
     commentSaveBtn.addEventListener('click',e=>{
       console.log("댓글 등록 버튼 클릭!")
+      console.log(e.target.closest('li'));
+      if(e.target.closest('li') == null)(
+        console.log('없다')
+      );
       //1)유효성 체크
       //2)입력 데이터 가져오기
       CommentAddForm.append('articleNum',id);
-      // CommentAddForm.append('commentGroup',null);
-      // CommentAddForm.append('pCommentNum',null);
+      CommentAddForm.append('commentGroup','');
+      CommentAddForm.append('pCommentNum','');
+      CommentAddForm.append('step','0');
+      CommentAddForm.append('pCommentNickname',' ');
       CommentAddForm.append('memNumber','1'); //세션 설정 후 수정
       CommentAddForm.append('commentContents',commentInputBox.value.replace(/(?:\r\n|\r|\n)/g, '<br>'));
-      // CommentAddForm.append('commentIndent',null);
-      CommentAddForm.append('files', imageFiles.files[0]);
+      CommentAddForm.append('reply','N');
+      CommentAddForm.append('files', imageFile.files[0]); //댓글 수정까지 만들고 문제 해결
 
       //3)댓글 등록 처리
       addComment(CommentAddForm);
@@ -404,15 +419,13 @@
         .catch(err => console.log(err));
     }
 
-
     //답댓글 작성 버튼 클릭
     commentList.addEventListener('click',e=>{
       e.preventDefault();
       if(e.target.parentElement.name == 'commentReplyBtn'){
         console.log('답댓글 작성 버튼 클릭!');
         if(document.getElementsByClassName('comment__write').length == 2) return;
-        const etc = document.createElement('div');
-        etc.innerHTML = `<li class="comment__write">
+        const replyBox = `<li class="comment__write">
                 <div class="reply-box reply-write">
                   <div class="reply-box__top">
                     <span class="reply-box__nickname font-size--13px">닉네임</span>
@@ -422,20 +435,101 @@
                       autofocus></textarea>
                   </div>
                   <div class="reply-box__bottom">
-                    <button class="font-size--12px" id="replyCancelBtn" href="#">취소</button>
-                    <button class="font-size--12px" id="replySaveBtn" href="#">등록</button>
+                    <div class="filebox">
+                      <label for="imageFile"><i class="fa-regular fa-image"></i></label>
+                      <input type="text" id="fileName" value=""  readonly>
+                      <input type="file" accept="image/*" id="imageFile">
+                    </div>
+                    <div>
+                      <button class="font-size--12px" id="replyCancelBtn" href="#">취소</button>
+                      <button class="font-size--12px" id="replySaveBtn" href="#">등록</button>
+                    </div>
                   </div>
                 </div>
               </li>`;
-        e.target.closest('li').insertAdjacentElement('afterend',etc);
+        e.target.closest('li').insertAdjacentHTML('afterend',replyBox);
       }
+      //답댓글 작성 취소 버튼 클릭
+      replyCancelBtn.addEventListener('click',e=>{
+        e.target.closest('li').remove();
+      });
+      
+      //답댓글 작성 완료 버튼 클릭
+      replySaveBtn.addEventListener('click',e=>{
+        console.log(e.target.closest('li').previousSibling);
+        console.log(e.target.closest('li').previousSibling.id);
+        console.log(e.target.closest('li').previousSibling.dataset.commentGroup);
+        //1)유효성 체크
+        //2)입력 데이터 가져오기
+        CommentAddForm.append('articleNum',id);
+        CommentAddForm.append('commentGroup',e.target.closest('li').previousSibling.dataset.commentGroup);
+        CommentAddForm.append('pCommentNum',e.target.closest('li').previousSibling.id);
+        CommentAddForm.append('step','0');
+        CommentAddForm.append('pCommentNickname',e.target.closest('li').previousSibling.dataset.memberNickname);
+        CommentAddForm.append('memNumber','1'); //세션 설정 후 수정
+        CommentAddForm.append('commentContents',commentReplyBox.value.replace(/(?:\r\n|\r|\n)/g, '<br>'));
+        CommentAddForm.append('reply','Y');
+        CommentAddForm.append('files',''); //댓글 수정까지 만들고 문제 해결
+        //3)댓글 등록 처리
+        addComment(CommentAddForm);
+        //4)폼 데이터 초기화
+        resetCommentAddForm();
+        //5)답댓글 입력창 삭제
+        e.target.closest('li').remove();
+      });
+
+      
     });
 
 
+    //댓글 수정 버튼 클릭
+    commentList.addEventListener('click',e=>{
+      e.preventDefault();
+      if(e.target.parentElement.name == 'commentEditBtn'){
+        console.log('댓글 수정 버튼 클릭!');
+        const commentNum = e.target.closest('li').id;
+        console.log(commentNum);
+        commentEditWindow(commentNum);
+      }
+    });
+
+    //댓글 수정창 출력 함수
+    function commentEditWindow(commentNum){
+      const url = `http://localhost:9080/comment/edit/${commentNum}`;
+      fetch(url,{
+        method:'GET'
+      }).then(res => res.json())
+        .then(data => {
+          console.log(document.getElementById(commentNum));
+          console.log(data);
+          const editBox = `<li><div class="comment__write">
+            <div class="reply-box">
+              <div class="reply-box__top">
+                <span class="reply-box__nickname font-size--13px">닉네임</span>
+              </div>
+              <div class="reply-box__middle">
+                <textarea class="reply-box__text" name="" id="commentInputBox" cols="30" rows="10" placeholder="댓글을 입력하세요."
+                  autofocus></textarea>
+              </div>
+              <div class="reply-box__bottom">
+                <div class="filebox">
+                  <label for="imageFile"><i class="fa-regular fa-image"></i></label>
+                  <input type="text" id="fileName" value=""  readonly>
+                  <input type="file" accept="image/*" id="imageFile">
+                </div>
+                <button id="commentSaveBtn" class = "font-size--12px" href="#">등록</button>
+              </div>
+            </div>
+          </div></li>`;
+
+          document.getElementById(commentNum).insertAdjacentHTML('afterend',editBox);
+          document.getElementById(commentNum).remove();
 
 
+        })
+        .catch(err => console.log(err));
+    }
 
-    //댓글 수정 함수
 
     //댓글 삭제 버튼 클릭
     commentList.addEventListener('click',e=>{
@@ -457,6 +551,11 @@
         findAll(id);
       }).catch(err => console.log(err));
   }
+
+    //사진첨부
+    imageFile.addEventListener('change',()=>{
+      fileName.value = imageFile.files[0].name;
+    })
 
 
     //ckeditor
