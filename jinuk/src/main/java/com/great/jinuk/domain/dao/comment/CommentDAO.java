@@ -25,12 +25,12 @@ public interface CommentDAO {
    */
   int save(Comment comment);
 
-  /**
-   * 대댓글 작성 (필요할까?)
-   * @param replyComment 댓글 정보
-   * @return 작성된 댓글 수
-   */
-  int saveReply(Long pCommentNum, Comment replyComment);
+//  /**
+//   * 대댓글 작성 (필요할까?)
+//   * @param replyComment 댓글 정보
+//   * @return 작성된 댓글 수
+//   */
+//  int saveReply(Long pCommentNum, Comment replyComment);
 
 
   /**

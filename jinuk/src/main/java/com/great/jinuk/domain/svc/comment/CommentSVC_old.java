@@ -28,12 +28,12 @@ public interface CommentSVC_old {
   Comment save(Comment comment);
 
 
-  /**
-   * 대댓글 작성 (필요할까?)
-   * @param replyComment 댓글 정보
-   * @return 댓글 정보
-   */
-  Comment saveReply(Long pCommentNum, Comment replyComment);
+//  /**
+//   * 대댓글 작성 (필요할까?)
+//   * @param replyComment 댓글 정보
+//   * @return 댓글 정보
+//   */
+//  Comment saveReply(Long pCommentNum, Comment replyComment);
 
   /**
    * 댓글 수정

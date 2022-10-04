@@ -98,23 +98,23 @@ public class CommentSVCImpl implements CommentSVC {
     return commentDAO.find(generatedCommentNum).get();
   }
 
-  /**
-   * 대댓글 작성 (필요할까?)
-   *
-   * @param replyComment 댓글 정보
-   * @return 작성된 댓글 수
-   */
-  @Override
-  public Comment saveReply(Long pCommentNum, Comment replyComment) {
-    Long generatedCommentNum = commentDAO.generatedCommentNum();
-    replyComment.setCommentNum(generatedCommentNum);
-    commentDAO.saveReply(pCommentNum,replyComment);
-
-    int totalCountOfArticle = commentDAO.totalCountOfArticle(replyComment.getArticleNum());
-    articleDAO.updateCommentsCnt(Long.valueOf(totalCountOfArticle),replyComment.getArticleNum());
-
-    return commentDAO.find(generatedCommentNum).get();
-  }
+//  /**
+//   * 대댓글 작성 (필요할까?)
+//   *
+//   * @param replyComment 댓글 정보
+//   * @return 작성된 댓글 수
+//   */
+//  @Override
+//  public Comment saveReply(Long pCommentNum, Comment replyComment) {
+//    Long generatedCommentNum = commentDAO.generatedCommentNum();
+//    replyComment.setCommentNum(generatedCommentNum);
+//    commentDAO.saveReply(pCommentNum,replyComment);
+//
+//    int totalCountOfArticle = commentDAO.totalCountOfArticle(replyComment.getArticleNum());
+//    articleDAO.updateCommentsCnt(Long.valueOf(totalCountOfArticle),replyComment.getArticleNum());
+//
+//    return commentDAO.find(generatedCommentNum).get();
+//  }
 
   /**
    * 댓글 수정

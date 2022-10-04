@@ -153,7 +153,7 @@
                     <span class="reply-box__nickname font-size--13px">닉네임</span>
                   </div>
                   <div class="reply-box__middle">
-                    <textarea class="reply-box__text" name="" id="commentReplyBox" cols="30" rows="10" placeholder="댓글을 입력하세요."
+                    <textarea class="reply-box__text" name="" id="commentReplyTextarea" cols="30" rows="10" placeholder="댓글을 입력하세요."
                       autofocus></textarea>
                   </div>
                   <div class="reply-box__bottom">
@@ -361,20 +361,30 @@
         }).catch(err=>console.log(err));
     }
 
-    //폼 데이터 객체 생성
-    const CommentAddForm = new FormData();
+    //댓글 작성 폼 데이터 객체 생성
+    const commentAddForm = new FormData();
 
-    //폼 데이터 초기화 함수
+    //댓글 수정 폼 데이터 객체 생성
+    const commentEditForm = new FormData();
+
+    //댓글 작성 폼 데이터 초기화 함수
     function resetCommentAddForm(){
-      CommentAddForm.delete('articleNum');
-      CommentAddForm.delete('commentGroup');
-      CommentAddForm.delete('pCommentNum');
-      CommentAddForm.delete('step');
-      CommentAddForm.delete('pCommentNickname');
-      CommentAddForm.delete('memNumber');
-      CommentAddForm.delete('commentContents');
-      CommentAddForm.delete('files');
-      CommentAddForm.delete('reply');
+      commentAddForm.delete('articleNum');
+      commentAddForm.delete('commentGroup');
+      commentAddForm.delete('pCommentNum');
+      commentAddForm.delete('step');
+      commentAddForm.delete('commentOrder');
+      commentAddForm.delete('pCommentNickname');
+      commentAddForm.delete('memNumber');
+      commentAddForm.delete('commentContents');
+      commentAddForm.delete('files');
+      commentAddForm.delete('reply');
+    }
+
+    //댓글 수정 폼 데이터 초기화 함수
+    function resetCommentEidtForm(){
+      commentEditForm.delete('commentNum');
+      commentEditForm.delete('commentContents');
     }
 
     //댓글 등록 버튼 클릭
@@ -386,18 +396,19 @@
       );
       //1)유효성 체크
       //2)입력 데이터 가져오기
-      CommentAddForm.append('articleNum',id);
-      CommentAddForm.append('commentGroup','');
-      CommentAddForm.append('pCommentNum','');
-      CommentAddForm.append('step','0');
-      CommentAddForm.append('pCommentNickname',' ');
-      CommentAddForm.append('memNumber','1'); //세션 설정 후 수정
-      CommentAddForm.append('commentContents',commentInputBox.value.replace(/(?:\r\n|\r|\n)/g, '<br>'));
-      CommentAddForm.append('reply','N');
-      CommentAddForm.append('files', imageFile.files[0]); //댓글 수정까지 만들고 문제 해결
+      commentAddForm.append('articleNum',id);
+      commentAddForm.append('commentGroup','');
+      commentAddForm.append('pCommentNum','');
+      commentAddForm.append('step','0');
+      commentAddForm.append('commentOrder','0');
+      commentAddForm.append('pCommentNickname',' ');
+      commentAddForm.append('memNumber','1'); //세션 설정 후 수정
+      commentAddForm.append('commentContents',commentInputBox.value.replace(/(?:\r\n|\r|\n)/g, '<br>'));
+      commentAddForm.append('reply','N');
+      commentAddForm.append('files', imageFile.files[0]); //댓글 수정까지 만들고 문제 해결
 
       //3)댓글 등록 처리
-      addComment(CommentAddForm);
+      addComment(commentAddForm);
       //4)폼 데이터 초기화
       resetCommentAddForm();
       //5)댓글 입력창 초기화
@@ -405,12 +416,12 @@
     });
 
     //댓글 등록 함수
-    function addComment(CommentAddForm){
-      console.log(CommentAddForm);
+    function addComment(commentAddForm){
+      console.log(commentAddForm);
       const url = `http://localhost:9080/comment/write/${id}`;
       fetch(url,{
         method:'POST',
-        body: CommentAddForm
+        body: commentAddForm
       }).then(res => res.json())
         .then(data => {
           console.log(data);
@@ -425,13 +436,13 @@
       if(e.target.parentElement.name == 'commentReplyBtn'){
         console.log('답댓글 작성 버튼 클릭!');
         if(document.getElementsByClassName('comment__write').length == 2) return;
-        const replyBox = `<li class="comment__write">
+        const replyBox = `<li class="comment__write" id="commentReplyBox">
                 <div class="reply-box reply-write">
                   <div class="reply-box__top">
                     <span class="reply-box__nickname font-size--13px">닉네임</span>
                   </div>
                   <div class="reply-box__middle">
-                    <textarea class="reply-box__text" name="" id="commentReplyBox" cols="30" rows="10" placeholder="댓글을 입력하세요."
+                    <textarea class="reply-box__text" name="" id="commentReplyTextarea" cols="30" rows="10" placeholder="댓글을 입력하세요."
                       autofocus></textarea>
                   </div>
                   <div class="reply-box__bottom">
@@ -448,45 +459,47 @@
                 </div>
               </li>`;
         e.target.closest('li').insertAdjacentHTML('afterend',replyBox);
+
+        //답댓글 작성 취소 버튼 클릭
+        replyCancelBtn?.addEventListener('click',e=>{
+          console.log('답댓글 작성 취소 버튼 클릭');
+          e.target.closest('li').remove();
+        });
+        
+        //답댓글 작성 완료 버튼 클릭
+        replySaveBtn?.addEventListener('click',e=>{
+          console.log(e.target.closest('li').previousSibling);
+          console.log(e.target.closest('li').previousSibling.id);
+          console.log(e.target.closest('li').previousSibling.dataset.commentGroup);
+          //1)유효성 체크
+          //2)입력 데이터 가져오기
+          commentAddForm.append('articleNum',id);
+          commentAddForm.append('commentGroup',e.target.closest('li').previousSibling.dataset.commentGroup);
+          commentAddForm.append('pCommentNum',e.target.closest('li').previousSibling.id);
+          commentAddForm.append('step','0');
+          commentAddForm.append('commentOrder','0');
+          commentAddForm.append('pCommentNickname',e.target.closest('li').previousSibling.dataset.memberNickname);
+          commentAddForm.append('memNumber','1'); //세션 설정 후 수정
+          commentAddForm.append('commentContents',commentReplyTextarea.value.replace(/(?:\r\n|\r|\n)/g, '<br>'));
+          commentAddForm.append('reply','Y');
+          commentAddForm.append('files',''); //댓글 수정까지 만들고 문제 해결
+          //3)댓글 등록 처리
+          addComment(commentAddForm);
+          //4)폼 데이터 초기화
+          resetCommentAddForm();
+          //5)답댓글 입력창 삭제
+          e.target.closest('li').remove();
+        });
       }
-      //답댓글 작성 취소 버튼 클릭
-      replyCancelBtn.addEventListener('click',e=>{
-        e.target.closest('li').remove();
-      });
-      
-      //답댓글 작성 완료 버튼 클릭
-      replySaveBtn.addEventListener('click',e=>{
-        console.log(e.target.closest('li').previousSibling);
-        console.log(e.target.closest('li').previousSibling.id);
-        console.log(e.target.closest('li').previousSibling.dataset.commentGroup);
-        //1)유효성 체크
-        //2)입력 데이터 가져오기
-        CommentAddForm.append('articleNum',id);
-        CommentAddForm.append('commentGroup',e.target.closest('li').previousSibling.dataset.commentGroup);
-        CommentAddForm.append('pCommentNum',e.target.closest('li').previousSibling.id);
-        CommentAddForm.append('step','0');
-        CommentAddForm.append('pCommentNickname',e.target.closest('li').previousSibling.dataset.memberNickname);
-        CommentAddForm.append('memNumber','1'); //세션 설정 후 수정
-        CommentAddForm.append('commentContents',commentReplyBox.value.replace(/(?:\r\n|\r|\n)/g, '<br>'));
-        CommentAddForm.append('reply','Y');
-        CommentAddForm.append('files',''); //댓글 수정까지 만들고 문제 해결
-        //3)댓글 등록 처리
-        addComment(CommentAddForm);
-        //4)폼 데이터 초기화
-        resetCommentAddForm();
-        //5)답댓글 입력창 삭제
-        e.target.closest('li').remove();
-      });
-
-      
+    
     });
-
 
     //댓글 수정 버튼 클릭
     commentList.addEventListener('click',e=>{
       e.preventDefault();
       if(e.target.parentElement.name == 'commentEditBtn'){
         console.log('댓글 수정 버튼 클릭!');
+        if(document.getElementsByClassName('comment__write').length == 2) return;
         const commentNum = e.target.closest('li').id;
         console.log(commentNum);
         commentEditWindow(commentNum);
@@ -502,14 +515,14 @@
         .then(data => {
           console.log(document.getElementById(commentNum));
           console.log(data);
-          const editBox = `<li><div class="comment__write">
+          const editBox = `<li id="commentEditBox"><div class="comment__write">
             <div class="reply-box">
               <div class="reply-box__top">
-                <span class="reply-box__nickname font-size--13px">닉네임</span>
+                <span class="reply-box__nickname font-size--13px">${data.data.member.memNickname}</span>
               </div>
               <div class="reply-box__middle">
-                <textarea class="reply-box__text" name="" id="commentInputBox" cols="30" rows="10" placeholder="댓글을 입력하세요."
-                  autofocus></textarea>
+                <textarea class="reply-box__text" name="" id="commentEditTextarea" cols="30" rows="10" placeholder="댓글을 입력하세요."
+                  autofocus>${data.data.commentContents}</textarea>
               </div>
               <div class="reply-box__bottom">
                 <div class="filebox">
@@ -517,7 +530,10 @@
                   <input type="text" id="fileName" value=""  readonly>
                   <input type="file" accept="image/*" id="imageFile">
                 </div>
-                <button id="commentSaveBtn" class = "font-size--12px" href="#">등록</button>
+                <div>
+                <button class="font-size--12px" id="editCancelBtn" href="#">취소</button>
+                <button class = "font-size--12px" id="editSaveBtn" href="#">등록</button>
+                </div>
               </div>
             </div>
           </div></li>`;
@@ -525,7 +541,38 @@
           document.getElementById(commentNum).insertAdjacentHTML('afterend',editBox);
           document.getElementById(commentNum).remove();
 
+          //댓글 수정 취소 버튼 클릭
+          editCancelBtn?.addEventListener('click',e=>{
+            console.log('댓글 수정 취소 버튼 클릭');
+            findAll(id);
+          });
 
+          //댓글 수정 완료 버튼 클릭
+          editSaveBtn?.addEventListener('click',e=>{
+            //1)유효성 체크
+            //2)입력 데이터 가져오기 (댓글 번호, 댓글 내용)
+            commentEditForm.append('commentNum',commentNum);
+            commentEditForm.append('commentContents',commentEditTextarea.value.replace(/(?:\r\n|\r|\n)/g, '<br>'));
+            //3)댓글 수정
+            editComment(commentEditForm);
+            //4)폼 데이터 리셋
+            resetCommentEidtForm();
+          });
+        })
+        .catch(err => console.log(err));
+    }
+
+    //댓글 수정 함수
+    function editComment(commentEditForm){
+      console.log(commentAddForm);
+      const url = `http://localhost:9080/comment/edit/${commentEditForm.get('commentNum')}`;
+      fetch(url,{
+        method:'PATCH',
+        body: commentEditForm
+      }).then(res => res.json())
+        .then(data => {
+          console.log(data);
+          findAll(id);
         })
         .catch(err => console.log(err));
     }

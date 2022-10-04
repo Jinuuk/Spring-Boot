@@ -67,11 +67,11 @@ where c.mem_number = m.mem_number and c.comment_num = 4;
 
 
 --댓글 목록 조회 (1번 게시글)
-select article_num, comment_group, comment_num, p_comment_num, step,
+select article_num, comment_group, comment_num, p_comment_num, step, comment_order,
 m.mem_nickname, comment_contents, create_date
 from comments c, member m
 where c.mem_number = m.mem_number and c.article_num = 5
-order by comment_group asc, step asc;
+order by comment_group asc, comment_order asc;
 
 
 --댓글 작성
@@ -86,11 +86,15 @@ insert into comments
 mem_number, comment_contents, create_date)
 values (2,1,6,5,2,'댓글 내용5', sysdate);
 
---댓글 스텝 변경
+--댓글 순서 최댓값 산출
+select max(comment_order) from comments where comment_group = 5;
+
+--댓글 순서 변경
 update comments
-set step = step + 1
+set order = order + 1
 where comment_group = ?
-and step > ?;
+and order > ?
+
 
 --댓글 수정
 update comments 

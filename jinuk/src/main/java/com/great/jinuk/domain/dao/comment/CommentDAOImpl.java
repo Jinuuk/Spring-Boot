@@ -31,7 +31,7 @@ public class CommentDAOImpl implements CommentDAO {
   public Optional<Comment> find(Long commentNum) {
     StringBuffer sql = new StringBuffer();
 
-    sql.append("select article_num, comment_group, comment_num, p_comment_num, step, ");
+    sql.append("select article_num, comment_group, comment_num, p_comment_num, step, comment_order, ");
     sql.append("p_comment_nickname, m.mem_nickname, comment_contents, create_date, reply ");
     sql.append("from comments c, member m ");
     sql.append("where c.mem_number = m.mem_number and c.comment_num = ? ");
@@ -63,11 +63,11 @@ public class CommentDAOImpl implements CommentDAO {
   public List<Comment> findAll(Long articleNum) {
     StringBuffer sql = new StringBuffer();
 
-    sql.append("select article_num, comment_group, comment_num, p_comment_num, step, ");
+    sql.append("select article_num, comment_group, comment_num, p_comment_num, step, comment_order, ");
     sql.append("p_comment_nickname, m.mem_nickname, comment_contents, create_date, reply ");
     sql.append("from comments c, member m ");
     sql.append("where c.mem_number = m.mem_number and c.article_num = ? ");
-    sql.append("order by comment_group asc, step asc ");
+    sql.append("order by comment_group asc, comment_order asc ");
 
     List<Comment> comments = jt.query(sql.toString(), new RowMapper<Comment>() {
       @Override
@@ -91,22 +91,28 @@ public class CommentDAOImpl implements CommentDAO {
   @Override
   public int save(Comment comment) {
 
-    if (comment.getPCommentNum() != null) {
-      //부모 댓글 조회
-      Optional<Comment> parentComment = find(comment.getPCommentNum());
-      //부모 댓글과 동일한 그룹의 답댓글들의 step 변경
-      int updateStep = updateStep(parentComment.get());
-      //답댓글 step = 부모 댓글 step + 1
-      comment.setStep(parentComment.get().getStep() + 1);
+//    if (comment.getPCommentNum() != null) { //첫댓글이라면
+//
+//    } else { //답댓글이라면
+//      //부모 댓글 조회
+//      Optional<Comment> parentComment = find(comment.getPCommentNum());
+//      //답댓글 step = 부모 댓글 step + 1
+//      comment.setStep(parentComment.get().getStep() + 1);
+//      //답댓글 order = 부모 댓글 order + 1
+//      comment.setCommentOrder(parentComment.get().getCommentOrder() + 1);
+////      comment.setCommentOrder(maxCommentOrder(comment)+1);
+//      //나머지 order + 1
+//      changeCommentOrder(parentComment.get());
+//    }
 
-    }
+
 
     StringBuffer sql = new StringBuffer();
 
     sql.append("insert into comments ");
-    sql.append("(article_num, comment_group, comment_num, p_comment_num, step, ");
+    sql.append("(article_num, comment_group, comment_num, p_comment_num, step, comment_order, ");
     sql.append("p_comment_nickname, mem_number, comment_contents, create_date, reply) ");
-    sql.append("values (?,?,?,?,?,?,?,?,sysdate, ?) ");
+    sql.append("values (?,?,?,?,?,?,?,?,?,sysdate, ?) ");
 
     log.info("쿼리 삽입하기 전 코멘트 내용 : {}", comment);
 
@@ -117,6 +123,7 @@ public class CommentDAOImpl implements CommentDAO {
         comment.getCommentNum(),
         comment.getPCommentNum(),
         comment.getStep(),
+        comment.getCommentOrder(),
         comment.getPCommentNickname(),
         comment.getMemNumber(),
         comment.getCommentContents(),
@@ -133,55 +140,67 @@ public class CommentDAOImpl implements CommentDAO {
     sql.append("set step = step + 1 ");
     sql.append("where comment_group = ? ");
     sql.append("and step > ? ");
+    sql.append("and article_num = ? ");
 
-    int affectedRows = jt.update(sql.toString(), comment.getCommentGroup(), comment.getStep());
+    int affectedRows = jt.update(sql.toString(), comment.getCommentGroup(), comment.getStep(),comment.getArticleNum());
 
     return affectedRows;
   }
 
+  //댓글 순서 최댓값 산출
+  private Long maxCommentOrder(Comment comment) {
+    String sql = "select max(comment_order) from comments where article_num = ? and comment_group = ? ";
 
-  /**
-   * 대댓글 작성 (필요할까?)
-   *
-   * @param replyComment 댓글 정보
-   * @return 작성된 댓글 수
-   */
-  @Override
-  public int saveReply(Long pCommentNum, Comment replyComment) {
+    Long maxCommentOrder = jt.queryForObject(sql, Long.class,comment.getArticleNum(),comment.getCommentGroup());
 
-    //부모 댓글 참조 반영
-    Comment comment = addInfoOfParentToChild(pCommentNum, replyComment);
+    return maxCommentOrder;
+  }
 
+  //댓글 순서 변경
+  private void changeCommentOrder(Comment parentComment){
     StringBuffer sql = new StringBuffer();
 
-    sql.append("insert into comments ");
-    sql.append("(article_num, comment_group, comment_num, p_comment_num, ");
-    sql.append("mem_number, comment_contents, create_date) ");
-    sql.append("values (?,?,?,?,?,?, sysdate) ");
+    sql.append("update comments ");
+    sql.append("set comment_order = comment_order + 1 ");
+    sql.append("where comment_group = ? ");
+    sql.append("and comment_order > ? ");
 
-    int affectedRow = jt.update(sql.toString(),
-        comment.getArticleNum(),
-        comment.getCommentGroup(),
-        comment.getCommentNum(),
-        pCommentNum,
-        comment.getMemNumber(),
-        comment.getCommentContents()
-    );
-
-    return affectedRow;
+    jt.update(sql.toString(),parentComment.getCommentGroup(),parentComment.getCommentOrder());
   }
 
-  //대댓글에 부모 댓글 정보 반영
-  private Comment addInfoOfParentToChild(Long pCommentNum, Comment replyComment) {
 
-    //부모 댓글
-    Optional<Comment> comment = find(pCommentNum);
+//  /**
+//   * 대댓글 작성 (필요할까?)
+//   *
+//   * @param replyComment 댓글 정보
+//   * @return 작성된 댓글 수
+//   */
+//  @Override
+//  public int saveReply(Long pCommentNum, Comment replyComment) {
+//
+//    //부모 댓글 참조 반영
+//    Comment comment = addInfoOfParentToChild(pCommentNum, replyComment);
+//
+//    StringBuffer sql = new StringBuffer();
+//
+//    sql.append("insert into comments ");
+//    sql.append("(article_num, comment_group, comment_num, p_comment_num, ");
+//    sql.append("mem_number, comment_contents, create_date) ");
+//    sql.append("values (?,?,?,?,?,?, sysdate) ");
+//
+//    int affectedRow = jt.update(sql.toString(),
+//        comment.getArticleNum(),
+//        comment.getCommentGroup(),
+//        comment.getCommentNum(),
+//        pCommentNum,
+//        comment.getMemNumber(),
+//        comment.getCommentContents()
+//    );
+//
+//    return affectedRow;
+//  }
 
-    //comment group 로직 : 대댓글의 comment group = 댓글의 comment group
-    replyComment.setCommentGroup(comment.get().getCommentGroup());
 
-    return replyComment;
-  }
 
   /**
    * 댓글 수정
@@ -239,7 +258,7 @@ public class CommentDAOImpl implements CommentDAO {
    */
   @Override
   public Long generatedCommentGroupNum() {
-    String sql = "select comments_comment_group_seq.nextval from dual ";
+    String sql = "select comments_comment_num_seq.currval from dual ";
     Long commentGroupNum = jt.queryForObject(sql, Long.class);
     return commentGroupNum;
   }

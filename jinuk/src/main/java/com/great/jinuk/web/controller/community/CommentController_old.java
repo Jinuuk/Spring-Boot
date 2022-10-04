@@ -3,7 +3,6 @@ package com.great.jinuk.web.controller.community;
 import com.great.jinuk.domain.dao.comment.Comment;
 import com.great.jinuk.domain.svc.comment.CommentSVC;
 import com.great.jinuk.web.api.ApiResponse;
-import com.great.jinuk.web.form.article.ArticleForm;
 import com.great.jinuk.web.form.comment.CommentAddForm;
 import com.great.jinuk.web.form.comment.CommentEditForm;
 import lombok.RequiredArgsConstructor;
@@ -45,20 +44,20 @@ public class CommentController_old {
     return ApiResponse.createApiResMsg("00","성공", savedComment);
   }
 
-  //대댓글 등록
-  @PostMapping("/reply")
-  public ApiResponse<Comment> saveReplyComment(ArticleForm articleForm,
-                                               CommentAddForm commentAddForm) {
-
-    Comment comment = new Comment();
-    BeanUtils.copyProperties(commentAddForm,comment);
-    comment.setArticleNum(articleForm.getArticleNum()); //꼭 필요할까?
-
-    //대댓글 등록
-    Comment savedReplyComment = commentSVC.saveReply(comment.getPCommentNum(), comment);
-
-    return ApiResponse.createApiResMsg("00","성공", savedReplyComment);
-  }
+//  //대댓글 등록
+//  @PostMapping("/reply")
+//  public ApiResponse<Comment> saveReplyComment(ArticleForm articleForm,
+//                                               CommentAddForm commentAddForm) {
+//
+//    Comment comment = new Comment();
+//    BeanUtils.copyProperties(commentAddForm,comment);
+//    comment.setArticleNum(articleForm.getArticleNum()); //꼭 필요할까?
+//
+//    //대댓글 등록
+//    Comment savedReplyComment = commentSVC.saveReply(comment.getPCommentNum(), comment);
+//
+//    return ApiResponse.createApiResMsg("00","성공", savedReplyComment);
+//  }
 
   //댓글 수정 화면
 

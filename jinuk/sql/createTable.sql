@@ -89,7 +89,8 @@ create table comments (
   comment_group        number(6),    -- 댓글 그룹
   comment_num          number(6),    -- 댓글 번호
   p_comment_num        number(6),    -- 부모 댓글 번호
-  step                 number(3),    -- 댓글 스텝
+  step                 number(3),    -- 댓글 스텝(깊이)
+  comment_order        number(3),    -- 댓글 순서
   p_comment_nickname   varchar2(18), -- 부모 댓글 닉네임
   mem_number           number(6),    -- 회원 번호
   comment_contents     clob,         -- 댓글 내용

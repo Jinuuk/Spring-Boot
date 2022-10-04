@@ -6,7 +6,6 @@ import com.great.jinuk.domain.entity.uploadFile.UploadFile;
 import com.great.jinuk.domain.svc.comment.CommentSVC;
 import com.great.jinuk.domain.svc.uploadFile.UploadFileSVC;
 import com.great.jinuk.web.api.ApiResponse;
-import com.great.jinuk.web.form.article.ArticleForm;
 import com.great.jinuk.web.form.comment.CommentAddForm;
 import com.great.jinuk.web.form.comment.CommentEditForm;
 import lombok.RequiredArgsConstructor;
@@ -70,20 +69,20 @@ public class CommentController {
     return ApiResponse.createApiResMsg("00", "성공", savedComment);
   }
 
-  //대댓글 등록
-  @PostMapping("/reply")
-  public ApiResponse<Comment> saveReplyComment(ArticleForm articleForm,
-                                               CommentAddForm commentAddForm) {
-
-    Comment comment = new Comment();
-    BeanUtils.copyProperties(commentAddForm, comment);
-    comment.setArticleNum(articleForm.getArticleNum()); //꼭 필요할까?
-
-    //대댓글 등록
-    Comment savedReplyComment = commentSVC.saveReply(comment.getPCommentNum(), comment);
-
-    return ApiResponse.createApiResMsg("00", "성공", savedReplyComment);
-  }
+//  //대댓글 등록
+//  @PostMapping("/reply")
+//  public ApiResponse<Comment> saveReplyComment(ArticleForm articleForm,
+//                                               CommentAddForm commentAddForm) {
+//
+//    Comment comment = new Comment();
+//    BeanUtils.copyProperties(commentAddForm, comment);
+//    comment.setArticleNum(articleForm.getArticleNum()); //꼭 필요할까?
+//
+//    //대댓글 등록
+//    Comment savedReplyComment = commentSVC.saveReply(comment.getPCommentNum(), comment);
+//
+//    return ApiResponse.createApiResMsg("00", "성공", savedReplyComment);
+//  }
 
   //댓글 수정 창
   @GetMapping("/edit/{commentNum}")
@@ -110,15 +109,16 @@ public class CommentController {
     BeanUtils.copyProperties(commentEditForm, comment);
 
     //댓글 수정
-    Comment updatedComment = new Comment();
-
-    //주의 : view에서 multiple인 경우 파일 첨부가 없더라도 빈문자열("")이 반환되어
-    // List<MultipartFile>에 빈 객체 1개가 포함됨
-    if (commentEditForm.getFile().isEmpty()) {
-      updatedComment = commentSVC.update(commentNum, comment);
-    } else if (!commentEditForm.getFile().isEmpty()) {
-      updatedComment = commentSVC.update(commentNum, comment, commentEditForm.getFile());
-    }
+    Comment updatedComment = commentSVC.update(commentNum, comment);
+//    Comment updatedComment = new Comment();
+//
+//    //주의 : view에서 multiple인 경우 파일 첨부가 없더라도 빈문자열("")이 반환되어
+//    // List<MultipartFile>에 빈 객체 1개가 포함됨
+//    if (commentEditForm.getFile().isEmpty()) {
+//      updatedComment = commentSVC.update(commentNum, comment);
+//    } else if (!commentEditForm.getFile().isEmpty()) {
+//      updatedComment = commentSVC.update(commentNum, comment, commentEditForm.getFile());
+//    }
 
     return ApiResponse.createApiResMsg("00", "성공", updatedComment);
   }
