@@ -91,19 +91,47 @@ public class CommentDAOImpl implements CommentDAO {
   @Override
   public int save(Comment comment) {
 
-//    if (comment.getPCommentNum() != null) { //첫댓글이라면
-//
-//    } else { //답댓글이라면
-//      //부모 댓글 조회
-//      Optional<Comment> parentComment = find(comment.getPCommentNum());
-//      //답댓글 step = 부모 댓글 step + 1
-//      comment.setStep(parentComment.get().getStep() + 1);
-//      //답댓글 order = 부모 댓글 order + 1
-//      comment.setCommentOrder(parentComment.get().getCommentOrder() + 1);
-////      comment.setCommentOrder(maxCommentOrder(comment)+1);
-//      //나머지 order + 1
-//      changeCommentOrder(parentComment.get());
-//    }
+    //답댓글이라면
+    if (comment.getPCommentNum() != null) {
+      log.info("댓글번호 : {}",comment.getPCommentNum());
+      Optional<Comment> parentComment = find(comment.getPCommentNum());
+
+      //답댓글 step = 부모 댓글 step + 1
+      comment.setStep(parentComment.get().getStep() + 1);
+
+//      //대댓글의 step = 그룹 내 최고 step
+//      if (comment.getStep() == maxStep(comment)) {
+//        comment.setCommentOrder(maxCommentOrder(comment) +1);
+//        //대댓글의 step > 그룹 내 최고 step
+//      } else if (comment.getStep() > maxStep(comment)) {
+//        changeCommentOrder(parentComment.get());
+//        comment.setCommentOrder(parentComment.get().getCommentOrder() + 1);
+//        //대댓글의 step < 그룹 내 최고 step
+//      } else {
+//        changeCommentOrder(parentComment.get(),maxCommentOrderInSameParent(comment));
+//        comment.setCommentOrder(maxCommentOrderInSameParent(comment) + 1);
+//      }
+
+//      if (maxCommentOrderInSameParent(comment) == maxCommentOrder(comment)) {
+//        comment.setCommentOrder(maxCommentOrder(comment) + 1);
+//      } else if (maxCommentOrderInSameParent(comment) < maxCommentOrder(comment)) {
+//        changeCommentOrder(comment,maxCommentOrderInSameParent(comment));
+//        comment.setCommentOrder(maxCommentOrderInSameParent(comment) + 1);
+//      } else if (maxCommentOrderInSameParent(comment) == null) {
+//        changeCommentOrder(parentComment.get());
+//        comment.setCommentOrder(parentComment.get().getCommentOrder() + 1);
+//      }
+
+      if (maxCommentOrderInSameParent(comment) == null) {
+        changeCommentOrder(parentComment.get());
+        comment.setCommentOrder(parentComment.get().getCommentOrder() + 1);
+      } else if (maxCommentOrderInSameParent(comment) == maxCommentOrder(comment)) {
+        comment.setCommentOrder(maxCommentOrder(comment) + 1);
+      } else if (maxCommentOrderInSameParent(comment) < maxCommentOrder(comment)) {
+        changeCommentOrder(comment,maxCommentOrderInSameParent(comment));
+        comment.setCommentOrder(maxCommentOrderInSameParent(comment) + 1);
+      }
+    }
 
 
 
@@ -147,7 +175,16 @@ public class CommentDAOImpl implements CommentDAO {
     return affectedRows;
   }
 
-  //댓글 순서 최댓값 산출
+  //댓글 그룹 내 최고 step 산출
+  private Long maxStep(Comment comment){
+    String sql = "select max(step) from comments where article_num = ? and comment_group = ? ";
+
+    Long maxStep = jt.queryForObject(sql, Long.class, comment.getArticleNum(), comment.getCommentGroup());
+
+    return maxStep;
+  }
+
+  //그룹 내 댓글 순서 최댓값 산출
   private Long maxCommentOrder(Comment comment) {
     String sql = "select max(comment_order) from comments where article_num = ? and comment_group = ? ";
 
@@ -156,49 +193,46 @@ public class CommentDAOImpl implements CommentDAO {
     return maxCommentOrder;
   }
 
+  //같은 부모 댓글을 가진 동일 step내 순서 최댓값 산출
+  private Long maxCommentOrderInSameParent (Comment comment) {
+    StringBuffer sql = new StringBuffer();
+    sql.append("select max(comment_order) from comments ");
+    sql.append("where article_num = ? and comment_group = ? and comment_num = ? and step = ? ");
+
+    Long maxCommentOrderInSameParent = jt.queryForObject(sql.toString(), Long.class, comment.getArticleNum(), comment.getCommentGroup(),
+                                                                                     comment.getPCommentNum(), comment.getStep());
+
+//    if (maxCommentOrderInSameParent == null) {
+//      return maxCommentOrder(comment);
+//    }
+
+      return maxCommentOrderInSameParent;
+
+  }
+
   //댓글 순서 변경
-  private void changeCommentOrder(Comment parentComment){
+  private void changeCommentOrder(Comment comment){
     StringBuffer sql = new StringBuffer();
 
     sql.append("update comments ");
     sql.append("set comment_order = comment_order + 1 ");
-    sql.append("where comment_group = ? ");
+    sql.append("where article_num =? and comment_group = ? ");
     sql.append("and comment_order > ? ");
 
-    jt.update(sql.toString(),parentComment.getCommentGroup(),parentComment.getCommentOrder());
+    jt.update(sql.toString(),comment.getArticleNum(), comment.getCommentGroup(),comment.getCommentOrder());
   }
 
+  //댓글 순서 변경2
+  private void changeCommentOrder(Comment comment, Long commentOrder){
+    StringBuffer sql = new StringBuffer();
 
-//  /**
-//   * 대댓글 작성 (필요할까?)
-//   *
-//   * @param replyComment 댓글 정보
-//   * @return 작성된 댓글 수
-//   */
-//  @Override
-//  public int saveReply(Long pCommentNum, Comment replyComment) {
-//
-//    //부모 댓글 참조 반영
-//    Comment comment = addInfoOfParentToChild(pCommentNum, replyComment);
-//
-//    StringBuffer sql = new StringBuffer();
-//
-//    sql.append("insert into comments ");
-//    sql.append("(article_num, comment_group, comment_num, p_comment_num, ");
-//    sql.append("mem_number, comment_contents, create_date) ");
-//    sql.append("values (?,?,?,?,?,?, sysdate) ");
-//
-//    int affectedRow = jt.update(sql.toString(),
-//        comment.getArticleNum(),
-//        comment.getCommentGroup(),
-//        comment.getCommentNum(),
-//        pCommentNum,
-//        comment.getMemNumber(),
-//        comment.getCommentContents()
-//    );
-//
-//    return affectedRow;
-//  }
+    sql.append("update comments ");
+    sql.append("set comment_order = comment_order + 1 ");
+    sql.append("where article_num =? and comment_group = ? ");
+    sql.append("and comment_order > ? ");
+
+    jt.update(sql.toString(),comment.getArticleNum(), comment.getCommentGroup(),commentOrder);
+  }
 
 
 

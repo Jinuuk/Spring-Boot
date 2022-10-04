@@ -63,7 +63,7 @@ rollback;
 select article_num, comment_group, comment_num, p_comment_num,
 m.mem_nickname, comment_contents, create_date
 from comments c, member m
-where c.mem_number = m.mem_number and c.comment_num = 4;
+where c.mem_number = m.mem_number and c.comment_num = 5;
 
 
 --댓글 목록 조회 (1번 게시글)
