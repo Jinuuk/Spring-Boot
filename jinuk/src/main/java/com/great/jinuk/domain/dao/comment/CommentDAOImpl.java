@@ -93,46 +93,21 @@ public class CommentDAOImpl implements CommentDAO {
 
     //답댓글이라면
     if (comment.getPCommentNum() != null) {
-      log.info("댓글번호 : {}",comment.getPCommentNum());
       Optional<Comment> parentComment = find(comment.getPCommentNum());
-
       //답댓글 step = 부모 댓글 step + 1
       comment.setStep(parentComment.get().getStep() + 1);
-
-//      //대댓글의 step = 그룹 내 최고 step
-//      if (comment.getStep() == maxStep(comment)) {
-//        comment.setCommentOrder(maxCommentOrder(comment) +1);
-//        //대댓글의 step > 그룹 내 최고 step
-//      } else if (comment.getStep() > maxStep(comment)) {
-//        changeCommentOrder(parentComment.get());
-//        comment.setCommentOrder(parentComment.get().getCommentOrder() + 1);
-//        //대댓글의 step < 그룹 내 최고 step
-//      } else {
-//        changeCommentOrder(parentComment.get(),maxCommentOrderInSameParent(comment));
-//        comment.setCommentOrder(maxCommentOrderInSameParent(comment) + 1);
-//      }
-
-//      if (maxCommentOrderInSameParent(comment) == maxCommentOrder(comment)) {
-//        comment.setCommentOrder(maxCommentOrder(comment) + 1);
-//      } else if (maxCommentOrderInSameParent(comment) < maxCommentOrder(comment)) {
-//        changeCommentOrder(comment,maxCommentOrderInSameParent(comment));
-//        comment.setCommentOrder(maxCommentOrderInSameParent(comment) + 1);
-//      } else if (maxCommentOrderInSameParent(comment) == null) {
-//        changeCommentOrder(parentComment.get());
-//        comment.setCommentOrder(parentComment.get().getCommentOrder() + 1);
-//      }
-
-      if (maxCommentOrderInSameParent(comment) == null) {
-        changeCommentOrder(parentComment.get());
-        comment.setCommentOrder(parentComment.get().getCommentOrder() + 1);
-      } else if (maxCommentOrderInSameParent(comment) == maxCommentOrder(comment)) {
+      //step이 1인 경우
+      if (comment.getStep() == 1) {
+        //순서 = 그룹 내 최고 순서 + 1
         comment.setCommentOrder(maxCommentOrder(comment) + 1);
-      } else if (maxCommentOrderInSameParent(comment) < maxCommentOrder(comment)) {
-        changeCommentOrder(comment,maxCommentOrderInSameParent(comment));
+        //step이 2이상인 경우
+      } else {
+        //같은 부모 댓글을 가진 동일 step 중 최고 순서보다 큰 순서 + 1
+        changeCommentOrder(comment, maxCommentOrderInSameParent(comment));
+        //순서 = 같은 부모 댓글을 가진 동일 step 중 최고 순서 + 1
         comment.setCommentOrder(maxCommentOrderInSameParent(comment) + 1);
       }
     }
-
 
 
     StringBuffer sql = new StringBuffer();
@@ -176,13 +151,13 @@ public class CommentDAOImpl implements CommentDAO {
   }
 
   //댓글 그룹 내 최고 step 산출
-  private Long maxStep(Comment comment){
-    String sql = "select max(step) from comments where article_num = ? and comment_group = ? ";
-
-    Long maxStep = jt.queryForObject(sql, Long.class, comment.getArticleNum(), comment.getCommentGroup());
-
-    return maxStep;
-  }
+//  private Long maxStep(Comment comment){
+//    String sql = "select max(step) from comments where article_num = ? and comment_group = ? ";
+//
+//    Long maxStep = jt.queryForObject(sql, Long.class, comment.getArticleNum(), comment.getCommentGroup());
+//
+//    return maxStep;
+//  }
 
   //그룹 내 댓글 순서 최댓값 산출
   private Long maxCommentOrder(Comment comment) {
@@ -197,30 +172,32 @@ public class CommentDAOImpl implements CommentDAO {
   private Long maxCommentOrderInSameParent (Comment comment) {
     StringBuffer sql = new StringBuffer();
     sql.append("select max(comment_order) from comments ");
-    sql.append("where article_num = ? and comment_group = ? and comment_num = ? and step = ? ");
+    sql.append("where article_num = ? and comment_group = ? and p_comment_num = ? and step = ? ");
 
     Long maxCommentOrderInSameParent = jt.queryForObject(sql.toString(), Long.class, comment.getArticleNum(), comment.getCommentGroup(),
                                                                                      comment.getPCommentNum(), comment.getStep());
+    log.info("코멘트 : {}",comment);
+    log.info("과연 : {}",maxCommentOrderInSameParent);
+    //만약 은 부모 댓글을 가진 동일 step 중 최고 순서가 null이라면 부모 댓글 순서 반환
+    if (maxCommentOrderInSameParent == null) {
+      maxCommentOrderInSameParent = find(comment.getPCommentNum()).get().getCommentOrder();
+    }
 
-//    if (maxCommentOrderInSameParent == null) {
-//      return maxCommentOrder(comment);
-//    }
-
-      return maxCommentOrderInSameParent;
+    return maxCommentOrderInSameParent;
 
   }
 
   //댓글 순서 변경
-  private void changeCommentOrder(Comment comment){
-    StringBuffer sql = new StringBuffer();
-
-    sql.append("update comments ");
-    sql.append("set comment_order = comment_order + 1 ");
-    sql.append("where article_num =? and comment_group = ? ");
-    sql.append("and comment_order > ? ");
-
-    jt.update(sql.toString(),comment.getArticleNum(), comment.getCommentGroup(),comment.getCommentOrder());
-  }
+//  private void changeCommentOrder(Comment comment){
+//    StringBuffer sql = new StringBuffer();
+//
+//    sql.append("update comments ");
+//    sql.append("set comment_order = comment_order + 1 ");
+//    sql.append("where article_num =? and comment_group = ? ");
+//    sql.append("and comment_order > ? ");
+//
+//    jt.update(sql.toString(),comment.getArticleNum(), comment.getCommentGroup(),comment.getCommentOrder());
+//  }
 
   //댓글 순서 변경2
   private void changeCommentOrder(Comment comment, Long commentOrder){
@@ -231,7 +208,7 @@ public class CommentDAOImpl implements CommentDAO {
     sql.append("where article_num =? and comment_group = ? ");
     sql.append("and comment_order > ? ");
 
-    jt.update(sql.toString(),comment.getArticleNum(), comment.getCommentGroup(),commentOrder);
+    jt.update(sql.toString(),comment.getArticleNum(), comment.getCommentGroup(), commentOrder);
   }
 
 

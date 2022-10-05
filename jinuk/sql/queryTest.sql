@@ -73,6 +73,9 @@ from comments c, member m
 where c.mem_number = m.mem_number and c.article_num = 5
 order by comment_group asc, comment_order asc;
 
+select max(comment_order) from comments
+where article_num = 5 and comment_group = 98 and p_comment_num = 99 and step = 2;
+
 
 --댓글 작성
 insert into comments 
