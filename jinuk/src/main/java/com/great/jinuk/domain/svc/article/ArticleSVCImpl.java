@@ -118,7 +118,7 @@ public class ArticleSVCImpl implements ArticleSVC {
     articleDAO.save(article);
 
     //첨부파일-이미지
-    uploadFileSVC.addFile(files, AttachCode.P0102, generatedArticleNum);
+    uploadFileSVC.addFile(files, AttachCode.B0101, generatedArticleNum);
 
     return articleDAO.read(generatedArticleNum).get();
   }
@@ -140,7 +140,7 @@ public class ArticleSVCImpl implements ArticleSVC {
     articleDAO.update(articleNum, article);
 
     //2)첨부파일-이미지
-    uploadFileSVC.addFile(files, AttachCode.P0102, articleNum);
+    uploadFileSVC.addFile(files, AttachCode.B0101, articleNum);
 
     return articleDAO.read(articleNum).get();
   }
@@ -153,13 +153,13 @@ public class ArticleSVCImpl implements ArticleSVC {
   @Override
   public void delete(Long articleNum) {
     //1)첨부파일 메타정보 조회
-    List<UploadFile> attachFiles = uploadFileSVC.getFilesByCodeWithRid(AttachCode.P0101.name(), articleNum);
-    List<UploadFile> imageFiles = uploadFileSVC.getFilesByCodeWithRid(AttachCode.P0102.name(), articleNum);
+    List<UploadFile> attachFiles = uploadFileSVC.getFilesByCodeWithRid(AttachCode.B0101.name(), articleNum);
+    //List<UploadFile> imageFiles = uploadFileSVC.getFilesByCodeWithRid(AttachCode.P0102.name(), articleNum);
 
     //2)스토리지 파일 삭제
     List<UploadFile> unionFiles = new LinkedList<>();
     unionFiles.addAll(attachFiles);
-    unionFiles.addAll((imageFiles));
+    //unionFiles.addAll((imageFiles));
     for (UploadFile file : unionFiles) {
       fileUtils.deleteAttachFile(AttachCode.valueOf(file.getCode()), file.getStoreFilename());
     }
@@ -168,8 +168,8 @@ public class ArticleSVCImpl implements ArticleSVC {
     articleDAO.delete(articleNum);
 
     //메타정보 삭제
-    uploadFileSVC.deleteFileByCodeWithRid(AttachCode.P0101.name(), articleNum);
-    uploadFileSVC.deleteFileByCodeWithRid(AttachCode.P0102.name(), articleNum);
+    uploadFileSVC.deleteFileByCodeWithRid(AttachCode.B0101.name(), articleNum);
+    //uploadFileSVC.deleteFileByCodeWithRid(AttachCode.P0102.name(), articleNum);
   }
 
   /**

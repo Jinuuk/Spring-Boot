@@ -1,6 +1,7 @@
 package com.great.jinuk.web.form.comment;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class CommentEditForm {
@@ -13,6 +14,6 @@ public class CommentEditForm {
 //  private LocalDateTime createDate; //  create_date          date,       -- 댓글 생성일
 //  private Long commentIndent;       //  comment_indent       number(3)  -- 대댓글 들여쓰기
 //  private Member member;
-//  private MultipartFile file;
+  private MultipartFile file;
 //  private UploadFile attachFile;
 }

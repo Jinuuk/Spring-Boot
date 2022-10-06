@@ -1,4 +1,4 @@
-package com.great.jinuk.web.controller.community;
+package com.great.jinuk.web.controller;
 
 import com.great.jinuk.domain.common.AttachCode;
 import com.great.jinuk.domain.dao.comment.Comment;
@@ -32,7 +32,7 @@ public class CommentController {
     List<Comment> commentList = commentSVC.findAll(articleNum);
 
     for (Comment comment : commentList) {
-      List<UploadFile> uploadFile = uploadFileSVC.getFilesByCodeWithRid(AttachCode.P0101.name(), comment.getCommentNum());
+      List<UploadFile> uploadFile = uploadFileSVC.getFilesByCodeWithRid(AttachCode.B0101.name(), comment.getCommentNum());
       if (uploadFile.size() > 0) {
         UploadFile attachFile = uploadFile.get(0);
         comment.setAttachFile(attachFile);
@@ -69,21 +69,6 @@ public class CommentController {
     return ApiResponse.createApiResMsg("00", "성공", savedComment);
   }
 
-//  //대댓글 등록
-//  @PostMapping("/reply")
-//  public ApiResponse<Comment> saveReplyComment(ArticleForm articleForm,
-//                                               CommentAddForm commentAddForm) {
-//
-//    Comment comment = new Comment();
-//    BeanUtils.copyProperties(commentAddForm, comment);
-//    comment.setArticleNum(articleForm.getArticleNum()); //꼭 필요할까?
-//
-//    //대댓글 등록
-//    Comment savedReplyComment = commentSVC.saveReply(comment.getPCommentNum(), comment);
-//
-//    return ApiResponse.createApiResMsg("00", "성공", savedReplyComment);
-//  }
-
   //댓글 수정 창
   @GetMapping("/edit/{commentNum}")
   public ApiResponse<Comment> editWindow(@PathVariable Long commentNum) {
@@ -91,7 +76,7 @@ public class CommentController {
     Optional<Comment> foundComment = commentSVC.find(commentNum);
 
     //첨부파일 조회
-    List<UploadFile> uploadFile = uploadFileSVC.getFilesByCodeWithRid(AttachCode.P0101.name(), commentNum);
+    List<UploadFile> uploadFile = uploadFileSVC.getFilesByCodeWithRid(AttachCode.B0101.name(), commentNum);
     if (uploadFile.size() > 0) {
       UploadFile attachFile = uploadFile.get(0);
       foundComment.get().setAttachFile(attachFile);
@@ -109,16 +94,15 @@ public class CommentController {
     BeanUtils.copyProperties(commentEditForm, comment);
 
     //댓글 수정
-    Comment updatedComment = commentSVC.update(commentNum, comment);
-//    Comment updatedComment = new Comment();
-//
-//    //주의 : view에서 multiple인 경우 파일 첨부가 없더라도 빈문자열("")이 반환되어
-//    // List<MultipartFile>에 빈 객체 1개가 포함됨
-//    if (commentEditForm.getFile().isEmpty()) {
-//      updatedComment = commentSVC.update(commentNum, comment);
-//    } else if (!commentEditForm.getFile().isEmpty()) {
-//      updatedComment = commentSVC.update(commentNum, comment, commentEditForm.getFile());
-//    }
+//    Comment updatedComment = commentSVC.update(commentNum, comment);
+    Comment updatedComment = new Comment();
+
+
+    if (commentEditForm.getFile() == null) {
+      updatedComment = commentSVC.update(commentNum, comment);
+    } else if (commentEditForm.getFile() != null) {
+      updatedComment = commentSVC.update(commentNum, comment, commentEditForm.getFile());
+    }
 
     return ApiResponse.createApiResMsg("00", "성공", updatedComment);
   }

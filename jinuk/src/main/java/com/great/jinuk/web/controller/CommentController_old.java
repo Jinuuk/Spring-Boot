@@ -1,4 +1,4 @@
-package com.great.jinuk.web.controller.community;
+package com.great.jinuk.web.controller;
 
 import com.great.jinuk.domain.dao.comment.Comment;
 import com.great.jinuk.domain.svc.comment.CommentSVC;

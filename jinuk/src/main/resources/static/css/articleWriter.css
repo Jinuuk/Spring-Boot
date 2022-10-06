@@ -55,6 +55,21 @@ button:hover {
   width: 300px;
 }
 
+.filebox #imageFile2 {
+  position: absolute;
+  width: 0;
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+}
+
+.filebox #fileName2 {
+  border:none;
+  color: grey;
+  width: 300px;
+}
+
 .toNickname {
   color : var(--main-color-yel);
   font-size: 12px;
@@ -192,12 +207,18 @@ button:hover {
 
 .comment__list .comment-box .comment-box__contents .comment-box__middle {
   display : flex;
+  flex-direction: column;
 }
 
-.comment__list .comment-box .comment-box__contents .comment-box__middle .replyNickname {
+.comment__list .comment-box .comment-box__contents .comment-box__middle .comment-box__image {
+  margin-top:10px;
+}
+
+
+/* .comment__list .comment-box .comment-box__contents .comment-box__middle .replyNickname {
   font-weight: bold;
   display: inline-block;
-}
+} */
 
 .comment__list .comment-box .comment-box__contents .comment-box__middle .comment-box__text {
   margin:5px 0;

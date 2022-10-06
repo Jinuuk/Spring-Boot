@@ -86,13 +86,19 @@ public class CommentSVCImpl implements CommentSVC {
     //1)댓글 등록
     Long generatedCommentNum = commentDAO.generatedCommentNum();
     comment.setCommentNum(generatedCommentNum);
+
+    if (comment.getCommentGroup() == null) {
+      Long generatedCommentGroupNum = commentDAO.generatedCommentGroupNum();
+      comment.setCommentGroup(generatedCommentGroupNum);
+    }
+
     commentDAO.save(comment);
 
     int totalCountOfArticle = commentDAO.totalCountOfArticle(comment.getArticleNum());
     articleDAO.updateCommentsCnt(Long.valueOf(totalCountOfArticle),comment.getArticleNum());
 
     //2)첨부파일
-    uploadFileSVC.addFile(file, AttachCode.P0101,generatedCommentNum);
+    uploadFileSVC.addFile(file, AttachCode.B0101,generatedCommentNum);
 
 
     return commentDAO.find(generatedCommentNum).get();
@@ -150,7 +156,7 @@ public class CommentSVCImpl implements CommentSVC {
     articleDAO.updateCommentsCnt(Long.valueOf(totalCountOfArticle),commentDAO.find(commentNum).get().getArticleNum());
 
     //2)첨부파일
-    uploadFileSVC.addFile(file, AttachCode.P0101,commentNum);
+    uploadFileSVC.addFile(file, AttachCode.B0101,commentNum);
 
     return commentDAO.find(commentNum).get();
   }
@@ -164,7 +170,7 @@ public class CommentSVCImpl implements CommentSVC {
   @Override
   public void delete(Long commentNum) {
     //1)첨부파일 메타정보 조회
-    List<UploadFile> attachFiles = uploadFileSVC.getFilesByCodeWithRid(AttachCode.P0101.name(), commentNum);
+    List<UploadFile> attachFiles = uploadFileSVC.getFilesByCodeWithRid(AttachCode.B0101.name(), commentNum);
     //2)스토리지 파일 삭제
     attachFiles.stream().forEach(file-> fileUtils.deleteAttachFile(AttachCode.valueOf(file.getCode()),file.getStoreFilename()));
 
@@ -178,7 +184,7 @@ public class CommentSVCImpl implements CommentSVC {
     articleDAO.updateCommentsCnt(Long.valueOf(totalCountOfArticle),articleNum);
 
     //4)첨부파일 메타 정보 삭제
-    uploadFileSVC.deleteFileByCodeWithRid(AttachCode.P0101.name(),commentNum);
+    uploadFileSVC.deleteFileByCodeWithRid(AttachCode.B0101.name(),commentNum);
   }
 
 //  /**

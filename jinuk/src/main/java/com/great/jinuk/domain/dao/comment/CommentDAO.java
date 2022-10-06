@@ -25,14 +25,6 @@ public interface CommentDAO {
    */
   int save(Comment comment);
 
-//  /**
-//   * 대댓글 작성 (필요할까?)
-//   * @param replyComment 댓글 정보
-//   * @return 작성된 댓글 수
-//   */
-//  int saveReply(Long pCommentNum, Comment replyComment);
-
-
   /**
    * 댓글 수정
    * @param commentNum 댓글 번호
@@ -67,10 +59,4 @@ public interface CommentDAO {
    */
   int totalCountOfArticle(Long articleNum);
 
-//  /**
-//   * 회원 댓글 건수 조회
-//   * @param memNumber
-//   * @return
-//   */
-//  int totalCountOfMember (Long memNumber);
 }

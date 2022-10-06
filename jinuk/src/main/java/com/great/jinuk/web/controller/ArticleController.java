@@ -1,4 +1,4 @@
-package com.great.jinuk.web.controller.community;
+package com.great.jinuk.web.controller;
 
 import com.great.jinuk.domain.common.paging.FindCriteria;
 import com.great.jinuk.domain.dao.article.Article;

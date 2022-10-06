@@ -14,7 +14,7 @@ drop table member;
 drop sequence article_article_num_seq;
 drop sequence comments_comment_num_seq;
 drop sequence uploadfile_uploadfile_id_seq;
-drop sequence comments_comment_group_seq
+--drop sequence comments_comment_group_seq
 
 --회원 임시 테이블 생성
 create table member (
@@ -121,14 +121,14 @@ nocache
 noorder;
 
 --댓글 그룹 번호 시퀀스 생성
-create sequence comments_comment_group_seq
-increment by 1
-start with 1
-minvalue 1
-maxvalue 999999
-nocycle
-nocache
-noorder;
+--create sequence comments_comment_group_seq
+--increment by 1
+--start with 1
+--minvalue 1
+--maxvalue 999999
+--nocycle
+--nocache
+--noorder;
 
 ----신고 테이블 생성
 --create table report (

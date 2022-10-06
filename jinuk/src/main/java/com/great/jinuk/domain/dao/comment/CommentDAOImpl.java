@@ -136,27 +136,18 @@ public class CommentDAOImpl implements CommentDAO {
   }
 
   //부모 댓글과 동일한 그룹의 답댓글들의 step 변경
-  private int updateStep(Comment comment){
-    StringBuffer sql = new StringBuffer();
-
-    sql.append("update comments ");
-    sql.append("set step = step + 1 ");
-    sql.append("where comment_group = ? ");
-    sql.append("and step > ? ");
-    sql.append("and article_num = ? ");
-
-    int affectedRows = jt.update(sql.toString(), comment.getCommentGroup(), comment.getStep(),comment.getArticleNum());
-
-    return affectedRows;
-  }
-
-  //댓글 그룹 내 최고 step 산출
-//  private Long maxStep(Comment comment){
-//    String sql = "select max(step) from comments where article_num = ? and comment_group = ? ";
+//  private int updateStep(Comment comment){
+//    StringBuffer sql = new StringBuffer();
 //
-//    Long maxStep = jt.queryForObject(sql, Long.class, comment.getArticleNum(), comment.getCommentGroup());
+//    sql.append("update comments ");
+//    sql.append("set step = step + 1 ");
+//    sql.append("where comment_group = ? ");
+//    sql.append("and step > ? ");
+//    sql.append("and article_num = ? ");
 //
-//    return maxStep;
+//    int affectedRows = jt.update(sql.toString(), comment.getCommentGroup(), comment.getStep(),comment.getArticleNum());
+//
+//    return affectedRows;
 //  }
 
   //그룹 내 댓글 순서 최댓값 산출
@@ -188,18 +179,6 @@ public class CommentDAOImpl implements CommentDAO {
   }
 
   //댓글 순서 변경
-//  private void changeCommentOrder(Comment comment){
-//    StringBuffer sql = new StringBuffer();
-//
-//    sql.append("update comments ");
-//    sql.append("set comment_order = comment_order + 1 ");
-//    sql.append("where article_num =? and comment_group = ? ");
-//    sql.append("and comment_order > ? ");
-//
-//    jt.update(sql.toString(),comment.getArticleNum(), comment.getCommentGroup(),comment.getCommentOrder());
-//  }
-
-  //댓글 순서 변경2
   private void changeCommentOrder(Comment comment, Long commentOrder){
     StringBuffer sql = new StringBuffer();
 
@@ -210,7 +189,6 @@ public class CommentDAOImpl implements CommentDAO {
 
     jt.update(sql.toString(),comment.getArticleNum(), comment.getCommentGroup(), commentOrder);
   }
-
 
 
   /**
