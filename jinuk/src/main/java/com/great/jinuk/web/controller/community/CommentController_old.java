@@ -1,10 +1,10 @@
-package com.great.jinuk.web.controller;
+package com.great.jinuk.web.controller.community;
 
 import com.great.jinuk.domain.dao.comment.Comment;
 import com.great.jinuk.domain.svc.comment.CommentSVC;
 import com.great.jinuk.web.api.ApiResponse;
-import com.great.jinuk.web.form.comment.CommentAddForm;
-import com.great.jinuk.web.form.comment.CommentEditForm;
+import com.great.jinuk.web.dto.comment.CommentAddForm;
+import com.great.jinuk.web.dto.comment.CommentEditForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;

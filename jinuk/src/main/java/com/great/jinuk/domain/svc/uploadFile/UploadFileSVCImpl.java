@@ -2,7 +2,7 @@ package com.great.jinuk.domain.svc.uploadFile;
 
 import com.great.jinuk.domain.common.AttachCode;
 import com.great.jinuk.domain.common.FileUtils;
-import com.great.jinuk.domain.entity.uploadFile.UploadFile;
+import com.great.jinuk.domain.dao.uploadFile.UploadFile;
 import com.great.jinuk.domain.dao.uploadFile.UploadFileDAO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

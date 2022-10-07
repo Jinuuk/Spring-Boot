@@ -1,4 +1,4 @@
-package com.great.jinuk.web.form.comment;
+package com.great.jinuk.web.dto.comment;
 
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;

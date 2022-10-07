@@ -1,7 +1,7 @@
 package com.great.jinuk.domain.common;
 
 
-import com.great.jinuk.domain.entity.uploadFile.UploadFile;
+import com.great.jinuk.domain.dao.uploadFile.UploadFile;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;

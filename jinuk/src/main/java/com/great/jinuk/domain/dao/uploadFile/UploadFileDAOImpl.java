@@ -1,6 +1,5 @@
 package com.great.jinuk.domain.dao.uploadFile;
 
-import com.great.jinuk.domain.entity.uploadFile.UploadFile;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;

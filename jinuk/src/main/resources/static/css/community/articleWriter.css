@@ -70,9 +70,15 @@ button:hover {
   width: 300px;
 }
 
-.toNickname {
+.comment-box__middle-left {
+  display: flex;
+}
+
+
+.pNickname {
   color : var(--main-color-yel);
-  font-size: 12px;
+  font-size: 13px;
+  margin:5px 0;
 }
 
 /* main */
@@ -82,6 +88,7 @@ button:hover {
   align-items: center;
 }
 
+
 .ck-reset_all {
     display :none;
 }
@@ -89,6 +96,7 @@ button:hover {
 .ck-blurred.ck.ck-content.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline.ck-read-only{
     border:none;
 }
+
 
 /* article */
 .article {

@@ -1,9 +1,10 @@
-package com.great.jinuk.web.api;
+package com.great.jinuk.web.controller.attachFile;
 
 import com.great.jinuk.domain.common.AttachCode;
 import com.great.jinuk.domain.common.FileUtils;
-import com.great.jinuk.domain.entity.uploadFile.UploadFile;
+import com.great.jinuk.domain.dao.uploadFile.UploadFile;
 import com.great.jinuk.domain.svc.uploadFile.UploadFileSVC;
+import com.great.jinuk.web.api.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;

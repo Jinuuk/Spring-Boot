@@ -1,4 +1,4 @@
-package com.great.jinuk.web.form.article;
+package com.great.jinuk.web.dto.article;
 
 import lombok.Data;
 
