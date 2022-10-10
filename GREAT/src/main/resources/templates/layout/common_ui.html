@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+    <th:block th:fragment="common_Head">
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="마감 할인 상품 소개">
+        <meta name="keywords" content="food, sale">
+        <meta name="author" content="KH 3팀">
+        <link rel="stylesheet" th:href="@{/css/common/common.css}">
+        <link rel="icon" th:href="@{/css/common/icon.svg}">
+        <script src="https://kit.fontawesome.com/132ba309f6.js" crossorigin="anonymous"></script>
+        <script type="text/javascript" defer th:src="@{/js/main/search.js}"></script>
+    </th:block>
+</head>
+<body>
+<div class="wrapper">
+    <!--비회원-->
+    <header class="header container" th:fragment="choose_header">
+        <nav class="top-menu content">
+            <th:block th:if="${session.isEmpty()}">
+                <a href="/join" class="top-menu__join">회원가입</a>
+                <a href="/login" class="top-menu__login">로그인</a>
+            </th:block>
+            <th:block th:if="${session.memType}=='customer'">
+                <li th:class="top-menu__member"><a th:href="@{/member/infoChk}" th:text="${session.memNickname} + 님">회원님</a>
+                    <ul>
+                        <li><a th:href="@{/mypage/}+@{review/}+${session.memNumber}">내 리뷰</a></li>
+                        <li><a th:href="@{/mypage/}+${session.memNumber}">주문 내역</a></li>
+                        <li><a th:href="@{/mypage/}+@{bookmark/}+${session.memNumber}">즐겨찾기</a></li>
+                        <li><a th:href="@{/mypage/}+@{good/}+${session.memNumber}">좋아요</a></li>
+                        <li><a href="/logout"><i class="fa-solid fa-arrow-right-from-bracket"></i>로그아웃</a></li>
+                    </ul>
+                </li>
+            </th:block>
+            <th:block th:if="${session.memType}=='owner'">
+                <li th:class="top-menu__member"><a th:href="@{/member/infoChk}" th:text="${session.memNickname} + 님">회원님</a>
+                    <ul>
+                        <li><a th:href="@{/products/add}">판매글 작성</a></li>
+                        <li><a th:href="@{/products/}+${session.memNumber}+@{/manage}">상품 관리</a></li>
+                        <li><a th:href="@{/products/}+${session.memNumber}+@{/saleList}">판매 내역</a></li>
+                        <li><a th:href="@{/mypage/profile/}+${session.memNumber}">내 프로필</a></li>
+                        <li><a href="/logout"><i class="fa-solid fa-arrow-right-from-bracket"></i>로그아웃</a></li>
+                    </ul>
+                </li>
+            </th:block>
+            <th:block th:if="${session.memAdmin}=='y'">
+                <li th:class="top-menu__member"><a th:text="${session.memNickname} + 님">회원님</a>
+                    <ul>
+                        <li><a href="/logout"><i class="fa-solid fa-arrow-right-from-bracket"></i>로그아웃</a></li>
+                    </ul>
+                </li>
+            </th:block>
+            <a th:href="@{/community/list}" class="top-menu__cs">커뮤니티</a>
+            <a th:href="@{/notice/list}" class="top-menu__cs">공지사항</a>
+        </nav>
+        <th:block th:replace="~{layout/common_ui::common_header}"></th:block>
+        <div th:replace="~{layout/common_ui::topBtn}"></div>
+    </header>
+
+    <!-- 공통 헤더 -->
+    <th:block th:fragment="common_header">
+        <div class="logo content"><a th:href="@{/}">GR<span>EAT</span></a></div>
+        <nav class="bottom-menu content">
+            <div class="category">
+                <ul>
+                    <li class="region-category"> 지역 선택&nbsp;&nbsp;<i class="fa-solid fa-chevron-down"> </i>
+                        <ul>
+                            <li><a th:href="@{/zonning?zone=남구&category=전체}">남구</a></li>
+                            <li><a th:href="@{/zonning?zone=중구&category=전체}">중구</a></li>
+                            <li><a th:href="@{/zonning?zone=북구&category=전체}">북구</a></li>
+                            <li><a th:href="@{/zonning?zone=동구&category=전체}">동구</a></li>
+                            <li><a th:href="@{/zonning?zone=울주군&category=전체}">울주군</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="search">
+                <input type="text" class="search__search-box" placeholder="검색어를 입력하세요.">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </div>
+        </nav>
+    </th:block>
+
+    <!-- top버튼 -->
+    <div class="topbtn" th:fragment="topBtn">
+        <a href="#"><i class="fa-solid fa-angles-up"></i></a>
+    </div>
+
+    <!-- footer -->
+    <footer class="footer container" th:fragment="footer">
+        <div class="footer-content">
+<!--            <a href="">GR<span>EAT</span></a>-->
+            <ul class="socials">
+                <li><a href="#"><i class="fa-brands fa-github"></i></a></li>
+                <li><a href="#"><i class="fa fa-youtube"></i></a></li>
+            </ul>
+            <p>저희 GREAT는 울산지역의 한정으로 만들어진 홈페이지입니다.</p>
+            <p>서비스를 이용하시는 모든 회원분들 이용에 감사드립니다. </p>
+            <p>더더욱 발전하는 GREAT이 되겠습니다. </p>
+            <!--Footer's social icon-->
+        </div>
+        <!--Copyright Area-->
+        <div class="footer-bottom">
+            <div class="cs_center">
+                <p>== &nbsp;&nbsp;CS 센터&nbsp;&nbsp;== </p>
+                <p>월요일 - 금요일 / 09:00 AM- 06:00 PM</p>
+                <p>점심시간/12:00PM-1:00PM</p>
+                <p>토요일, 일요일, 공휴일 휴무</p>
+            </div>
+            <div>
+                <p>Design By - <a href="#">365 Team Project</a></p>
+                <p>tell :<a href="">1501-1501</a></p>
+            </div>
+        </div>
+        <div class="company">
+            Copyrightⓒ2022-2022 회사명: GREAT
+        </div>
+    </footer>
+</div>
+</body>
+</html>

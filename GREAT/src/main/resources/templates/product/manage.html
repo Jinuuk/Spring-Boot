@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <th:block th:replace="~{layout/common_ui::common_Head}"></th:block>
+  <title>GREAT | 상품관리</title>
+  <link rel="stylesheet" th:href="@{/css/product/판매내역.css}">
+  <script type="text/javascript" defer th:src="@{/js/product/manage.js}"></script>
+</head>
+<body>
+<div class="wrapper">
+  <header th:replace="~{layout/common_ui::choose_header}"></header>
+    <main class="main container">
+      <div class="main-side-left">
+        <p class="memNum" th:text="${session.memNumber}"></p>
+        <ul>
+          <li class="p-manage p-manage-choice">
+            <h3><a th:href="@{/products/}+${session.memNumber}+@{/manage}">상품 관리</a></h3>
+            <i class="fa-solid fa-angle-right"></i>
+          </li>
+          <li class="p-manage">
+            <h3><a th:href="@{/products/}+${session.memNumber}+@{/saleList}">판매 내역</a></h3>
+          </li>
+        </ul>
+      </div>
+      <div class="main-side-right">
+        <div class="main-head">
+          <div class="main-title">
+            <i class="bar"></i>
+            <h2>상품관리</h2>
+            <span>회원이 판매하는 모든 상품 정보를 확인하실 수 있습니다.</span>
+          </div>
+          <img th:src="@{/img/product/상품관리.png}">
+        </div>
+        <div class="order-manage">
+          <div class="order-choice">
+            <div class="drop__period">
+              <input type="date" name="" id="startDate">~<input type="date" name="" id="finishDate">
+              <button type="button" id="searchBtn">조회</button>
+            </div>
+            <div class="drop__status">
+              <select name="" id="sell_status">
+                <option class="sell_all" value="전체">전체</option>
+                <option class="sell_ing" value="판매중">판매중</option>
+                <option class="sell_ed" value="판매완료">판매완료</option>
+              </select>
+            </div>
+          </div>
+          <div class="ordered-list">
+            <table class="product_manage-tb">
+              <thead>
+                <tr class="table_header">
+                  <th>No.</th>
+                  <th>사진</th>
+                  <th>판매상태</th>
+                  <th>상품명</th>
+                  <th>가격</th>
+                  <th>수량</th>
+                  <th>등록일</th>
+                  <th>기능</th>
+                </tr>
+              </thead>
+              <tbody>
+<!--                <tr th:each="rec : ${list}">-->
+<!--                </tr>-->
+              </tbody>
+            </table>
+<!--            <div th:replace="~{layout/common_ui::pagingBtn}"></div>-->
+          </div>
+        </div>
+      </div>
+    </main>
+  <footer th:replace="~{layout/common_ui::footer}"></footer>
+</div>
+</body>
+</html>
