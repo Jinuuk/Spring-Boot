@@ -1,7 +1,7 @@
-package com.great.jinuk.web.form.comment;
+package com.great.jinuk.web.dto.comment;
 
 import com.great.jinuk.domain.Member;
-import com.great.jinuk.domain.entity.uploadFile.UploadFile;
+import com.great.jinuk.domain.dao.uploadFile.UploadFile;
 import lombok.Data;
 
 import java.time.LocalDateTime;

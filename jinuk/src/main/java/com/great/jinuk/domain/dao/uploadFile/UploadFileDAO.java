@@ -1,7 +1,5 @@
 package com.great.jinuk.domain.dao.uploadFile;
 
-import com.great.jinuk.domain.entity.uploadFile.UploadFile;
-
 import java.util.List;
 import java.util.Optional;
 

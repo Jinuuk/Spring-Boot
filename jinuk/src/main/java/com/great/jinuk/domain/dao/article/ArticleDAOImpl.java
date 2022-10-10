@@ -258,7 +258,7 @@ public class ArticleDAOImpl implements ArticleDAO {
     StringBuffer sql = new StringBuffer();
     sql.append("update article ");
     sql.append("set article_category = ?, article_title = ?, ");
-    sql.append("article_contents = ?, attachment = ?, create_date = sysdate ");
+    sql.append("article_contents = ?, attachment = ? ");
     sql.append("where article_num = ? ");
 
     int affectedRow = jt.update(sql.toString(), article.getArticleCategory(), article.getArticleTitle(), article.getArticleContents(), article.getAttachment(), articleNum);

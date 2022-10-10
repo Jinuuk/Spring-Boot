@@ -1,7 +1,7 @@
 package com.great.jinuk.domain.svc.uploadFile;
 
 import com.great.jinuk.domain.common.AttachCode;
-import com.great.jinuk.domain.entity.uploadFile.UploadFile;
+import com.great.jinuk.domain.dao.uploadFile.UploadFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

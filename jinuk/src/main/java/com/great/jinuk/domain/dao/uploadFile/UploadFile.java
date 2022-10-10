@@ -1,4 +1,4 @@
-package com.great.jinuk.domain.entity.uploadFile;
+package com.great.jinuk.domain.dao.uploadFile;
 
 
 import lombok.Data;

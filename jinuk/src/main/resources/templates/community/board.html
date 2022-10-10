@@ -5,8 +5,8 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/common/common.css">
-  <link rel="stylesheet" href="/css/board.css">
+  <link rel="stylesheet" href="/css/common/common.css">
+  <link rel="stylesheet" href="/css/community/board.css">
   <script src="https://kit.fontawesome.com/038578f405.js" crossorigin="anonymous"></script>
   <title>GREAT 커뮤니티</title>
 </head>
@@ -125,8 +125,8 @@
         <div class="board__write width--900px">
           <button id="board__post-btn">글쓰기</button>
         </div>
-<!--        <div class="board__page width&#45;&#45;900px">-->
-<!--          <div class="board__page&#45;&#45;select">-->
+<!--        <div class="board__page width--900px">-->
+<!--          <div class="board__page--select">-->
 <!--            <a href=""><i class="fa-solid fa-chevron-left"></i>이전</a>-->
 <!--            <a href="">1</a>-->
 <!--            <a href="">2</a>-->
@@ -136,7 +136,7 @@
 <!--            <a href="">다음<i class="fa-solid fa-chevron-right"></i></a>-->
 <!--          </div>-->
 <!--        </div>-->
-<!--        <div class="board__search width&#45;&#45;900px">-->
+<!--        <div class="board__search width--900px">-->
 <!--          <form class="board__search-box" th:object="${articleSearchForm}" th:action="@{/community/search}">-->
 <!--            <div class="board__search-setting">-->
 <!--              <select name="" id="search-category" th:field="*{searchCategory}">-->
@@ -187,7 +187,7 @@
             </a>
           </th:block>
         </div>
-
+<!-- 
         <div class="community-search">
           <select id="searchType" name="searchType" th:field="${fc.searchType}">
             <option th:value="title">제목</option>
@@ -197,7 +197,26 @@
           </select>
           <input type="text" id="keyword" name="keyword" th:field="${fc.keyword}">
           <button id="searchBtn">검색</button>
+        </div> -->
+
+        <div class="board__search width--900px">
+          <div class="board__search-box">
+            <div class="board__search-date">
+            </div>
+            <div class="board__search-setting">
+              <select id="searchType" name="searchType" th:field="${fc.searchType}">
+            <option th:value="title">제목</option>
+            <option th:value="contents">내용</option>
+            <option th:value="titleOrContents">제목+내용</option>
+            <option th:value="nickname">닉네임</option>
+              </select>
+            </div>
+            <div class="board__search-keyword">
+              <input type="text" id="keyword" name="keyword" th:field="${fc.keyword}"><a href="" class="search__search-icon"><i class="fa-solid fa-magnifying-glass" id="searchBtn"></i></a>
+            </div>
+          </div>
         </div>
+
         
       </div>
 
@@ -219,7 +238,10 @@
     const $articleCategory = document.getElementById('category');
 
     //검색 버튼 클릭시
-    $searchBtn?.addEventListener('click', search_f);
+    $searchBtn?.addEventListener('click', e=>{
+      e.preventDefault();
+      search_f(e);
+    });
 
     //키워드 입력 필드에 엔터 눌렀을 때 검색
     $keyword?.addEventListener('keydown', e=>{
