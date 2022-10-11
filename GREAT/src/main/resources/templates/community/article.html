@@ -59,7 +59,7 @@
               <div class="comment__write">
                 <div class="reply-box">
                   <div class="reply-box__top">
-                    <span class="reply-box__nickname font-size--13px">닉네임</span>
+                    <span class="reply-box__nickname font-size--13px" th:text="*{member.memNickname}">닉네임</span>
                   </div>
                   <div class="reply-box__middle">
                     <textarea class="reply-box__text" name="" id="commentInputBox" cols="30" rows="10" placeholder="댓글을 입력하세요."
@@ -71,7 +71,7 @@
                       <input type="text" id="fileName" value=""  readonly>
                       <input type="file" accept="image/*" id="imageFile">
                     </div>
-                    <button id="commentSaveBtn" class = "font-size--12px" href="#">등록</button>
+                    <button id="commentSaveBtn" class = "font-size--12px">등록</button>
                   </div>
                 </div>
               </div>
@@ -154,7 +154,7 @@
                           <span href="#" class="font-size--13px" id="comment-box__nickname">${comment.member.memNickname}</span>
                           ${comment.memNumber == [[${articleForm.memNumber}]] ? `<span class="writer">작성자</span>` : ``}
                         </div>
-                        ${root.dataset.sMemNumber == [[${articleForm.memNumber}]] ? 
+                        ${root.dataset.sMemNumber == comment.memNumber ? 
                         `<div class="comment-box__info">
                           <a class="comment-box__modify font-size--12px" href="#" name="commentEditBtn"><i
                               class="fa-regular fa-pen-to-square"></i></a>
@@ -294,8 +294,8 @@
                       <input type="file" accept="image/*" id="imageFile2">
                     </div>
                     <div>
-                      <button class="font-size--12px" id="replyCancelBtn" href="#">취소</button>
-                      <button class="font-size--12px" id="replySaveBtn" href="#">등록</button>
+                      <button class="font-size--12px" id="replyCancelBtn">취소</button>
+                      <button class="font-size--12px" id="replySaveBtn">등록</button>
                     </div>
                   </div>
                 </div>
@@ -309,12 +309,14 @@
 
         //답댓글 작성 취소 버튼 클릭
         replyCancelBtn?.addEventListener('click',e=>{
+          e.preventDefault();
           console.log('답댓글 작성 취소 버튼 클릭');
           e.target.closest('li').remove();
         });
 
         //답댓글 작성 완료 버튼 클릭
         replySaveBtn?.addEventListener('click',e=>{
+          e.preventDefault();
           console.log(e.target.closest('li').previousSibling);
           console.log(e.target.closest('li').previousSibling.id);
           console.log(e.target.closest('li').previousSibling.dataset.commentGroup);
@@ -383,9 +385,8 @@
                   <input type="file" accept="image/*" id="imageFile3" data-uploadfile-id="${data.data.attachFile?.uploadfileId}">
                 </div>
                 <div>
-                  <button class="font-size--12px" id="fileDeleteBtn" href="#">사진 삭제</button>
-                  <button class="font-size--12px" id="editCancelBtn" href="#">취소</button>
-                  <button class = "font-size--12px" id="editSaveBtn" href="#">등록</button>
+                  <button class="font-size--12px" id="editCancelBtn">취소</button>
+                  <button class = "font-size--12px" id="editSaveBtn">등록</button>
                 </div>
               </div>
             </div>
@@ -393,7 +394,7 @@
           document.getElementById(commentNum).insertAdjacentHTML('afterend',editBox);
           document.getElementById(commentNum).classList.add('editting');
           document.getElementById(commentNum).style.display = 'none';
-          const fid = document.getElementById('imageFile3').dataset.uploadfileId;
+          let fid = document.getElementById('imageFile3').dataset.uploadfileId;
 
         //사진 첨부 시 파일명만 표시
         imageFile3.addEventListener('change',()=>{
@@ -402,27 +403,17 @@
 
           //댓글 수정 취소 버튼 클릭
           editCancelBtn?.addEventListener('click',e=>{
+            e.preventDefault();
             console.log('댓글 수정 취소 버튼 클릭');
             document.getElementById(commentNum).classList.remove('editting');
             document.getElementById(commentNum).style.display ='block';
             //document.getElementById('commentEditBox').remove();
             document.getElementsByClassName('comment__write edit')[0].remove();
-          });
-          
-          //파일 삭제 버튼 클릭
-          fileDeleteBtn?.addEventListener('click',e=>{
-            console.log('파일 삭제 버튼 클릭');
-            fileName3.value='';
-            imageFile3.type ='';
-            imageFile3.type='file';
-          });
+          });    
 
           //댓글 수정 완료 버튼 클릭
           editSaveBtn?.addEventListener('click',e=>{
-            //0)사진 삭제
-            if(fid != null && imageFile3.files.length == 0){
-              deleteAttachFile(fid);
-            };
+            e.preventDefault();
             //1)유효성 체크
             //2)입력 데이터 가져오기 (댓글 번호, 댓글 내용)
             commentEditForm.append('commentNum',commentNum);
